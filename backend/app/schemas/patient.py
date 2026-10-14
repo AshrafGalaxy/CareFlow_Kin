@@ -1,5 +1,5 @@
 from typing import Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class PatientProfileBase(BaseModel):
@@ -29,8 +29,7 @@ class PatientProfileUpdate(BaseModel):
 
 
 class PatientProfileOut(PatientProfileBase):
+    model_config = ConfigDict(from_attributes=True)
+
     id: str
     user_id: str
-
-    class Config:
-        from_attributes = True

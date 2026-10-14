@@ -9,7 +9,6 @@ def generate_uuid() -> str:
     return str(uuid.uuid4())
 
 
-@declarative_mixin
 class TimestampMixin:
     """Reusable mixin for created_at and updated_at timestamps."""
     created_at = Column(

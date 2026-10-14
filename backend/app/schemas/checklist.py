@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from app.models.checklist import ChecklistItemTime, ChecklistLogStatus
 
 
@@ -22,6 +22,8 @@ class ChecklistLogCreate(BaseModel):
 
 
 class ChecklistLogOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: str
     checklist_item_id: str
     patient_id: str
@@ -30,15 +32,11 @@ class ChecklistLogOut(BaseModel):
     completed_at: datetime
     reason: Optional[str] = None
 
-    class Config:
-        from_attributes = True
-
 
 class ChecklistItemOut(ChecklistItemBase):
+    model_config = ConfigDict(from_attributes=True)
+
     id: str
     patient_id: str
     today_status: Optional[ChecklistLogStatus] = None
     completed_at: Optional[datetime] = None
-
-    class Config:
-        from_attributes = True

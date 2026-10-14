@@ -1,10 +1,12 @@
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from app.models.timeline import TimelineEventType, PrivacyLevel
 
 
 class TimelineEventOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: str
     patient_id: str
     event_type: TimelineEventType
@@ -14,6 +16,3 @@ class TimelineEventOut(BaseModel):
     timestamp: datetime
     privacy_level: PrivacyLevel
     created_at: datetime
-
-    class Config:
-        from_attributes = True

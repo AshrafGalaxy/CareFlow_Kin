@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from app.models.checkin import CheckInStatus
 
 
@@ -11,6 +11,8 @@ class CheckInCreate(BaseModel):
 
 
 class CheckInOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: str
     patient_id: str
     date: str
@@ -18,6 +20,3 @@ class CheckInOut(BaseModel):
     notes: Optional[str] = None
     recorded_at: datetime
     created_at: datetime
-
-    class Config:
-        from_attributes = True

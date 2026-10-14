@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from app.models.appointment import AppointmentStatus
 
 
@@ -19,9 +19,8 @@ class AppointmentCreate(AppointmentBase):
 
 
 class AppointmentOut(AppointmentBase):
+    model_config = ConfigDict(from_attributes=True)
+
     id: str
     patient_id: str
     created_at: datetime
-
-    class Config:
-        from_attributes = True

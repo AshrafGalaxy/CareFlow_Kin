@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional, List
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from app.models.medication import MedicationStatus, MedicationLogStatus
 
 
@@ -36,6 +36,8 @@ class MedicationLogCreate(BaseModel):
 
 
 class MedicationLogOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: str
     medication_id: str
     patient_id: str
@@ -45,19 +47,15 @@ class MedicationLogOut(BaseModel):
     reason: Optional[str] = None
     created_at: datetime
 
-    class Config:
-        from_attributes = True
-
 
 class MedicationOut(MedicationBase):
+    model_config = ConfigDict(from_attributes=True)
+
     id: str
     patient_id: str
     created_at: datetime
     updated_at: datetime
     logs: Optional[List[MedicationLogOut]] = []
-
-    class Config:
-        from_attributes = True
 
 
 class AdherenceReport(BaseModel):
