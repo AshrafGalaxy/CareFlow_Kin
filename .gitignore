@@ -30,6 +30,10 @@ web-build/
 *.swp
 *.swo
 
+# Local Developer Scripts
+dev.py
+dev.ps1
+
 # Environment Variables and Credentials
 .env
 .env.local
