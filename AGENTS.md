@@ -16,6 +16,9 @@
   - **Verification**: Document the executed test suite commands, compiler outputs, and observed metrics.
 
 ## 3. Engineering Tenets
+- **Git Hygiene and .gitignore Integrity**: Rigorously maintain `.gitignore`. Never allow untracked files, virtual environments, build outputs, or environment files into version control.
+- **Modern Architectural Standards**: Employ current industry architectural patterns, including asynchronous REST APIs, strongly typed data contracts, and responsive layout primitives.
+- **Strict Core Scoping**: Focus solely on delivering the core platform foundation thoroughly. Future extensions (circle tokens, SOS escalation, live media streaming, machine learning logic) are strictly deferred.
 - **Server-Authoritative Security**: Client-side interface adjustments do not constitute access control. All role checks and consent validations must execute on the backend.
 - **Single Source of Truth**: Unified entities (`User`, `PatientProfile`, `Medication`, `CheckIn`) must remain canonical and un-duplicated across the system.
 - **Authentic Workflows**: Simulated timeouts or cosmetic mock responses presented as completed services are prohibited.
@@ -27,5 +30,7 @@
 - **Ambiguous Commit Headers**: Emitting non-standard or overly brief subject lines devoid of scope.
 - **Direct Client Mocking**: Rendering fabricated data in place of integrating with defined REST contracts.
 - **Credential Leakage**: Committing secret keys, tokens, or environment definitions into the repository tree.
+- **Ignored Git Hygiene**: Leaving `.gitignore` outdated when introducing new dependencies or runtime artifacts.
+- **Scope Intrusion**: Prematurely introducing code for future modules into the foundational layer.
 - **Cross-User Data Bleed**: Executing database queries lacking explicit tenant or user ownership filters.
 - **Inadequate Interface Contrast**: Employing low-contrast color combinations or undersized tap targets unsuitable for older adults.
