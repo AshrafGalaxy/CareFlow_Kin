@@ -18,6 +18,9 @@
   - Maintain strictly segregated commits per logical domain (e.g., isolate backend services from frontend views).
   - Stacking bulk modifications across disparate directories (e.g., bundling 15–20 mixed files) is prohibited.
   - Commit at regular intervals immediately upon achieving verifiable completion of each subsystem.
+- **Canonical Scope Isolation**:
+  - Commit messages, titles, and descriptions must strictly refer to tracked, repository-level assets.
+  - Never mention, document, or cite private local scripts, untracked helper files, or developer-specific local tooling in version control messages.
 
 ## 3. Engineering Tenets
 - **Git Hygiene and .gitignore Integrity**: Rigorously maintain `.gitignore`. Never allow untracked files, virtual environments, build outputs, or environment files into version control.
@@ -39,3 +42,4 @@
 - **Bulk Commit Stacking**: Stacking multi-domain alterations across disparate subsystems into an indistinct single commit.
 - **Cross-User Data Bleed**: Executing database queries lacking explicit tenant or user ownership filters.
 - **Inadequate Interface Contrast**: Employing low-contrast color combinations or undersized tap targets unsuitable for older adults.
+- **Local Artifact Disclosure**: Referencing uncommitted, private, or developer-specific local files within commit messages, pull requests, or repository-facing documentation.
