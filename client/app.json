@@ -1,0 +1,29 @@
+{
+  "expo": {
+    "name": "Careflow",
+    "slug": "careflow",
+    "version": "1.0.0",
+    "orientation": "default",
+    "icon": "./assets/icon.png",
+    "scheme": "careflow",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "backgroundColor": "#F8FAF8"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0D5C52"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single"
+    },
+    "plugins": [
+      "expo-router"
+    ]
+  }
+}
