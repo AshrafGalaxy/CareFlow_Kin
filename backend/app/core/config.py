@@ -5,7 +5,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "Elderly Careflow API"
+    PROJECT_NAME: str = "Careflow API"
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api/v1"
     

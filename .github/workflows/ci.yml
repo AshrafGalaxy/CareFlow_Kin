@@ -1,4 +1,4 @@
-name: Elderly Careflow CI
+name: Careflow CI
 
 on:
   push:
