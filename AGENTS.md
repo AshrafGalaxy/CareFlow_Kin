@@ -14,6 +14,10 @@
   - **Context**: State the theoretical rationale and purpose of the update.
   - **Modifications**: Provide an itemized, point-wise enumeration of code alterations.
   - **Verification**: Document the executed test suite commands, compiler outputs, and observed metrics.
+- **Domain Segregation and Cadence**:
+  - Maintain strictly segregated commits per logical domain (e.g., isolate backend services from frontend views).
+  - Stacking bulk modifications across disparate directories (e.g., bundling 15–20 mixed files) is prohibited.
+  - Commit at regular intervals immediately upon achieving verifiable completion of each subsystem.
 
 ## 3. Engineering Tenets
 - **Git Hygiene and .gitignore Integrity**: Rigorously maintain `.gitignore`. Never allow untracked files, virtual environments, build outputs, or environment files into version control.
@@ -32,5 +36,6 @@
 - **Credential Leakage**: Committing secret keys, tokens, or environment definitions into the repository tree.
 - **Ignored Git Hygiene**: Leaving `.gitignore` outdated when introducing new dependencies or runtime artifacts.
 - **Scope Intrusion**: Prematurely introducing code for future modules into the foundational layer.
+- **Bulk Commit Stacking**: Stacking multi-domain alterations across disparate subsystems into an indistinct single commit.
 - **Cross-User Data Bleed**: Executing database queries lacking explicit tenant or user ownership filters.
 - **Inadequate Interface Contrast**: Employing low-contrast color combinations or undersized tap targets unsuitable for older adults.
