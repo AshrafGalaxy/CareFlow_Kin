@@ -4,7 +4,6 @@
     "slug": "careflow",
     "version": "1.0.0",
     "orientation": "default",
-    "icon": "./assets/icon.png",
     "scheme": "careflow",
     "userInterfaceStyle": "light",
     "splash": {
@@ -23,7 +22,8 @@
       "output": "single"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-asset"
     ]
   }
 }
