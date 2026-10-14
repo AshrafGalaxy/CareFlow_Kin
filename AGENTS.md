@@ -7,7 +7,7 @@
 
 ## 2. Version Control and Commit Standards
 - **Subject Line**:
-  - Maximum 55 characters.
+  - Target ~50 characters; maximum ceiling of 72 characters.
   - Imperative mood (e.g., `feat(auth): implement token verification dependency`).
   - Standardized conventional types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`.
 - **Commit Body Format**:
