@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing and Coverage
+coverage/
+.pytest_cache/
+__pycache__/
+*.py[cod]
+*$py.class
+.coverage
+htmlcov/
+
+# Python Environments
+.venv/
+env/
+venv/
+ENV/
+
+# Production and Distribution Builds
+dist/
+build/
+.expo/
+web-build/
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment Variables and Credentials
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Database
+*.sqlite3
+*.db
+
+# OS Artifacts
+.DS_Store
+Thumbs.db
+
+# TypeScript / Metro
+*.tsbuildinfo
