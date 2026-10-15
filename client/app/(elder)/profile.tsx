@@ -16,6 +16,7 @@ import { ResponsiveContainer } from "../../components/ResponsiveContainer";
 import { BigButton } from "../../components/BigButton";
 import { CareFlowLogo } from "../../components/CareFlowLogo";
 import { useAuth } from "../../context/AuthContext";
+import { useAccessibility } from "../../context/AccessibilityContext";
 import {
   User,
   Shield,
@@ -33,6 +34,8 @@ export default function ProfileScreen() {
   const router = useRouter();
   const { user, logout } = useAuth();
   const { isSmallMobile } = useResponsive();
+  const { fontMultiplier, isAAAMode, minTouchTarget, aaaColors, highContrastBorders } = useAccessibility();
+  const cardBorderStyle = highContrastBorders ? { borderWidth: 1.5, borderColor: "#CBD5E1" } : {};
 
   // Settings states
   const [morningReminders, setMorningReminders] = useState(true);
@@ -49,15 +52,15 @@ export default function ProfileScreen() {
   return (
     <ResponsiveContainer>
       <View style={styles.header}>
-        <Text style={styles.screenTitle}>Elder Profile & Settings</Text>
-        <Text style={styles.screenSubtitle}>
+        <Text style={[styles.screenTitle, { fontSize: Math.round(26 * fontMultiplier) }]}>Elder Profile & Settings</Text>
+        <Text style={[styles.screenSubtitle, { fontSize: Math.round(15 * fontMultiplier) }]}>
           Manage care preferences, guardian contacts, and notification alerts.
         </Text>
       </View>
 
       <View style={styles.contentStack}>
         {/* 1. Identity & Role Card */}
-        <View style={[styles.profileCard, isSmallMobile && { padding: 14, gap: 12 }]}>
+        <View style={[styles.profileCard, isSmallMobile && { padding: 14, gap: 12 }, cardBorderStyle]}>
           <View style={[styles.avatarWrap, isSmallMobile && { width: 48, height: 48, borderRadius: 12 }]}>
             <Text style={[styles.avatarText, isSmallMobile && { fontSize: 20 }]}>
               {user?.full_name ? user.full_name.charAt(0) : "E"}
@@ -65,30 +68,30 @@ export default function ProfileScreen() {
           </View>
 
           <View style={styles.identityBlock}>
-            <Text style={[styles.userName, isSmallMobile && { fontSize: 17 }]}>{user?.full_name || "Eleanor Vance"}</Text>
-            <Text style={styles.userEmail}>{user?.email || "eleanor@careflow.com"}</Text>
+            <Text style={[styles.userName, { fontSize: Math.round((isSmallMobile ? 17 : 20) * fontMultiplier) }]}>{user?.full_name || "Eleanor Vance"}</Text>
+            <Text style={[styles.userEmail, { fontSize: Math.round(14 * fontMultiplier) }]}>{user?.email || "eleanor@careflow.com"}</Text>
 
             <View style={styles.roleBadgeRow}>
               <View style={styles.roleBadge}>
                 <Heart size={13} color="#0284C7" />
-                <Text style={styles.roleBadgeText}>Elder Companion</Text>
+                <Text style={[styles.roleBadgeText, { fontSize: Math.round(12 * fontMultiplier) }]}>Elder Companion</Text>
               </View>
 
               <View style={styles.activePill}>
                 <View style={styles.activeDot} />
-                <Text style={styles.activeText}>Active Member</Text>
+                <Text style={[styles.activeText, { fontSize: Math.round(12 * fontMultiplier) }]}>Active Member</Text>
               </View>
             </View>
           </View>
         </View>
 
         {/* 2. Emergency & Family Guardian Support */}
-        <View style={[styles.sectionCard, isSmallMobile && { padding: 14 }]}>
+        <View style={[styles.sectionCard, isSmallMobile && { padding: 14 }, cardBorderStyle]}>
           <View style={styles.sectionHeader}>
             <View style={styles.sectionIconSquircle}>
               <Shield size={18} color="#0284C7" />
             </View>
-            <Text style={styles.sectionTitle}>Designated Family Guardian</Text>
+            <Text style={[styles.sectionTitle, { fontSize: Math.round(16 * fontMultiplier) }]}>Designated Family Guardian</Text>
           </View>
 
           <View style={[styles.contactRow, isSmallMobile && { padding: 10, gap: 10 }]}>
@@ -96,12 +99,12 @@ export default function ProfileScreen() {
               <Text style={styles.contactInitials}>RV</Text>
             </View>
             <View style={styles.contactInfo}>
-              <Text style={styles.contactName}>Robert Vance</Text>
-              <Text style={styles.contactRelation}>Son • Primary Emergency Contact</Text>
-              <Text style={styles.contactPhone}>+1 (555) 382-9014</Text>
+              <Text style={[styles.contactName, { fontSize: Math.round(16 * fontMultiplier) }]}>Robert Vance</Text>
+              <Text style={[styles.contactRelation, { fontSize: Math.round(13 * fontMultiplier) }]}>Son • Primary Emergency Contact</Text>
+              <Text style={[styles.contactPhone, { fontSize: Math.round(14 * fontMultiplier) }]}>+1 (555) 382-9014</Text>
             </View>
             <TouchableOpacity
-              style={styles.contactCallBtn}
+              style={[styles.contactCallBtn, { minHeight: Math.max(48, minTouchTarget), minWidth: Math.max(48, minTouchTarget) }]}
               onPress={() => Alert.alert("Emergency Dial", "Calling Robert Vance...")}
             >
               <Phone size={18} color="#059669" />
@@ -111,10 +114,10 @@ export default function ProfileScreen() {
 
 
         {/* 3. Notification Preferences */}
-        <View style={styles.sectionCard}>
+        <View style={[styles.sectionCard, cardBorderStyle]}>
           <View style={styles.sectionHeader}>
             <Bell size={20} color={Theme.colors.primary} />
-            <Text style={styles.sectionTitle}>Daily Notifications & Alerts</Text>
+            <Text style={[styles.sectionTitle, { fontSize: Math.round(16 * fontMultiplier) }]}>Daily Notifications & Alerts</Text>
           </View>
 
           <View style={styles.toggleRow}>

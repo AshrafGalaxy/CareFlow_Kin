@@ -8,6 +8,7 @@ interface CareFlowLogoProps {
   showText?: boolean;
   withContainer?: boolean;
   style?: ViewStyle;
+  title?: string;
 }
 
 export const CareFlowLogo: React.FC<CareFlowLogoProps> = ({
@@ -15,6 +16,7 @@ export const CareFlowLogo: React.FC<CareFlowLogoProps> = ({
   showText = false,
   withContainer = false,
   style,
+  title = "Careflow",
 }) => {
   const emblem = (
     <Svg width={size} height={size} viewBox="0 0 1000 1000">
@@ -91,7 +93,7 @@ export const CareFlowLogo: React.FC<CareFlowLogoProps> = ({
       {emblem}
       <View style={styles.textWrap}>
         <Text style={[styles.brandText, { fontSize: Math.round(size * 0.58) }]}>
-          Careflow
+          {title}
         </Text>
       </View>
     </View>

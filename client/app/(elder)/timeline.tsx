@@ -6,9 +6,12 @@ import { useResponsive } from "../../hooks/useResponsive";
 import { ResponsiveContainer } from "../../components/ResponsiveContainer";
 import { api, TimelineEvent } from "../../services/api";
 import { Clock, Pill, Smile, CheckSquare, Calendar, ShieldCheck } from "lucide-react-native";
+import { useAccessibility } from "../../context/AccessibilityContext";
 
 export default function TimelineScreen() {
   const { isSmallMobile } = useResponsive();
+  const { fontMultiplier, isAAAMode, minTouchTarget, aaaColors, highContrastBorders } = useAccessibility();
+  const cardBorderStyle = highContrastBorders ? { borderWidth: 1.5, borderColor: "#CBD5E1" } : {};
   const { data: events = [] } = useQuery<TimelineEvent[]>({
     queryKey: ["careTimeline"],
     queryFn: async () => {
@@ -76,8 +79,8 @@ export default function TimelineScreen() {
   return (
     <ResponsiveContainer>
       <View style={styles.header}>
-        <Text style={styles.title}>Care Timeline</Text>
-        <Text style={styles.subtitle}>
+        <Text style={[styles.title, { fontSize: Math.round(26 * fontMultiplier) }]}>Care Timeline</Text>
+        <Text style={[styles.subtitle, { fontSize: Math.round(15 * fontMultiplier) }]}>
           Your unified history of completed routines, medications, and clinical logs.
         </Text>
       </View>
@@ -103,16 +106,16 @@ export default function TimelineScreen() {
                 {index < events.length - 1 && <View style={styles.connectorLine} />}
               </View>
 
-              <View style={[styles.contentCard, isSmallMobile && { padding: 12 }]}>
+              <View style={[styles.contentCard, isSmallMobile && { padding: 12 }, cardBorderStyle]}>
                 <View style={styles.timestampRow}>
                   <View style={[styles.badgePill, { backgroundColor: bg }]}>
-                    <Text style={[styles.badgeText, { color: textColor }]}>{ev.event_type}</Text>
+                    <Text style={[styles.badgeText, { color: textColor, fontSize: Math.round(11 * fontMultiplier) }]}>{ev.event_type}</Text>
                   </View>
-                  <Text style={styles.timeText}>{`${dayStr} • ${dateStr}`}</Text>
+                  <Text style={[styles.timeText, { fontSize: Math.round(13 * fontMultiplier) }]}>{`${dayStr} • ${dateStr}`}</Text>
                 </View>
-                <Text style={[styles.eventTitle, isSmallMobile && { fontSize: 15 }]}>{ev.title}</Text>
+                <Text style={[styles.eventTitle, { fontSize: Math.round((isSmallMobile ? 15 : 17) * fontMultiplier) }]}>{ev.title}</Text>
                 {ev.description && (
-                  <Text style={[styles.eventDesc, isSmallMobile && { fontSize: 12 }]}>{ev.description}</Text>
+                  <Text style={[styles.eventDesc, { fontSize: Math.round((isSmallMobile ? 12 : 14) * fontMultiplier) }]}>{ev.description}</Text>
                 )}
               </View>
             </View>

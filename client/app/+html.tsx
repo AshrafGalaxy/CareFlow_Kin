@@ -8,7 +8,7 @@ export default function Root({ children }: PropsWithChildren) {
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <title>CareFlow Kin - Connected Daily Care</title>
+        <title>Careflow - Connected Daily Care</title>
 
         {/* Strict 2-Font System: Fontshare General Sans & Google Fonts Manrope (+ Plus Jakarta Sans fallback) */}
         <link rel="preconnect" href="https://api.fontshare.com" />

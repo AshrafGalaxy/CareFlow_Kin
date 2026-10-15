@@ -8,6 +8,7 @@ import { ResponsiveContainer } from "../../components/ResponsiveContainer";
 import { BigButton } from "../../components/BigButton";
 import { api } from "../../services/api";
 import { Smile, Meh, Frown, AlertTriangle, ArrowLeft, CheckCircle2 } from "lucide-react-native";
+import { useAccessibility } from "../../context/AccessibilityContext";
 
 type WellnessStatus = "GOOD" | "OKAY" | "NOT_WELL" | "NEEDS_HELP";
 
@@ -15,6 +16,7 @@ export default function CheckInScreen() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { isSmallMobile } = useResponsive();
+  const { fontMultiplier, isAAAMode, minTouchTarget, aaaColors, highContrastBorders } = useAccessibility();
   const [selectedStatus, setSelectedStatus] = useState<WellnessStatus | null>(null);
   const [notes, setNotes] = useState("");
 
@@ -82,22 +84,26 @@ export default function CheckInScreen() {
     <ResponsiveContainer>
       <TouchableOpacity
         onPress={() => router.back()}
-        style={styles.backBtn}
+        style={[styles.backBtn, { minHeight: Math.max(48, minTouchTarget) }]}
         accessibilityRole="button"
         accessibilityLabel="Go back to Home"
       >
         <ArrowLeft size={16} color="#0284C7" />
-        <Text style={styles.backText}>Back to Dashboard</Text>
+        <Text style={[styles.backText, { fontSize: Math.round(14 * fontMultiplier) }]}>Back to Dashboard</Text>
       </TouchableOpacity>
 
-      <Text style={styles.screenTitle}>How are you feeling today?</Text>
-      <Text style={styles.screenSubtitle}>
+      <Text style={[styles.screenTitle, { fontSize: Math.round(28 * fontMultiplier) }]}>How are you feeling today?</Text>
+      <Text style={[styles.screenSubtitle, { fontSize: Math.round(16 * fontMultiplier) }]}>
         Select the option that best reflects your current comfort. This keeps your care circle calmly reassured.
       </Text>
 
       <View style={styles.optionsList}>
         {options.map((opt) => {
           const isSelected = selectedStatus === opt.status;
+          const cardBorderStyle = isSelected
+            ? { borderColor: opt.color, borderWidth: 2, backgroundColor: opt.bg }
+            : (highContrastBorders ? { borderWidth: 1.5, borderColor: "#CBD5E1" } : {});
+
           return (
             <TouchableOpacity
               key={opt.status}
@@ -105,8 +111,9 @@ export default function CheckInScreen() {
               onPress={() => setSelectedStatus(opt.status)}
               style={[
                 styles.optionCard,
+                { minHeight: Math.max(76, minTouchTarget) },
                 isSmallMobile && { padding: 12, gap: 10 },
-                isSelected && { borderColor: opt.color, backgroundColor: opt.bg },
+                cardBorderStyle,
               ]}
               accessibilityRole="radio"
               accessibilityState={{ selected: isSelected }}
@@ -115,10 +122,10 @@ export default function CheckInScreen() {
                 {opt.icon}
               </View>
               <View style={styles.textBox}>
-                <Text style={[styles.optTitle, isSelected && { color: opt.color }]}>
+                <Text style={[styles.optTitle, { fontSize: Math.round(18 * fontMultiplier) }, isSelected && { color: opt.color }]}>
                   {opt.title}
                 </Text>
-                <Text style={styles.optDesc}>{opt.desc}</Text>
+                <Text style={[styles.optDesc, { fontSize: Math.round(14 * fontMultiplier) }]}>{opt.desc}</Text>
               </View>
               {isSelected && (
                 <View style={styles.checkIndicator}>

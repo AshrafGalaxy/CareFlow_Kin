@@ -27,11 +27,14 @@ import {
   X,
   Stethoscope,
 } from "lucide-react-native";
+import { useAccessibility } from "../../context/AccessibilityContext";
 
 export default function AppointmentsScreen() {
   const queryClient = useQueryClient();
   const { isSmallMobile } = useResponsive();
+  const { fontMultiplier, isAAAMode, minTouchTarget, aaaColors, highContrastBorders } = useAccessibility();
   const [modalVisible, setModalVisible] = useState(false);
+  const cardBorderStyle = highContrastBorders ? { borderWidth: 1.5, borderColor: "#CBD5E1" } : {};
 
 
   // Form states
@@ -120,28 +123,28 @@ export default function AppointmentsScreen() {
     <ResponsiveContainer>
       <View style={styles.headerRow}>
         <View style={styles.titleWrap}>
-          <Text style={styles.screenTitle}>Clinical Appointments</Text>
-          <Text style={styles.screenSubtitle}>
+          <Text style={[styles.screenTitle, { fontSize: Math.round(26 * fontMultiplier) }]}>Clinical Appointments</Text>
+          <Text style={[styles.screenSubtitle, { fontSize: Math.round(15 * fontMultiplier) }]}>
             Scheduled visits, specialist follow-ups, and clinical consultations.
           </Text>
         </View>
 
         <TouchableOpacity
-          style={styles.addBtn}
+          style={[styles.addBtn, { minHeight: Math.max(48, minTouchTarget) }]}
           onPress={() => setModalVisible(true)}
           activeOpacity={0.8}
         >
           <Plus size={18} color="#FFFFFF" />
-          <Text style={styles.addBtnText}>New Visit</Text>
+          <Text style={[styles.addBtnText, { fontSize: Math.round(14 * fontMultiplier) }]}>New Visit</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.listContainer}>
         {appts.length === 0 ? (
-          <View style={styles.emptyCard}>
+          <View style={[styles.emptyCard, cardBorderStyle]}>
             <Calendar size={40} color={Theme.colors.accent} />
-            <Text style={styles.emptyTitle}>No Upcoming Appointments</Text>
-            <Text style={styles.emptyDesc}>
+            <Text style={[styles.emptyTitle, { fontSize: Math.round(18 * fontMultiplier) }]}>No Upcoming Appointments</Text>
+            <Text style={[styles.emptyDesc, { fontSize: Math.round(14 * fontMultiplier) }]}>
               You have no clinical visits scheduled right now. Use the button above to add one.
             </Text>
           </View>
@@ -159,19 +162,19 @@ export default function AppointmentsScreen() {
             });
 
             return (
-              <View key={appt.id} style={[styles.apptCard, isSmallMobile && { padding: 14 }]}>
+              <View key={appt.id} style={[styles.apptCard, isSmallMobile && { padding: 14 }, cardBorderStyle]}>
                 <View style={styles.cardHeader}>
                   <View style={[styles.iconBox, isSmallMobile && { width: 36, height: 36, borderRadius: 10 }]}>
                     <Stethoscope size={isSmallMobile ? 18 : 20} color="#0D9488" />
                   </View>
 
                   <View style={styles.titleBlock}>
-                    <Text style={[styles.apptTitle, isSmallMobile && { fontSize: 16 }]}>{appt.title}</Text>
-                    <Text style={styles.doctorText}>{appt.doctor_name}</Text>
+                    <Text style={[styles.apptTitle, { fontSize: Math.round((isSmallMobile ? 16 : 18) * fontMultiplier) }]}>{appt.title}</Text>
+                    <Text style={[styles.doctorText, { fontSize: Math.round(15 * fontMultiplier) }]}>{appt.doctor_name}</Text>
                   </View>
 
                   <View style={styles.statusBadge}>
-                    <Text style={styles.statusBadgeText}>{appt.status}</Text>
+                    <Text style={[styles.statusBadgeText, { fontSize: Math.round(11 * fontMultiplier) }]}>{appt.status}</Text>
                   </View>
                 </View>
 
@@ -179,7 +182,7 @@ export default function AppointmentsScreen() {
                 <View style={styles.detailsGrid}>
                   <View style={styles.detailRow}>
                     <Calendar size={16} color={Theme.colors.accent} />
-                    <Text style={styles.detailText}>
+                    <Text style={[styles.detailText, { fontSize: Math.round(14 * fontMultiplier) }]}>
                       {dateStr} • {timeStr}
                     </Text>
                   </View>
@@ -187,7 +190,7 @@ export default function AppointmentsScreen() {
                   {appt.clinic_name && (
                     <View style={styles.detailRow}>
                       <MapPin size={16} color={Theme.colors.accent} />
-                      <Text style={styles.detailText}>
+                      <Text style={[styles.detailText, { fontSize: Math.round(14 * fontMultiplier) }]}>
                         {appt.clinic_name} {appt.location ? `(${appt.location})` : ""}
                       </Text>
                     </View>

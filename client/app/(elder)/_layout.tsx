@@ -16,8 +16,10 @@ import { useRouter, usePathname } from "expo-router";
 import { CareFlowLogo } from "../../components/CareFlowLogo";
 import { useAuth } from "../../context/AuthContext";
 import { useResponsive } from "../../hooks/useResponsive";
+import { AccessibilityProvider } from "../../context/AccessibilityContext";
+import { AccessibilityToolbar } from "../../components/AccessibilityToolbar";
 
-export default function ElderLayout() {
+function ElderLayoutContent() {
   const { isSmallMobile, isMobile, isTablet, isDesktop } = useResponsive();
   const router = useRouter();
   const pathname = usePathname();
@@ -188,11 +190,15 @@ export default function ElderLayout() {
       {!isMobile ? renderSidebar() : renderMobileHeader()}
 
       <View style={styles.mainContentArea}>
+        <View style={[styles.toolbarContainer, { paddingHorizontal: isSmallMobile ? 12 : 20 }]}>
+          <AccessibilityToolbar />
+        </View>
+
         <Tabs
           screenOptions={{
             headerShown: false,
             tabBarStyle: !isMobile ? { display: "none" } : styles.mobileTabBar,
-            tabBarActiveTintColor: Theme.colors.primary,
+            tabBarActiveTintColor: Theme.accessibility.aaaColors.primary,
             tabBarInactiveTintColor: Theme.colors.textMuted,
             tabBarLabelStyle: [styles.tabLabel, isSmallMobile && styles.tabLabelSmall],
             tabBarItemStyle: styles.tabItem,
@@ -253,6 +259,14 @@ export default function ElderLayout() {
   );
 }
 
+export default function ElderLayout() {
+  return (
+    <AccessibilityProvider>
+      <ElderLayoutContent />
+    </AccessibilityProvider>
+  );
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -264,6 +278,11 @@ const styles = StyleSheet.create({
   mainContentArea: {
     flex: 1,
     height: "100%",
+  },
+  toolbarContainer: {
+    paddingTop: 10,
+    backgroundColor: Theme.colors.background,
+    zIndex: 10,
   },
 
   // Desktop / Tablet Sidebar Styles

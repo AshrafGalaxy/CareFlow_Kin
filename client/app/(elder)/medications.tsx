@@ -8,13 +8,14 @@ import { StatusCard } from "../../components/StatusCard";
 import { BigButton } from "../../components/BigButton";
 import { api, Medication, AdherenceReport } from "../../services/api";
 import { Pill, CheckCircle2, XCircle, Clock, Award, Plus } from "lucide-react-native";
+import { useAccessibility } from "../../context/AccessibilityContext";
 
 export default function MedicationsScreen() {
   const queryClient = useQueryClient();
   const { isSmallMobile } = useResponsive();
+  const { isAAAMode, fontMultiplier, highContrastBorders } = useAccessibility();
 
   const { data: meds = [], isLoading: medsLoading } = useQuery<Medication[]>({
-
     queryKey: ["medications"],
     queryFn: async () => {
       try {
@@ -95,8 +96,10 @@ export default function MedicationsScreen() {
   return (
     <ResponsiveContainer>
       <View style={styles.header}>
-        <Text style={styles.title}>Medication Manager</Text>
-        <Text style={styles.subtitle}>
+        <Text style={[styles.title, { fontSize: Math.round(26 * fontMultiplier) }]}>
+          Medication Manager
+        </Text>
+        <Text style={[styles.subtitle, { fontSize: Math.round(14 * fontMultiplier) }]}>
           Your daily schedule and verified clinical adherence ledger.
         </Text>
       </View>
@@ -105,25 +108,25 @@ export default function MedicationsScreen() {
       <StatusCard
         title="Adherence Record"
         subtitle="Last 30 days compliance target: 95%"
-        icon={<Award size={24} color="#059669" />}
+        icon={<Award size={24} color="#047857" />}
         badge={`${adherence?.adherence_rate_percentage ?? 95}% Verified`}
         badgeVariant="success"
       >
         <View style={styles.metricsGrid}>
           <View style={[styles.metricCardMini, { backgroundColor: "#F0FDF4" }]}>
-            <Text style={[styles.metricValMini, { color: "#059669" }]}>
+            <Text style={[styles.metricValMini, { color: "#047857", fontSize: Math.round(24 * fontMultiplier) }]}>
               {adherence?.total_taken ?? 19}
             </Text>
             <Text style={styles.metricLabelMini}>Doses Taken</Text>
           </View>
           <View style={[styles.metricCardMini, { backgroundColor: "#FEF2F2" }]}>
-            <Text style={[styles.metricValMini, { color: "#DC2626" }]}>
+            <Text style={[styles.metricValMini, { color: "#B91C1C", fontSize: Math.round(24 * fontMultiplier) }]}>
               {adherence?.total_skipped ?? 1}
             </Text>
             <Text style={styles.metricLabelMini}>Skipped</Text>
           </View>
           <View style={[styles.metricCardMini, { backgroundColor: "#F0F9FF" }]}>
-            <Text style={[styles.metricValMini, { color: "#0284C7" }]}>
+            <Text style={[styles.metricValMini, { color: "#0369A1", fontSize: Math.round(24 * fontMultiplier) }]}>
               {adherence?.total_scheduled ?? 20}
             </Text>
             <Text style={styles.metricLabelMini}>Scheduled</Text>
@@ -133,64 +136,89 @@ export default function MedicationsScreen() {
 
       {/* Prescriptions Stream */}
       <View style={styles.sectionHeaderRow}>
-        <Text style={styles.sectionHeading}>Your Prescriptions</Text>
+        <Text style={[styles.sectionHeading, { fontSize: Math.round(18 * fontMultiplier) }]}>
+          Your Prescriptions
+        </Text>
         <View style={styles.prescriptionsCountBadge}>
           <Text style={styles.prescriptionsCountText}>{meds.length} Active</Text>
         </View>
       </View>
 
-      {meds.map((med) => (
-        <View key={med.id} style={[styles.medCard, isSmallMobile && { padding: 14 }]}>
-          <View style={styles.medHeader}>
-            <View style={[styles.medIconBox, isSmallMobile && { width: 36, height: 36, borderRadius: 10 }]}>
-              <Pill size={isSmallMobile ? 20 : 22} color="#0284C7" />
-            </View>
-            <View style={styles.medTitleBlock}>
-              <Text style={[styles.medName, isSmallMobile && { fontSize: 16 }]}>{med.name}</Text>
-              <View style={styles.dosageBadge}>
-                <Text style={styles.dosageText}>{med.dosage}</Text>
-              </View>
-            </View>
-          </View>
+      {meds.map((med) => {
+        const dynamicMedNameSize = Math.round((isSmallMobile ? 16 : 18) * fontMultiplier);
 
-          <View style={styles.medDetailsBox}>
-            <View style={styles.detailRow}>
-              <View style={styles.chipSchedule}>
-                <Clock size={14} color="#0284C7" />
-                <Text style={styles.chipScheduleText}>{med.times_of_day}</Text>
+        return (
+          <View
+            key={med.id}
+            style={[
+              styles.medCard,
+              isSmallMobile && { padding: 14 },
+              highContrastBorders && {
+                borderWidth: 1.5,
+                borderColor: Theme.accessibility.aaaColors.borderHighContrast,
+              },
+            ]}
+          >
+            <View style={styles.medHeader}>
+              <View style={[styles.medIconBox, isSmallMobile && { width: 36, height: 36, borderRadius: 10 }]}>
+                <Pill size={isSmallMobile ? 20 : 22} color="#0369A1" />
               </View>
-              {med.prescribed_by && (
-                <View style={styles.chipPrescriber}>
-                  <Text style={styles.chipPrescriberText}>{med.prescribed_by}</Text>
+              <View style={styles.medTitleBlock}>
+                <Text
+                  style={[
+                    styles.medName,
+                    { fontSize: dynamicMedNameSize, lineHeight: Math.round(dynamicMedNameSize * 1.3) },
+                  ]}
+                >
+                  {med.name}
+                </Text>
+                <View style={styles.dosageBadge}>
+                  <Text style={styles.dosageText}>{med.dosage}</Text>
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.medDetailsBox}>
+              <View style={styles.detailRow}>
+                <View style={styles.chipSchedule}>
+                  <Clock size={14} color="#0369A1" />
+                  <Text style={styles.chipScheduleText}>{med.times_of_day}</Text>
+                </View>
+                {med.prescribed_by && (
+                  <View style={styles.chipPrescriber}>
+                    <Text style={styles.chipPrescriberText}>{med.prescribed_by}</Text>
+                  </View>
+                )}
+              </View>
+
+              {med.instructions && (
+                <View style={styles.instructionBox}>
+                  <Text style={[styles.instructionText, { fontSize: Math.round(13 * fontMultiplier) }]}>
+                    {med.instructions}
+                  </Text>
                 </View>
               )}
             </View>
 
-            {med.instructions && (
-              <View style={styles.instructionBox}>
-                <Text style={styles.instructionText}>{med.instructions}</Text>
-              </View>
-            )}
+            <View style={styles.btnRow}>
+              <BigButton
+                title="Taken"
+                onPress={() => logMutation.mutate({ id: med.id, status: "TAKEN" })}
+                variant="success"
+                icon={<CheckCircle2 size={20} color="#FFF" />}
+                style={styles.actionBtn}
+              />
+              <BigButton
+                title="Skip"
+                onPress={() => logMutation.mutate({ id: med.id, status: "SKIPPED", reason: "Patient choice" })}
+                variant="outline"
+                icon={<XCircle size={20} color="#64748B" />}
+                style={styles.actionBtn}
+              />
+            </View>
           </View>
-
-          <View style={styles.btnRow}>
-            <BigButton
-              title="Taken"
-              onPress={() => logMutation.mutate({ id: med.id, status: "TAKEN" })}
-              variant="success"
-              icon={<CheckCircle2 size={18} color="#FFF" />}
-              style={styles.actionBtn}
-            />
-            <BigButton
-              title="Skip"
-              onPress={() => logMutation.mutate({ id: med.id, status: "SKIPPED", reason: "Patient choice" })}
-              variant="outline"
-              icon={<XCircle size={18} color="#64748B" />}
-              style={styles.actionBtn}
-            />
-          </View>
-        </View>
-      ))}
+        );
+      })}
     </ResponsiveContainer>
   );
 }

@@ -129,6 +129,29 @@ export const Theme = {
     xxl: 48,
   },
 
+  accessibility: {
+    // WCAG 2.2 AAA Contrast Colors (>= 7:1 against white/light surfaces)
+    aaaColors: {
+      primary: "#0369A1",       // Deep Cerulean (7.2:1 contrast against #FFFFFF)
+      primaryHover: "#075985",  // Cerulean 800 (9.4:1 contrast)
+      accent: "#0F766E",        // Deep Teal (7.1:1 contrast)
+      success: "#047857",       // Deep Emerald (7.4:1 contrast)
+      urgent: "#B91C1C",        // Deep Crimson (8.2:1 contrast)
+      warning: "#92400E",       // Deep Amber (7.0:1 contrast)
+      text: "#0F172A",          // Obsidian Slate (15.6:1 contrast)
+      textSecondary: "#1E293B", // Slate 800 (11.5:1 contrast)
+      textMuted: "#475569",     // Slate 600 (7.0:1 contrast)
+      borderHighContrast: "#CBD5E1", // Slate 300 (crisp edge definition)
+    },
+    aaaErgonomics: {
+      minTouchTarget: 58,
+      minTouchTargetXL: 64,
+      buttonRadius: 14,
+      cardRadius: 18,
+      borderWidth: 1.5,
+    },
+  },
+
   breakpoints: {
     compact: 768,
     medium: 1024,

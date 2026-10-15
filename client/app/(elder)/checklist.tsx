@@ -7,11 +7,12 @@ import { ResponsiveContainer } from "../../components/ResponsiveContainer";
 import { BigButton } from "../../components/BigButton";
 import { api, ChecklistItem } from "../../services/api";
 import { CheckSquare, CheckCircle2, XCircle, Droplet, Activity, Sun, Moon } from "lucide-react-native";
+import { useAccessibility } from "../../context/AccessibilityContext";
 
 export default function ChecklistScreen() {
   const queryClient = useQueryClient();
   const { isSmallMobile } = useResponsive();
-
+  const { isAAAMode, fontMultiplier, highContrastBorders, minTouchTarget } = useAccessibility();
 
   const { data: items = [] } = useQuery<ChecklistItem[]>({
     queryKey: ["checklistToday"],
@@ -99,18 +100,30 @@ export default function ChecklistScreen() {
   return (
     <ResponsiveContainer>
       <View style={styles.header}>
-        <Text style={styles.title}>Daily Routine Checklist</Text>
-        <Text style={styles.subtitle}>
+        <Text style={[styles.title, { fontSize: Math.round(26 * fontMultiplier) }]}>
+          Daily Routine Checklist
+        </Text>
+        <Text style={[styles.subtitle, { fontSize: Math.round(14 * fontMultiplier) }]}>
           Step-by-step calm activities to keep you feeling energized and balanced.
         </Text>
       </View>
 
       {/* Routine Progress Summary Deck */}
-      <View style={styles.progressDeck}>
+      <View
+        style={[
+          styles.progressDeck,
+          highContrastBorders && {
+            borderWidth: 1.5,
+            borderColor: Theme.accessibility.aaaColors.borderHighContrast,
+          },
+        ]}
+      >
         <View style={styles.progressDeckHeader}>
           <View style={styles.progressDeckInfo}>
-            <Text style={styles.progressDeckTitle}>Today's Routine Completion</Text>
-            <Text style={styles.progressDeckSubtitle}>
+            <Text style={[styles.progressDeckTitle, { fontSize: Math.round(15 * fontMultiplier) }]}>
+              Today's Routine Completion
+            </Text>
+            <Text style={[styles.progressDeckSubtitle, { fontSize: Math.round(13 * fontMultiplier) }]}>
               {completedCount} of {items.length} daily wellness tasks finished
             </Text>
           </View>
@@ -129,16 +142,33 @@ export default function ChecklistScreen() {
           const isDone = item.today_status === "COMPLETED";
           const isSkipped = item.today_status === "SKIPPED";
           const { icon, bg } = getIconData(item.icon_name);
+          const dynamicItemTitleSize = Math.round((isSmallMobile ? 16 : 17) * fontMultiplier);
 
           return (
-            <View key={item.id} style={[styles.card, isSmallMobile && { padding: 14 }]}>
+            <View
+              key={item.id}
+              style={[
+                styles.card,
+                isSmallMobile && { padding: 14 },
+                highContrastBorders && {
+                  borderWidth: 1.5,
+                  borderColor: Theme.accessibility.aaaColors.borderHighContrast,
+                },
+              ]}
+            >
               <View style={styles.cardHeader}>
                 <View style={[styles.iconBox, { backgroundColor: bg }, isSmallMobile && { width: 36, height: 36, borderRadius: 10 }]}>
                   {icon}
                 </View>
                 <View style={styles.infoBox}>
                   <View style={styles.itemHeaderLine}>
-                    <Text style={[styles.itemTitle, isDone && styles.itemDoneTitle, isSmallMobile && { fontSize: 16 }]}>
+                    <Text
+                      style={[
+                        styles.itemTitle,
+                        isDone && styles.itemDoneTitle,
+                        { fontSize: dynamicItemTitleSize, lineHeight: Math.round(dynamicItemTitleSize * 1.35) },
+                      ]}
+                    >
                       {item.title}
                     </Text>
                     <View style={styles.timeTag}>
@@ -147,21 +177,47 @@ export default function ChecklistScreen() {
                   </View>
 
                   {item.description && (
-                    <Text style={styles.itemDesc}>{item.description}</Text>
+                    <Text style={[styles.itemDesc, { fontSize: Math.round(13 * fontMultiplier) }]}>
+                      {item.description}
+                    </Text>
                   )}
                 </View>
               </View>
 
               <View style={[styles.actionsRow, isSmallMobile && { gap: 8 }]}>
                 {isDone ? (
-                  <View style={styles.statusPillDone}>
-                    <CheckCircle2 size={18} color="#059669" />
-                    <Text style={styles.statusTextDone}>Completed for Today</Text>
+                  <View
+                    style={[
+                      styles.statusPillDone,
+                      { minHeight: isAAAMode ? minTouchTarget : 44 },
+                    ]}
+                  >
+                    <CheckCircle2 size={20} color="#047857" />
+                    <Text
+                      style={[
+                        styles.statusTextDone,
+                        { fontSize: Math.round(14 * fontMultiplier) },
+                      ]}
+                    >
+                      Completed for Today
+                    </Text>
                   </View>
                 ) : isSkipped ? (
-                  <View style={styles.statusPillSkipped}>
-                    <XCircle size={18} color="#D97706" />
-                    <Text style={styles.statusTextSkipped}>Skipped for Today</Text>
+                  <View
+                    style={[
+                      styles.statusPillSkipped,
+                      { minHeight: isAAAMode ? minTouchTarget : 44 },
+                    ]}
+                  >
+                    <XCircle size={20} color="#92400E" />
+                    <Text
+                      style={[
+                        styles.statusTextSkipped,
+                        { fontSize: Math.round(14 * fontMultiplier) },
+                      ]}
+                    >
+                      Skipped for Today
+                    </Text>
                   </View>
                 ) : (
                   <>
@@ -169,7 +225,7 @@ export default function ChecklistScreen() {
                       title="Done"
                       onPress={() => completeMutation.mutate(item.id)}
                       variant="primary"
-                      icon={<CheckCircle2 size={18} color="#FFF" />}
+                      icon={<CheckCircle2 size={20} color="#FFF" />}
                       style={styles.actionBtn}
                     />
                     <BigButton

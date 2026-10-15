@@ -24,11 +24,13 @@ import {
   Activity,
   ArrowRight
 } from "lucide-react-native";
+import { useAccessibility } from "../../context/AccessibilityContext";
 
 export default function ElderHomeScreen() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { isSmallMobile, isMobile, isTablet, isDesktop } = useResponsive();
+  const { fontMultiplier, isAAAMode, minTouchTarget, aaaColors, highContrastBorders } = useAccessibility();
 
 
   // Query Elder Home Deck payload from backend API
@@ -174,6 +176,8 @@ export default function ElderHomeScreen() {
     (home.checklist_completed_count / Math.max(1, home.checklist_total_count)) * 100
   );
 
+  const cardBorderStyle = highContrastBorders ? { borderWidth: 1.5, borderColor: "#CBD5E1" } : {};
+
   return (
     <ResponsiveContainer>
       <HeaderGreeting greeting={home.greeting} date={home.date} />
@@ -181,70 +185,70 @@ export default function ElderHomeScreen() {
       {/* 1. Desktop & Deck Top Summary Metrics Ribbon */}
       <View style={[styles.metricsRibbon, isMobile && styles.metricsRibbonMobile]}>
         {/* KPI 1: Adherence */}
-        <View style={[styles.metricCard, isMobile && styles.metricCardMobile, isSmallMobile && styles.metricCardSmall]}>
+        <View style={[styles.metricCard, isMobile && styles.metricCardMobile, isSmallMobile && styles.metricCardSmall, cardBorderStyle]}>
           <View style={styles.metricCardHeader}>
             <View style={[styles.metricIconWrap, { backgroundColor: "#F0F9FF" }, isSmallMobile && styles.metricIconWrapSmall]}>
               <TrendingUp size={isSmallMobile ? 15 : 18} color="#0284C7" />
             </View>
             <View style={[styles.metricBadge, { backgroundColor: "#F0F9FF" }]}>
-              <Text style={[styles.metricBadgeText, { color: "#0284C7" }]}>95% Target</Text>
+              <Text style={[styles.metricBadgeText, { color: "#0284C7", fontSize: Math.round(11 * fontMultiplier) }]}>95% Target</Text>
             </View>
           </View>
           <View style={styles.metricBody}>
-            <Text style={[styles.metricLabel, isSmallMobile && styles.metricLabelSmall]} numberOfLines={1}>ADHERENCE</Text>
-            <Text style={[styles.metricValue, isSmallMobile && styles.metricValueSmall]}>{Math.round(home.adherence_rate_percentage)}%</Text>
+            <Text style={[styles.metricLabel, isSmallMobile && styles.metricLabelSmall, { fontSize: Math.round((isSmallMobile ? 9 : 11) * fontMultiplier) }]} numberOfLines={1}>ADHERENCE</Text>
+            <Text style={[styles.metricValue, isSmallMobile && styles.metricValueSmall, { fontSize: Math.round((isSmallMobile ? 18 : 24) * fontMultiplier) }]}>{Math.round(home.adherence_rate_percentage)}%</Text>
           </View>
         </View>
 
         {/* KPI 2: Routine */}
-        <View style={[styles.metricCard, isMobile && styles.metricCardMobile, isSmallMobile && styles.metricCardSmall]}>
+        <View style={[styles.metricCard, isMobile && styles.metricCardMobile, isSmallMobile && styles.metricCardSmall, cardBorderStyle]}>
           <View style={styles.metricCardHeader}>
             <View style={[styles.metricIconWrap, { backgroundColor: "#EEF2FF" }, isSmallMobile && styles.metricIconWrapSmall]}>
               <CheckSquare size={isSmallMobile ? 15 : 18} color="#4F46E5" />
             </View>
             <View style={[styles.metricBadge, { backgroundColor: "#EEF2FF" }]}>
-              <Text style={[styles.metricBadgeText, { color: "#4F46E5" }]}>{checklistPercent}% Done</Text>
+              <Text style={[styles.metricBadgeText, { color: "#4F46E5", fontSize: Math.round(11 * fontMultiplier) }]}>{checklistPercent}% Done</Text>
             </View>
           </View>
           <View style={styles.metricBody}>
-            <Text style={[styles.metricLabel, isSmallMobile && styles.metricLabelSmall]} numberOfLines={1}>ROUTINE</Text>
-            <Text style={[styles.metricValue, isSmallMobile && styles.metricValueSmall]}>
+            <Text style={[styles.metricLabel, isSmallMobile && styles.metricLabelSmall, { fontSize: Math.round((isSmallMobile ? 9 : 11) * fontMultiplier) }]} numberOfLines={1}>ROUTINE</Text>
+            <Text style={[styles.metricValue, isSmallMobile && styles.metricValueSmall, { fontSize: Math.round((isSmallMobile ? 18 : 24) * fontMultiplier) }]}>
               {home.checklist_completed_count} / {home.checklist_total_count}
             </Text>
           </View>
         </View>
 
         {/* KPI 3: Doses */}
-        <View style={[styles.metricCard, isMobile && styles.metricCardMobile, isSmallMobile && styles.metricCardSmall]}>
+        <View style={[styles.metricCard, isMobile && styles.metricCardMobile, isSmallMobile && styles.metricCardSmall, cardBorderStyle]}>
           <View style={styles.metricCardHeader}>
             <View style={[styles.metricIconWrap, { backgroundColor: "#F0FDFA" }, isSmallMobile && styles.metricIconWrapSmall]}>
               <Pill size={isSmallMobile ? 15 : 18} color="#0D9488" />
             </View>
             <View style={[styles.metricBadge, { backgroundColor: "#F0FDFA" }]}>
-              <Text style={[styles.metricBadgeText, { color: "#0D9488" }]}>{home.next_medications[0]?.times_of_day || "Scheduled"}</Text>
+              <Text style={[styles.metricBadgeText, { color: "#0D9488", fontSize: Math.round(11 * fontMultiplier) }]}>{home.next_medications[0]?.times_of_day || "Scheduled"}</Text>
             </View>
           </View>
           <View style={styles.metricBody}>
-            <Text style={[styles.metricLabel, isSmallMobile && styles.metricLabelSmall]} numberOfLines={1}>DOSES</Text>
-            <Text style={[styles.metricValue, isSmallMobile && styles.metricValueSmall]}>{home.next_medications.length}</Text>
+            <Text style={[styles.metricLabel, isSmallMobile && styles.metricLabelSmall, { fontSize: Math.round((isSmallMobile ? 9 : 11) * fontMultiplier) }]} numberOfLines={1}>DOSES</Text>
+            <Text style={[styles.metricValue, isSmallMobile && styles.metricValueSmall, { fontSize: Math.round((isSmallMobile ? 18 : 24) * fontMultiplier) }]}>{home.next_medications.length}</Text>
           </View>
         </View>
 
         {/* KPI 4: Wellness */}
-        <View style={[styles.metricCard, isMobile && styles.metricCardMobile, isSmallMobile && styles.metricCardSmall]}>
+        <View style={[styles.metricCard, isMobile && styles.metricCardMobile, isSmallMobile && styles.metricCardSmall, cardBorderStyle]}>
           <View style={styles.metricCardHeader}>
             <View style={[styles.metricIconWrap, { backgroundColor: "#ECFDF5" }, isSmallMobile && styles.metricIconWrapSmall]}>
               <Smile size={isSmallMobile ? 15 : 18} color="#10B981" />
             </View>
             <View style={[styles.metricBadge, { backgroundColor: checkinDone ? "#ECFDF5" : "#FEF3C7" }]}>
-              <Text style={[styles.metricBadgeText, { color: checkinDone ? "#059669" : "#D97706" }]}>
+              <Text style={[styles.metricBadgeText, { color: checkinDone ? "#059669" : "#D97706", fontSize: Math.round(11 * fontMultiplier) }]}>
                 {checkinDone ? "Synced" : "Pending"}
               </Text>
             </View>
           </View>
           <View style={styles.metricBody}>
-            <Text style={[styles.metricLabel, isSmallMobile && styles.metricLabelSmall]} numberOfLines={1}>WELLNESS</Text>
-            <Text style={[styles.metricValue, isSmallMobile && styles.metricValueSmall]}>{checkinDone ? "Logged" : "Ready"}</Text>
+            <Text style={[styles.metricLabel, isSmallMobile && styles.metricLabelSmall, { fontSize: Math.round((isSmallMobile ? 9 : 11) * fontMultiplier) }]} numberOfLines={1}>WELLNESS</Text>
+            <Text style={[styles.metricValue, isSmallMobile && styles.metricValueSmall, { fontSize: Math.round((isSmallMobile ? 18 : 24) * fontMultiplier) }]}>{checkinDone ? "Logged" : "Ready"}</Text>
           </View>
         </View>
       </View>
@@ -269,7 +273,7 @@ export default function ElderHomeScreen() {
               {home.checklist_items.map((item) => {
                 const isDone = item.today_status === "COMPLETED";
                 return (
-                  <View key={item.id} style={styles.checklistItemCard}>
+                  <View key={item.id} style={[styles.checklistItemCard, cardBorderStyle]}>
                     <View style={styles.checklistItemContent}>
                       <View style={styles.itemHeaderLine}>
                         <View style={styles.timeTag}>
@@ -279,19 +283,19 @@ export default function ElderHomeScreen() {
                           <Text style={styles.completedTimestamp}>Done at {item.completed_at}</Text>
                         )}
                       </View>
-                      <Text style={[styles.itemTitle, isDone && styles.itemDoneText]}>
+                      <Text style={[styles.itemTitle, isDone && styles.itemDoneText, { fontSize: Math.round(17 * fontMultiplier) }]}>
                         {item.title}
                       </Text>
                       {item.description && (
-                        <Text style={styles.itemDesc}>{item.description}</Text>
+                        <Text style={[styles.itemDesc, { fontSize: Math.round(13 * fontMultiplier) }]}>{item.description}</Text>
                       )}
                     </View>
 
                     <View style={styles.itemActionArea}>
                       {isDone ? (
-                        <View style={styles.donePill}>
+                        <View style={[styles.donePill, { minHeight: Math.max(48, minTouchTarget) }]}>
                           <CheckCircle2 size={22} color={Theme.colors.success} />
-                          <Text style={styles.doneText}>Completed</Text>
+                          <Text style={[styles.doneText, { fontSize: Math.round(14 * fontMultiplier) }]}>Completed</Text>
                         </View>
                       ) : (
                         <BigButton
@@ -320,8 +324,8 @@ export default function ElderHomeScreen() {
               <View style={styles.checkinConfirmedBox}>
                 <CheckCircle2 size={32} color={Theme.colors.success} />
                 <View style={styles.checkinConfirmedTextWrap}>
-                  <Text style={styles.checkinConfirmedTitle}>Status Logged: Feeling Well</Text>
-                  <Text style={styles.checkinConfirmedDesc}>
+                  <Text style={[styles.checkinConfirmedTitle, { fontSize: Math.round(16 * fontMultiplier) }]}>Status Logged: Feeling Well</Text>
+                  <Text style={[styles.checkinConfirmedDesc, { fontSize: Math.round(13 * fontMultiplier) }]}>
                     Your care circle was notified that you're feeling good today.
                   </Text>
                 </View>
@@ -336,12 +340,17 @@ export default function ElderHomeScreen() {
                 ].map((emo) => (
                   <TouchableOpacity
                     key={emo.status}
-                    style={[styles.emotiveBtn, isSmallMobile && styles.emotiveBtnGrid]}
+                    style={[
+                      styles.emotiveBtn,
+                      isSmallMobile && styles.emotiveBtnGrid,
+                      { minHeight: Math.max(isSmallMobile ? 70 : 82, minTouchTarget) },
+                      cardBorderStyle,
+                    ]}
                     onPress={() => checkinMutation.mutate(emo.status)}
                     activeOpacity={0.8}
                   >
-                    <Text style={styles.emotiveEmoji}>{emo.icon}</Text>
-                    <Text style={styles.emotiveLabel}>{emo.label}</Text>
+                    <Text style={[styles.emotiveEmoji, { fontSize: Math.round(26 * fontMultiplier) }]}>{emo.icon}</Text>
+                    <Text style={[styles.emotiveLabel, { fontSize: Math.round(14 * fontMultiplier) }]}>{emo.label}</Text>
                   </TouchableOpacity>
                 ))}
               </View>
@@ -364,20 +373,20 @@ export default function ElderHomeScreen() {
               <Text style={styles.promptText}>No medications scheduled for today.</Text>
             ) : (
               home.next_medications.map((med) => (
-                <View key={med.id} style={styles.medCard}>
+                <View key={med.id} style={[styles.medCard, cardBorderStyle]}>
                   <View style={styles.medCardTop}>
                     <View style={styles.medBadgePill}>
                       <Clock size={16} color={Theme.colors.primary} />
-                      <Text style={styles.medTimeTag}>{med.times_of_day}</Text>
+                      <Text style={[styles.medTimeTag, { fontSize: Math.round(13 * fontMultiplier) }]}>{med.times_of_day}</Text>
                     </View>
-                    <Text style={styles.medDoseTag}>{med.frequency}</Text>
+                    <Text style={[styles.medDoseTag, { fontSize: Math.round(13 * fontMultiplier) }]}>{med.frequency}</Text>
                   </View>
 
-                  <Text style={styles.medName}>{med.name}</Text>
-                  <Text style={styles.medDoseText}>{med.dosage}</Text>
+                  <Text style={[styles.medName, { fontSize: Math.round(18 * fontMultiplier) }]}>{med.name}</Text>
+                  <Text style={[styles.medDoseText, { fontSize: Math.round(14 * fontMultiplier) }]}>{med.dosage}</Text>
 
                   {med.instructions && (
-                    <Text style={styles.medInstructions}>
+                    <Text style={[styles.medInstructions, { fontSize: Math.round(13 * fontMultiplier) }]}>
                       Note: {med.instructions}
                     </Text>
                   )}
@@ -402,11 +411,11 @@ export default function ElderHomeScreen() {
               badge="Confirmed"
               badgeVariant="primary"
             >
-              <View style={styles.apptBox}>
+              <View style={[styles.apptBox, cardBorderStyle]}>
                 <View style={styles.apptDetails}>
-                  <Text style={styles.apptDoctorText}>{home.upcoming_appointment.doctor_name}</Text>
-                  <Text style={styles.apptClinicText}>{home.upcoming_appointment.clinic_name}</Text>
-                  <Text style={styles.apptDateText}>
+                  <Text style={[styles.apptDoctorText, { fontSize: Math.round(16 * fontMultiplier) }]}>{home.upcoming_appointment.doctor_name}</Text>
+                  <Text style={[styles.apptClinicText, { fontSize: Math.round(13 * fontMultiplier) }]}>{home.upcoming_appointment.clinic_name}</Text>
+                  <Text style={[styles.apptDateText, { fontSize: Math.round(13 * fontMultiplier) }]}>
                     Scheduled for {new Date(home.upcoming_appointment.scheduled_at).toLocaleDateString("en-US", {
                       weekday: "short",
                       month: "long",
@@ -419,12 +428,12 @@ export default function ElderHomeScreen() {
           )}
 
           {/* Discreet Care Circle Assistance Banner */}
-          <View style={styles.careCircleBanner}>
+          <View style={[styles.careCircleBanner, cardBorderStyle]}>
             <View style={styles.careCircleHeader}>
               <Shield size={24} color={Theme.colors.primary} />
-              <Text style={styles.careCircleTitle}>Family & Care Support</Text>
+              <Text style={[styles.careCircleTitle, { fontSize: Math.round(18 * fontMultiplier) }]}>Family & Care Support</Text>
             </View>
-            <Text style={styles.careCircleSubtitle}>
+            <Text style={[styles.careCircleSubtitle, { fontSize: Math.round(14 * fontMultiplier) }]}>
               Your authorized family guardians receive daily updates and can be contacted with a single tap.
             </Text>
             <BigButton

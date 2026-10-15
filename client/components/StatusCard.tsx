@@ -4,6 +4,8 @@ import { Theme } from "../constants/theme";
 
 import { useResponsive } from "../hooks/useResponsive";
 
+import { useAccessibility } from "../context/AccessibilityContext";
+
 interface StatusCardProps {
   title: string;
   subtitle?: string;
@@ -24,8 +26,21 @@ export const StatusCard: React.FC<StatusCardProps> = ({
   style,
 }) => {
   const { isSmallMobile, cardPadding } = useResponsive();
+  const { isAAAMode, highContrastBorders, fontMultiplier } = useAccessibility();
 
   const getBadgeColors = () => {
+    if (isAAAMode) {
+      switch (badgeVariant) {
+        case "success":
+          return { bg: "#F0FDF4", text: Theme.accessibility.aaaColors.success, border: "#BBF7D0" };
+        case "accent":
+          return { bg: "#F0F9FF", text: Theme.accessibility.aaaColors.primary, border: "#BAE6FD" };
+        case "primary":
+          return { bg: "#F0F9FF", text: Theme.accessibility.aaaColors.primary, border: "#BAE6FD" };
+        default:
+          return { bg: "#F1F5F9", text: Theme.accessibility.aaaColors.textMuted, border: "#CBD5E1" };
+      }
+    }
     switch (badgeVariant) {
       case "success":
         return { bg: "#ECFDF5", text: "#059669", border: "#A7F3D0" };
@@ -39,9 +54,21 @@ export const StatusCard: React.FC<StatusCardProps> = ({
   };
 
   const badgeColor = getBadgeColors();
+  const dynamicTitleSize = Math.round((isSmallMobile ? 17 : Theme.typography.subheading) * fontMultiplier);
+  const dynamicSubtitleSize = Math.round(Theme.typography.bodySmall * fontMultiplier);
 
   return (
-    <View style={[styles.card, { padding: cardPadding }, style]}>
+    <View
+      style={[
+        styles.card,
+        { padding: cardPadding },
+        highContrastBorders && {
+          borderWidth: 1.5,
+          borderColor: Theme.accessibility.aaaColors.borderHighContrast,
+        },
+        style,
+      ]}
+    >
       <View style={styles.headerRow}>
         <View style={styles.titleContainer}>
           {icon && (
@@ -55,8 +82,25 @@ export const StatusCard: React.FC<StatusCardProps> = ({
             </View>
           )}
           <View style={styles.textWrapper}>
-            <Text style={[styles.title, isSmallMobile && styles.titleSmall]}>{title}</Text>
-            {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
+            <Text
+              style={[
+                styles.title,
+                isSmallMobile && styles.titleSmall,
+                { fontSize: dynamicTitleSize, lineHeight: Math.round(dynamicTitleSize * 1.3) },
+              ]}
+            >
+              {title}
+            </Text>
+            {subtitle && (
+              <Text
+                style={[
+                  styles.subtitle,
+                  { fontSize: dynamicSubtitleSize, lineHeight: Math.round(dynamicSubtitleSize * 1.4) },
+                ]}
+              >
+                {subtitle}
+              </Text>
+            )}
           </View>
         </View>
         {badge && (
@@ -67,7 +111,13 @@ export const StatusCard: React.FC<StatusCardProps> = ({
               { backgroundColor: badgeColor.bg, borderColor: badgeColor.border },
             ]}
           >
-            <Text style={[styles.badgeText, isSmallMobile && styles.badgeTextSmall, { color: badgeColor.text }]}>
+            <Text
+              style={[
+                styles.badgeText,
+                isSmallMobile && styles.badgeTextSmall,
+                { color: badgeColor.text, fontSize: Math.round(11 * fontMultiplier) },
+              ]}
+            >
               {badge}
             </Text>
           </View>

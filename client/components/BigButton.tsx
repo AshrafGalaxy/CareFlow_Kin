@@ -1,6 +1,7 @@
 import React from "react";
 import { TouchableOpacity, Text, StyleSheet, View, ActivityIndicator } from "react-native";
 import { Theme } from "../constants/theme";
+import { useAccessibility } from "../context/AccessibilityContext";
 
 interface BigButtonProps {
   title: string;
@@ -21,8 +22,24 @@ export const BigButton: React.FC<BigButtonProps> = ({
   disabled = false,
   style,
 }) => {
+  const { isAAAMode, minTouchTarget, fontMultiplier } = useAccessibility();
+
   const getBackgroundColor = () => {
     if (disabled) return "#E2E8F0";
+    if (isAAAMode) {
+      switch (variant) {
+        case "primary":
+          return Theme.accessibility.aaaColors.primary;
+        case "accent":
+          return Theme.accessibility.aaaColors.accent;
+        case "success":
+          return Theme.accessibility.aaaColors.success;
+        case "outline":
+          return "#FFFFFF";
+        default:
+          return Theme.accessibility.aaaColors.primary;
+      }
+    }
     switch (variant) {
       case "primary":
         return Theme.colors.primary;
@@ -39,11 +56,15 @@ export const BigButton: React.FC<BigButtonProps> = ({
 
   const getTextColor = () => {
     if (disabled) return "#94A3B8";
-    if (variant === "outline") return Theme.colors.primary;
+    if (variant === "outline") {
+      return isAAAMode ? Theme.accessibility.aaaColors.primary : Theme.colors.primary;
+    }
     return "#FFFFFF";
   };
 
   const isOutline = variant === "outline";
+  const activeMinHeight = isAAAMode ? minTouchTarget : 50;
+  const activeFontSize = Math.round(15 * fontMultiplier);
 
   return (
     <TouchableOpacity
@@ -53,9 +74,15 @@ export const BigButton: React.FC<BigButtonProps> = ({
       style={[
         styles.button,
         {
+          minHeight: activeMinHeight,
           backgroundColor: getBackgroundColor(),
-          borderColor: isOutline ? Theme.colors.primary : "transparent",
-          borderWidth: isOutline ? 1.5 : 0,
+          borderColor: isOutline
+            ? (isAAAMode ? Theme.accessibility.aaaColors.primary : Theme.colors.primary)
+            : "transparent",
+          borderWidth: isOutline ? (isAAAMode ? 2 : 1.5) : 0,
+          borderRadius: isAAAMode ? 14 : Theme.ergonomics.buttonRadius,
+          paddingVertical: isAAAMode ? 14 : 12,
+          paddingHorizontal: isAAAMode ? 22 : 20,
         },
         style,
       ]}
@@ -67,8 +94,19 @@ export const BigButton: React.FC<BigButtonProps> = ({
         <ActivityIndicator color={getTextColor()} size="small" />
       ) : (
         <View style={styles.contentRow}>
-          {icon && <View style={styles.iconContainer}>{icon}</View>}
-          <Text style={[styles.text, { color: getTextColor() }]}>{title}</Text>
+          {icon && <View style={[styles.iconContainer, isAAAMode && { marginRight: 10 }]}>{icon}</View>}
+          <Text
+            style={[
+              styles.text,
+              {
+                color: getTextColor(),
+                fontSize: activeFontSize,
+                fontWeight: isAAAMode ? "700" : "600",
+              },
+            ]}
+          >
+            {title}
+          </Text>
         </View>
       )}
     </TouchableOpacity>
