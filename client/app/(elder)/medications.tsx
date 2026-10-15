@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   detailText: {
-    fontFamily: Theme.fonts.mono,
+    fontFamily: Theme.fonts.heading,
     fontSize: Theme.typography.bodySmall,
     color: Theme.colors.text,
     fontWeight: "600",

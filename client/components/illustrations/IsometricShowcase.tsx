@@ -705,7 +705,7 @@ const cardStyles = StyleSheet.create({
     paddingVertical: 3,
   },
   figText: {
-    fontFamily: Theme.fonts.mono,
+    fontFamily: Theme.fonts.heading,
     fontSize: 11,
     fontWeight: "700",
     color: "#475569",
@@ -754,7 +754,7 @@ const cardStyles = StyleSheet.create({
     borderRadius: 3,
   },
   readoutText: {
-    fontFamily: Theme.fonts.mono,
+    fontFamily: Theme.fonts.heading,
     fontSize: 11,
     fontWeight: "600",
     letterSpacing: 0.2,

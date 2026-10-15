@@ -10,7 +10,7 @@ export default function Root({ children }: PropsWithChildren) {
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <title>Careflow - Connected Daily Care</title>
 
-        {/* Fontshare General Sans & Google Fonts (Manrope + JetBrains Mono) */}
+        {/* Strict 2-Font System: Fontshare General Sans & Google Fonts Manrope */}
         <link rel="preconnect" href="https://api.fontshare.com" />
         <link
           href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap"
@@ -19,7 +19,7 @@ export default function Root({ children }: PropsWithChildren) {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
           rel="stylesheet"
         />
 

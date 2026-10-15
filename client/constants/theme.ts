@@ -59,7 +59,7 @@ export const Theme = {
   },
 
   fonts: {
-    // Standardized Option 1: Manrope for Brand/Headings, General Sans for Body/UI
+    // Strict 2-Font System: Manrope for Brand/Headings/Metrics, General Sans for Body/UI
     brand: Platform.select({
       web: "'Manrope', -apple-system, BlinkMacSystemFont, sans-serif",
       default: "System",
@@ -72,9 +72,10 @@ export const Theme = {
       web: "'General Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
       default: "System",
     }),
+    // Kept as alias to heading (Manrope) for backward compatibility without loading a 3rd font
     mono: Platform.select({
-      web: "'JetBrains Mono', monospace",
-      default: "monospace",
+      web: "'Manrope', -apple-system, BlinkMacSystemFont, sans-serif",
+      default: "System",
     }),
   },
 

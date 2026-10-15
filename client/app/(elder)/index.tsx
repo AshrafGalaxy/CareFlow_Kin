@@ -723,7 +723,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   medTimeTag: {
-    fontFamily: Theme.fonts.mono,
+    fontFamily: Theme.fonts.heading,
     fontSize: 11,
     fontWeight: "700",
     color: Theme.colors.primary,

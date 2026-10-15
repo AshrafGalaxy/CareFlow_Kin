@@ -372,7 +372,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   contactPhone: {
-    fontFamily: Theme.fonts.mono,
+    fontFamily: Theme.fonts.heading,
     fontSize: 12,
     color: Theme.colors.accent,
     marginTop: 2,

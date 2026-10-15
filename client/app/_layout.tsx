@@ -28,14 +28,14 @@ export default function RootLayout() {
         document.head.appendChild(link);
       }
 
-      // 2. Load Google Fonts Manrope & JetBrains Mono
+      // 2. Load Google Fonts Manrope
       const existingGf = document.getElementById("careflow-fonts-gf");
       if (!existingGf) {
         const link = document.createElement("link");
         link.id = "careflow-fonts-gf";
         link.rel = "stylesheet";
         link.href =
-          "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700&display=swap";
+          "https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap";
         document.head.appendChild(link);
       }
     }

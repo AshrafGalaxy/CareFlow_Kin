@@ -749,7 +749,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   heroBadgeText: {
-    fontFamily: Theme.fonts.mono,
+    fontFamily: Theme.fonts.heading,
     fontSize: 11,
     fontWeight: "700",
     color: Theme.colors.brandPrimary,
@@ -882,7 +882,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   sectionBadgeText: {
-    fontFamily: Theme.fonts.mono,
+    fontFamily: Theme.fonts.heading,
     fontSize: 11,
     fontWeight: "700",
     color: Theme.colors.brandPrimary,
@@ -939,7 +939,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   tensionPainTag: {
-    fontFamily: Theme.fonts.mono,
+    fontFamily: Theme.fonts.heading,
     fontSize: 10,
     fontWeight: "700",
     color: "#EF4444",
@@ -976,7 +976,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
   },
   tensionDividerPillText: {
-    fontFamily: Theme.fonts.mono,
+    fontFamily: Theme.fonts.heading,
     fontSize: 9,
     fontWeight: "700",
     color: "#0369A1",
@@ -986,7 +986,7 @@ const styles = StyleSheet.create({
     paddingTop: 4,
   },
   tensionSolutionTag: {
-    fontFamily: Theme.fonts.mono,
+    fontFamily: Theme.fonts.heading,
     fontSize: 10,
     fontWeight: "700",
     color: Theme.colors.success,
@@ -1074,7 +1074,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   stepBadgeText: {
-    fontFamily: Theme.fonts.mono,
+    fontFamily: Theme.fonts.heading,
     fontSize: 14,
     fontWeight: "700",
     color: "#0284C7",
@@ -1279,7 +1279,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#10B981",
   },
   systemStatusText: {
-    fontFamily: Theme.fonts.mono,
+    fontFamily: Theme.fonts.heading,
     fontSize: 11,
     fontWeight: "600",
     color: "#15803D",

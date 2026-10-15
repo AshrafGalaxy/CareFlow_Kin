@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   timeText: {
-    fontFamily: Theme.fonts.mono,
+    fontFamily: Theme.fonts.body,
     fontSize: 11,
     color: Theme.colors.textMuted,
   },
