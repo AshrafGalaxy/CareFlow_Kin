@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
   backBtnText: {
     fontFamily: Theme.fonts.heading,
     fontSize: 14,
-    fontWeight: "700",
+    fontWeight: "600",
     color: Theme.colors.primary,
   },
   header: {
@@ -277,9 +277,9 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: Theme.fonts.brand,
     fontSize: Theme.typography.heading,
-    fontWeight: "800",
-    color: Theme.colors.primaryDark,
-    letterSpacing: -0.5,
+    fontWeight: "700",
+    color: Theme.colors.text,
+    letterSpacing: -0.4,
   },
   subtitle: {
     fontFamily: Theme.fonts.body,
@@ -311,7 +311,7 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontFamily: Theme.fonts.heading,
     fontSize: 13,
-    fontWeight: "700",
+    fontWeight: "600",
     color: Theme.colors.text,
     letterSpacing: 0.2,
   },
@@ -361,7 +361,7 @@ const styles = StyleSheet.create({
   roleTitle: {
     fontFamily: Theme.fonts.heading,
     fontSize: 14,
-    fontWeight: "700",
+    fontWeight: "600",
     color: Theme.colors.text,
   },
   roleDesc: {
@@ -391,7 +391,7 @@ const styles = StyleSheet.create({
   signInLink: {
     fontFamily: Theme.fonts.heading,
     fontSize: 14,
-    fontWeight: "800",
+    fontWeight: "600",
     color: Theme.colors.primary,
   },
 });

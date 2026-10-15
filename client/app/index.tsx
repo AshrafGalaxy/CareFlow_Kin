@@ -12,6 +12,7 @@ import { Theme } from "../constants/theme";
 import { useResponsive } from "../hooks/useResponsive";
 import { BigButton } from "../components/BigButton";
 import { CareFlowLogo } from "../components/CareFlowLogo";
+import { FontPairingSwitcher } from "../components/FontPairingSwitcher";
 import { api, getAuthToken } from "../services/api";
 import {
   Clock,
@@ -108,6 +109,11 @@ export default function LandingPage() {
         <Text style={[styles.heroSubtitle, { fontSize: heroSubtitleFontSize, lineHeight: heroSubtitleLineHeight }]}>
           The serene, unified companion for daily medication tracking, gentle wellness check-ins, and trusted care circles — designed for ease of use without cognitive fatigue.
         </Text>
+
+        {/* Real-time Font Pairing Comparison Switcher */}
+        <View style={{ marginTop: 18, marginBottom: 6 }}>
+          <FontPairingSwitcher compact={isSmallMobile} />
+        </View>
 
         {/* Dual CTA Actions */}
         <View style={[styles.heroActions, isDesktop && styles.heroActionsDesktop]}>
@@ -402,22 +408,22 @@ const styles = StyleSheet.create({
   heroBadgeText: {
     fontFamily: Theme.fonts.heading,
     fontSize: 12,
-    fontWeight: "800",
+    fontWeight: "600",
     color: Theme.colors.accent,
-    letterSpacing: 0.8,
+    letterSpacing: 0.6,
   },
   heroTitle: {
     fontFamily: Theme.fonts.brand,
-    fontSize: Platform.select({ web: 48, default: 32 }),
-    fontWeight: "900",
-    color: Theme.colors.primaryDark,
+    fontSize: Platform.select({ web: 46, default: 32 }),
+    fontWeight: "700",
+    color: Theme.colors.text,
     textAlign: "center",
     maxWidth: 860,
-    lineHeight: Platform.select({ web: 58, default: 40 }),
-    letterSpacing: -1,
+    lineHeight: Platform.select({ web: 56, default: 40 }),
+    letterSpacing: -0.8,
   },
   heroTitleHighlight: {
-    color: Theme.colors.accent,
+    color: Theme.colors.primary,
   },
   heroSubtitle: {
     fontFamily: Theme.fonts.body,
@@ -496,13 +502,13 @@ const styles = StyleSheet.create({
   teaserAvatarText: {
     fontFamily: Theme.fonts.heading,
     fontSize: 16,
-    fontWeight: "800",
+    fontWeight: "600",
     color: "#FFFFFF",
   },
   teaserName: {
     fontFamily: Theme.fonts.heading,
     fontSize: 16,
-    fontWeight: "800",
+    fontWeight: "600",
     color: Theme.colors.text,
   },
   teaserStatus: {
@@ -524,7 +530,7 @@ const styles = StyleSheet.create({
   teaserAdherenceText: {
     fontFamily: Theme.fonts.heading,
     fontSize: 12,
-    fontWeight: "700",
+    fontWeight: "600",
     color: "#059669",
   },
   teaserBody: {
@@ -546,7 +552,7 @@ const styles = StyleSheet.create({
   teaserColTitle: {
     fontFamily: Theme.fonts.heading,
     fontSize: 13,
-    fontWeight: "800",
+    fontWeight: "600",
     color: Theme.colors.text,
     marginBottom: Theme.spacing.sm,
     letterSpacing: 0.3,
@@ -625,16 +631,16 @@ const styles = StyleSheet.create({
   sectionBadge: {
     fontFamily: Theme.fonts.heading,
     fontSize: 12,
-    fontWeight: "800",
+    fontWeight: "600",
     color: Theme.colors.accent,
-    letterSpacing: 1,
+    letterSpacing: 0.8,
     marginBottom: 6,
   },
   sectionTitle: {
     fontFamily: Theme.fonts.brand,
-    fontSize: Platform.select({ web: 36, default: 28 }),
-    fontWeight: "800",
-    color: Theme.colors.primaryDark,
+    fontSize: Platform.select({ web: 34, default: 26 }),
+    fontWeight: "700",
+    color: Theme.colors.text,
     textAlign: "center",
   },
   sectionSubtitle: {
@@ -672,7 +678,7 @@ const styles = StyleSheet.create({
   featureCardTitle: {
     fontFamily: Theme.fonts.heading,
     fontSize: 18,
-    fontWeight: "800",
+    fontWeight: "600",
     color: Theme.colors.text,
     marginBottom: 8,
   },
@@ -712,7 +718,7 @@ const styles = StyleSheet.create({
   trustTitle: {
     fontFamily: Theme.fonts.heading,
     fontSize: 15,
-    fontWeight: "800",
+    fontWeight: "600",
     color: Theme.colors.text,
     marginTop: Theme.spacing.sm,
     marginBottom: 4,
@@ -732,7 +738,7 @@ const styles = StyleSheet.create({
     width: "100%",
     marginHorizontal: "auto",
     marginTop: Theme.spacing.xxl + 20,
-    backgroundColor: Theme.colors.primaryDark,
+    backgroundColor: "#0F172A",
     borderRadius: Theme.ergonomics.cardRadius + 8,
     padding: Theme.spacing.xxl,
     alignItems: "center",
@@ -742,7 +748,7 @@ const styles = StyleSheet.create({
   ctaTitle: {
     fontFamily: Theme.fonts.brand,
     fontSize: Platform.select({ web: 32, default: 24 }),
-    fontWeight: "800",
+    fontWeight: "700",
     color: "#FFFFFF",
     marginTop: Theme.spacing.md,
     textAlign: "center",
@@ -751,7 +757,7 @@ const styles = StyleSheet.create({
   ctaSubtitle: {
     fontFamily: Theme.fonts.body,
     fontSize: Theme.typography.body,
-    color: "#90E0EF",
+    color: "#94A3B8",
     textAlign: "center",
     maxWidth: 580,
     marginTop: Theme.spacing.xs,

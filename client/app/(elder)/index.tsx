@@ -486,9 +486,9 @@ const styles = StyleSheet.create({
   metricLabel: {
     fontFamily: Theme.fonts.heading,
     fontSize: 11,
-    fontWeight: "800",
+    fontWeight: "600",
     color: Theme.colors.textMuted,
-    letterSpacing: 0.8,
+    letterSpacing: 0.6,
   },
   metricLabelSmall: {
     fontSize: 9,
@@ -497,7 +497,7 @@ const styles = StyleSheet.create({
   metricValue: {
     fontFamily: Theme.fonts.brand,
     fontSize: Theme.typography.subheading + 2,
-    fontWeight: "800",
+    fontWeight: "700",
     color: Theme.colors.text,
     marginTop: 2,
   },
@@ -581,20 +581,20 @@ const styles = StyleSheet.create({
   timeTagText: {
     fontFamily: Theme.fonts.heading,
     fontSize: 10,
-    fontWeight: "800",
+    fontWeight: "600",
     color: Theme.colors.primary,
     letterSpacing: 0.5,
   },
   completedTimestamp: {
     fontFamily: Theme.fonts.body,
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: "500",
     color: Theme.colors.success,
   },
   itemTitle: {
     fontFamily: Theme.fonts.heading,
     fontSize: Theme.typography.body,
-    fontWeight: "700",
+    fontWeight: "600",
     color: Theme.colors.text,
     lineHeight: 22,
   },
@@ -737,14 +737,14 @@ const styles = StyleSheet.create({
   medName: {
     fontFamily: Theme.fonts.heading,
     fontSize: Theme.typography.subheading,
-    fontWeight: "800",
+    fontWeight: "600",
     color: Theme.colors.text,
     marginTop: 4,
   },
   medDoseText: {
     fontFamily: Theme.fonts.body,
     fontSize: Theme.typography.body,
-    fontWeight: "600",
+    fontWeight: "500",
     color: Theme.colors.textMuted,
     marginTop: 2,
   },
@@ -785,7 +785,7 @@ const styles = StyleSheet.create({
   apptDoctorText: {
     fontFamily: Theme.fonts.heading,
     fontSize: Theme.typography.bodyLarge,
-    fontWeight: "800",
+    fontWeight: "600",
     color: Theme.colors.text,
   },
   apptClinicText: {
@@ -796,7 +796,7 @@ const styles = StyleSheet.create({
   apptDateText: {
     fontFamily: Theme.fonts.heading,
     fontSize: Theme.typography.bodySmall,
-    fontWeight: "700",
+    fontWeight: "600",
     color: Theme.colors.accent,
     marginTop: 6,
   },
@@ -820,7 +820,7 @@ const styles = StyleSheet.create({
   careCircleTitle: {
     fontFamily: Theme.fonts.heading,
     fontSize: Theme.typography.bodyLarge,
-    fontWeight: "800",
+    fontWeight: "600",
     color: Theme.colors.text,
   },
   careCircleSubtitle: {

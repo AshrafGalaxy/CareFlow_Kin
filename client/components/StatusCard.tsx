@@ -32,7 +32,7 @@ export const StatusCard: React.FC<StatusCardProps> = ({
       case "accent":
         return { bg: "#EFF6FF", text: "#0284C7", border: "#BAE6FD" };
       case "primary":
-        return { bg: Theme.colors.primaryLight, text: Theme.colors.primary, border: "rgba(2, 62, 138, 0.2)" };
+        return { bg: Theme.colors.primaryLight, text: Theme.colors.primary, border: Theme.colors.borderActive };
       default:
         return { bg: "#F1F5F9", text: Theme.colors.textMuted, border: "#E2E8F0" };
     }
@@ -123,9 +123,9 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: Theme.fonts.heading,
     fontSize: Theme.typography.subheading,
-    fontWeight: "700",
+    fontWeight: "600",
     color: Theme.colors.text,
-    letterSpacing: -0.3,
+    letterSpacing: -0.2,
   },
   titleSmall: {
     fontSize: 17,
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
   badgeText: {
     fontFamily: Theme.fonts.heading,
     fontSize: 12,
-    fontWeight: "700",
+    fontWeight: "600",
     letterSpacing: 0.2,
   },
   badgeTextSmall: {

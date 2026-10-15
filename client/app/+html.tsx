@@ -10,11 +10,16 @@ export default function Root({ children }: PropsWithChildren) {
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <title>Careflow - Connected Daily Care</title>
 
-        {/* Preconnect & Google Fonts */}
+        {/* Fontshare General Sans & Google Fonts (Manrope + JetBrains Mono) */}
+        <link rel="preconnect" href="https://api.fontshare.com" />
+        <link
+          href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap"
+          rel="stylesheet"
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
 
@@ -23,29 +28,34 @@ export default function Root({ children }: PropsWithChildren) {
         <style
           dangerouslySetInnerHTML={{
             __html: `
+              :root {
+                --font-heading: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                --font-brand: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                --font-body: 'General Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+              }
               html, body {
                 margin: 0;
                 padding: 0;
-                background-color: #F5F9FC;
-                color: #03045E;
-                font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+                background-color: #F8FAFC;
+                color: #0F172A;
+                font-family: var(--font-body);
                 -webkit-font-smoothing: antialiased;
                 -moz-osx-font-smoothing: grayscale;
               }
               * {
                 box-sizing: border-box;
               }
-              /* Premium glassmorphism scrollbar */
+              /* Premium minimalist scrollbar */
               ::-webkit-scrollbar {
-                width: 8px;
-                height: 8px;
+                width: 6px;
+                height: 6px;
               }
               ::-webkit-scrollbar-track {
                 background: #F1F5F9;
               }
               ::-webkit-scrollbar-thumb {
                 background: #CBD5E1;
-                border-radius: 4px;
+                border-radius: 3px;
               }
               ::-webkit-scrollbar-thumb:hover {
                 background: #94A3B8;

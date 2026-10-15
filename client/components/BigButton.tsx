@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: Theme.fonts.heading,
     fontSize: 15,
-    fontWeight: "700",
+    fontWeight: "600",
     textAlign: "center",
     letterSpacing: 0.1,
   },

@@ -2,64 +2,86 @@ import { Platform } from "react-native";
 
 export const Theme = {
   colors: {
-    // Canonical 9-Color Oceanic Coolors Palette
-    deepTwilight: "#03045E",   // Deepest Navy - Primary Typography & Dark Accents
-    frenchBlue: "#023E8A",     // French Blue - Primary Brand & Key CTAs
-    brightTealBlue: "#0077B6", // Bright Teal Blue - Secondary CTAs & Active Indicators
-    blueGreen: "#0096C7",      // Blue Green - Interactive Focus & Highlights
-    turquoiseSurf: "#00B4D8",  // Turquoise Surf - Flow Accents & Wellness Highlights
-    skyAqua: "#48CAE4",        // Sky Aqua - Subtle Badges & Hover Fills
-    frostedBlue: "#90E0EF",    // Frosted Blue - Card Container Highlights
-    frostedBlue2: "#ADE8F4",   // Frosted Blue 2 - Distinct Card Borders & Dividers
-    lightCyan: "#CAF0F8",      // Light Cyan - Soothing Surface Tint
+    // Premium Minimalist Healthcare Palette (Light Canvas)
+    // Non-monochromatic: Soothing, warm slates with vibrant, accessible sky/teal accents
+    brandPrimary: "#0284C7",    // Radiant Sky Cerulean - Primary Action & Brand Accent
+    brandHover: "#0369A1",      // Deep Cerulean - Focused & Hover State
+    brandLight: "#F0F9FF",      // Sky Mist 50 - Subtle active pill backgrounds & highlights
+    brandSubtle: "#E0F2FE",     // Sky 100 - Gentle pill borders & selection chips
+    
+    tealAccent: "#0D9488",      // Serene Wellness Teal - Health vitals & mood highlights
+    tealLight: "#F0FDFA",       // Teal Mist - Ambient wellness containers
+    
+    // Legacy oceanic compatibility mapping (prevents downstream reference breakage)
+    deepTwilight: "#0F172A",   // Mapped to Obsidian Slate (Replaced harsh navy text)
+    frenchBlue: "#0284C7",     // Mapped to Radiant Sky
+    brightTealBlue: "#0369A1", // Mapped to Deep Sky
+    blueGreen: "#0D9488",      // Mapped to Serene Teal
+    turquoiseSurf: "#38BDF8",  // Bright Sky
+    skyAqua: "#E0F2FE",        // Soft Sky
+    frostedBlue: "#F0F9FF",    // Sky Mist
+    frostedBlue2: "#E2E8F0",   // Clean Slate Border
+    lightCyan: "#F8FAFC",      // Luminous Canvas
 
     // Semantic Brand Roles
-    primary: "#023E8A",
-    primaryDark: "#03045E",
-    primaryLight: "#EBF5FB",
-    accent: "#0077B6",
-    accentLight: "#E0F2FE",
-    brandAccent: "#00B4D8",
-    brandGradientStart: "#023E8A",
-    brandGradientEnd: "#0077B6",
+    primary: "#0284C7",
+    primaryDark: "#0369A1",
+    primaryLight: "#F0F9FF",
+    accent: "#0D9488",
+    accentLight: "#F0FDFA",
+    brandAccent: "#0284C7",
+    brandGradientStart: "#0284C7",
+    brandGradientEnd: "#0D9488",
 
     // Feedback States
-    success: "#059669",
+    success: "#10B981",
     successLight: "#ECFDF5",
-    urgent: "#DC2626",
+    urgent: "#EF4444",
     urgentLight: "#FEF2F2",
-    warning: "#D97706",
+    warning: "#F59E0B",
     warningLight: "#FFFBEB",
 
-    // Surfaces & Spatial Layers (Modern Clean Canvas)
-    background: "#F4F8FA",
+    // Surfaces & Spatial Layers (Glare-free, comfortable for aging eyes)
+    background: "#F8FAFC",
     surfaceLight: "#FFFFFF",
     card: "#FFFFFF",
-    cardGlass: "rgba(255, 255, 255, 0.94)",
-    border: "rgba(0, 119, 182, 0.12)",
-    borderSubtle: "rgba(0, 119, 182, 0.06)",
-    borderActive: "#0077B6",
+    cardGlass: "rgba(255, 255, 255, 0.98)",
+    border: "#E2E8F0",
+    borderSubtle: "#F1F5F9",
+    borderActive: "#0284C7",
 
-    // Typography Legibility Hierarchy
-    text: "#03045E",
-    textSecondary: "#1E293B",
-    textMuted: "#64748B",
-    textLight: "#94A3B8",
-    textInverse: "#FFFFFF",
+    // Typography Legibility Hierarchy (Warm, high-contrast Slate - No harsh navy wash)
+    text: "#0F172A",          // Obsidian Slate 900 - Crisp, clear, non-fatiguing
+    textSecondary: "#334155", // Slate 700 - Balanced, accessible secondary
+    textMuted: "#64748B",     // Slate 500 - Timestamps, helper hints
+    textLight: "#94A3B8",     // Slate 400 - Subtle badges & disabled states
+    textInverse: "#FFFFFF",   // High-contrast white for colored buttons
   },
 
   fonts: {
-    // Multi-Font Hierarchy with Web & Native Compatibility
-    brand: Platform.select({ web: "'Outfit', sans-serif", default: "Outfit" }),
-    heading: Platform.select({ web: "'Plus Jakarta Sans', sans-serif", default: "Plus Jakarta Sans" }),
-    body: Platform.select({ web: "'Manrope', sans-serif", default: "Manrope" }),
-    mono: Platform.select({ web: "'JetBrains Mono', monospace", default: "JetBrains Mono" }),
+    // Dynamic CSS variable font stack for real-time comparison, with native fallback
+    brand: Platform.select({
+      web: "var(--font-brand, 'Manrope', -apple-system, sans-serif)",
+      default: "System",
+    }),
+    heading: Platform.select({
+      web: "var(--font-heading, 'Manrope', -apple-system, sans-serif)",
+      default: "System",
+    }),
+    body: Platform.select({
+      web: "var(--font-body, 'General Sans', -apple-system, sans-serif)",
+      default: "System",
+    }),
+    mono: Platform.select({
+      web: "'JetBrains Mono', monospace",
+      default: "monospace",
+    }),
   },
 
   typography: {
-    display: 36,
-    heading: 26,
-    subheading: 20,
+    display: 34,
+    heading: 24,
+    subheading: 19,
     bodyLarge: 17,
     body: 15,
     bodySmall: 13,
@@ -68,32 +90,32 @@ export const Theme = {
 
   shadows: {
     sm: {
-      shadowColor: "#03045E",
-      shadowOffset: { width: 0, height: 2 },
+      shadowColor: "#0F172A",
+      shadowOffset: { width: 0, height: 1 },
       shadowOpacity: 0.04,
-      shadowRadius: 8,
+      shadowRadius: 6,
       elevation: 1,
     },
     md: {
-      shadowColor: "#03045E",
-      shadowOffset: { width: 0, height: 8 },
-      shadowOpacity: 0.06,
-      shadowRadius: 20,
-      elevation: 3,
+      shadowColor: "#0F172A",
+      shadowOffset: { width: 0, height: 6 },
+      shadowOpacity: 0.05,
+      shadowRadius: 16,
+      elevation: 2,
     },
     lg: {
-      shadowColor: "#03045E",
-      shadowOffset: { width: 0, height: 16 },
-      shadowOpacity: 0.08,
-      shadowRadius: 32,
-      elevation: 6,
+      shadowColor: "#0F172A",
+      shadowOffset: { width: 0, height: 12 },
+      shadowOpacity: 0.07,
+      shadowRadius: 28,
+      elevation: 4,
     },
   },
 
   ergonomics: {
     minTouchTarget: 48,
-    buttonRadius: 14,
-    cardRadius: 18,
+    buttonRadius: 12,
+    cardRadius: 16,
     borderWidth: 1,
   },
 
@@ -111,4 +133,67 @@ export const Theme = {
     medium: 1024,
     expanded: 1280,
   },
+};
+
+export type FontPairingId = "option1" | "option2";
+
+export interface FontPairingConfig {
+  id: FontPairingId;
+  label: string;
+  badge: string;
+  headingFontName: string;
+  bodyFontName: string;
+  headingCss: string;
+  bodyCss: string;
+  rationale: string;
+}
+
+export const FONT_PAIRING_PRESETS: Record<FontPairingId, FontPairingConfig> = {
+  option1: {
+    id: "option1",
+    label: "Option 1: Manrope Headings + General Sans Body",
+    badge: "Manrope / GenSans",
+    headingFontName: "Manrope",
+    bodyFontName: "General Sans",
+    headingCss: "'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    bodyCss: "'General Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    rationale: "Warm, welcoming, geometric headings paired with crisp, ultra-clean reading body copy.",
+  },
+  option2: {
+    id: "option2",
+    label: "Option 2: General Sans Headings + Manrope Body",
+    badge: "GenSans / Manrope",
+    headingFontName: "General Sans",
+    bodyFontName: "Manrope",
+    headingCss: "'General Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    bodyCss: "'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    rationale: "Editorial, sharp, modern headings with open-aperture, friendly geometric body text.",
+  },
+};
+
+export const applyFontPairing = (id: FontPairingId): FontPairingConfig => {
+  const config = FONT_PAIRING_PRESETS[id] || FONT_PAIRING_PRESETS.option1;
+  if (Platform.OS === "web" && typeof document !== "undefined") {
+    document.documentElement.style.setProperty("--font-heading", config.headingCss);
+    document.documentElement.style.setProperty("--font-brand", config.headingCss);
+    document.documentElement.style.setProperty("--font-body", config.bodyCss);
+    try {
+      localStorage.setItem("careflow_font_pairing", id);
+    } catch (e) {
+      // Storage unavailable
+    }
+  }
+  return config;
+};
+
+export const getActiveFontPairing = (): FontPairingId => {
+  if (Platform.OS === "web" && typeof localStorage !== "undefined") {
+    try {
+      const stored = localStorage.getItem("careflow_font_pairing");
+      if (stored === "option2") return "option2";
+    } catch (e) {
+      // Ignore
+    }
+  }
+  return "option1";
 };
