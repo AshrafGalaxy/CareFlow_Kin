@@ -1,0 +1,35 @@
+#!/bin/sh
+# Git pre-push hook to verify all outgoing commits adhere to subject <= 70 chars
+
+REMOTE="$1"
+URL="$2"
+MAX_LENGTH=70
+
+while read local_ref local_oid remote_ref remote_oid; do
+    if [ "$local_oid" = "0000000000000000000000000000000000000000" ]; then
+        # Branch deletion, skip
+        continue
+    fi
+
+    if [ "$remote_oid" = "0000000000000000000000000000000000000000" ]; then
+        # New branch on remote, check commits relative to origin/main or last 10
+        RANGE="$local_oid"
+    else
+        RANGE="$remote_oid..$local_oid"
+    fi
+
+    for commit in $(git rev-list "$RANGE" 2>/dev/null); do
+        subject=$(git log -1 --format="%s" "$commit")
+        len=${#subject}
+        if [ "$len" -gt "$MAX_LENGTH" ]; then
+            echo "================================================================="
+            echo "PUSH ABORTED: Commit $commit subject exceeds limit ($len / $MAX_LENGTH chars)"
+            echo "Subject: $subject"
+            echo "Please amend or rebase your commits before pushing."
+            echo "================================================================="
+            exit 1
+        fi
+    done
+done
+
+exit 0

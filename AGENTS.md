@@ -7,7 +7,7 @@
 
 ## 2. Version Control and Commit Standards
 - **Subject Line**:
-  - Target ~50 characters; maximum ceiling of 72 characters.
+  - Target ~50 characters; strict hard ceiling of 70 characters (enforced by hooks).
   - Imperative mood (e.g., `feat(auth): implement token verification dependency`).
   - Standardized conventional types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`.
 - **Commit Body Format**:
@@ -59,3 +59,4 @@
 - **Colloquial Page Nomenclature ("Landing Page")**: Using colloquial marketing labels like "landing page" in commit headers or logs rather than precise architectural domain scopes (`public portal`, `entry view`, `public index`).
 - **Explicit File Citation in Commit Headers**: Citing raw filenames or extensions (e.g., "in AGENTS.md", "index.tsx") within commit titles rather than canonical architectural scopes.
 - **Overly Convoluted Commit Language**: Using dense, obscure, or unnatural wording instead of simple, straightforward language that anyone can easily read and understand.
+- **Oversized Commit Headers**: Emitting subject lines exceeding 70 characters. Target ~50 characters, never exceeding 70.
