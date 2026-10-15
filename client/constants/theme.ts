@@ -59,17 +59,17 @@ export const Theme = {
   },
 
   fonts: {
-    // Dynamic CSS variable font stack for real-time comparison, with native fallback
+    // Standardized Option 1: Manrope for Brand/Headings, General Sans for Body/UI
     brand: Platform.select({
-      web: "var(--font-brand, 'Manrope', -apple-system, sans-serif)",
+      web: "'Manrope', -apple-system, BlinkMacSystemFont, sans-serif",
       default: "System",
     }),
     heading: Platform.select({
-      web: "var(--font-heading, 'Manrope', -apple-system, sans-serif)",
+      web: "'Manrope', -apple-system, BlinkMacSystemFont, sans-serif",
       default: "System",
     }),
     body: Platform.select({
-      web: "var(--font-body, 'General Sans', -apple-system, sans-serif)",
+      web: "'General Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
       default: "System",
     }),
     mono: Platform.select({
@@ -133,67 +133,4 @@ export const Theme = {
     medium: 1024,
     expanded: 1280,
   },
-};
-
-export type FontPairingId = "option1" | "option2";
-
-export interface FontPairingConfig {
-  id: FontPairingId;
-  label: string;
-  badge: string;
-  headingFontName: string;
-  bodyFontName: string;
-  headingCss: string;
-  bodyCss: string;
-  rationale: string;
-}
-
-export const FONT_PAIRING_PRESETS: Record<FontPairingId, FontPairingConfig> = {
-  option1: {
-    id: "option1",
-    label: "Option 1: Manrope Headings + General Sans Body",
-    badge: "Manrope / GenSans",
-    headingFontName: "Manrope",
-    bodyFontName: "General Sans",
-    headingCss: "'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-    bodyCss: "'General Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-    rationale: "Warm, welcoming, geometric headings paired with crisp, ultra-clean reading body copy.",
-  },
-  option2: {
-    id: "option2",
-    label: "Option 2: General Sans Headings + Manrope Body",
-    badge: "GenSans / Manrope",
-    headingFontName: "General Sans",
-    bodyFontName: "Manrope",
-    headingCss: "'General Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-    bodyCss: "'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-    rationale: "Editorial, sharp, modern headings with open-aperture, friendly geometric body text.",
-  },
-};
-
-export const applyFontPairing = (id: FontPairingId): FontPairingConfig => {
-  const config = FONT_PAIRING_PRESETS[id] || FONT_PAIRING_PRESETS.option1;
-  if (Platform.OS === "web" && typeof document !== "undefined") {
-    document.documentElement.style.setProperty("--font-heading", config.headingCss);
-    document.documentElement.style.setProperty("--font-brand", config.headingCss);
-    document.documentElement.style.setProperty("--font-body", config.bodyCss);
-    try {
-      localStorage.setItem("careflow_font_pairing", id);
-    } catch (e) {
-      // Storage unavailable
-    }
-  }
-  return config;
-};
-
-export const getActiveFontPairing = (): FontPairingId => {
-  if (Platform.OS === "web" && typeof localStorage !== "undefined") {
-    try {
-      const stored = localStorage.getItem("careflow_font_pairing");
-      if (stored === "option2") return "option2";
-    } catch (e) {
-      // Ignore
-    }
-  }
-  return "option1";
 };

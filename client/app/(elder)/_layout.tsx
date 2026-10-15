@@ -14,7 +14,6 @@ import {
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import { useRouter, usePathname } from "expo-router";
 import { CareFlowLogo } from "../../components/CareFlowLogo";
-import { FontPairingSwitcher } from "../../components/FontPairingSwitcher";
 import { useAuth } from "../../context/AuthContext";
 import { useResponsive } from "../../hooks/useResponsive";
 
@@ -54,10 +53,6 @@ export default function ElderLayout() {
         <View style={styles.deckTag}>
           <Text style={styles.deckTagText}>ELDER DECK</Text>
         </View>
-
-        {!isTablet && (
-          <FontPairingSwitcher compact={true} style={{ marginTop: 10, width: "100%" }} />
-        )}
       </View>
 
       {/* Navigation List */}

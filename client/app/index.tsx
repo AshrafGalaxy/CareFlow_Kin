@@ -12,7 +12,6 @@ import { Theme } from "../constants/theme";
 import { useResponsive } from "../hooks/useResponsive";
 import { BigButton } from "../components/BigButton";
 import { CareFlowLogo } from "../components/CareFlowLogo";
-import { FontPairingSwitcher } from "../components/FontPairingSwitcher";
 import { api, getAuthToken } from "../services/api";
 import {
   Clock,
@@ -109,11 +108,6 @@ export default function LandingPage() {
         <Text style={[styles.heroSubtitle, { fontSize: heroSubtitleFontSize, lineHeight: heroSubtitleLineHeight }]}>
           The serene, unified companion for daily medication tracking, gentle wellness check-ins, and trusted care circles — designed for ease of use without cognitive fatigue.
         </Text>
-
-        {/* Real-time Font Pairing Comparison Switcher */}
-        <View style={{ marginTop: 18, marginBottom: 6 }}>
-          <FontPairingSwitcher compact={isSmallMobile} />
-        </View>
 
         {/* Dual CTA Actions */}
         <View style={[styles.heroActions, isDesktop && styles.heroActionsDesktop]}>

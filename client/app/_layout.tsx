@@ -38,22 +38,6 @@ export default function RootLayout() {
           "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700&display=swap";
         document.head.appendChild(link);
       }
-
-      // 3. Rehydrate stored font pairing if available
-      try {
-        const stored = localStorage.getItem("careflow_font_pairing");
-        if (stored === "option2") {
-          document.documentElement.style.setProperty("--font-heading", "'General Sans', -apple-system, sans-serif");
-          document.documentElement.style.setProperty("--font-brand", "'General Sans', -apple-system, sans-serif");
-          document.documentElement.style.setProperty("--font-body", "'Manrope', -apple-system, sans-serif");
-        } else {
-          document.documentElement.style.setProperty("--font-heading", "'Manrope', -apple-system, sans-serif");
-          document.documentElement.style.setProperty("--font-brand", "'Manrope', -apple-system, sans-serif");
-          document.documentElement.style.setProperty("--font-body", "'General Sans', -apple-system, sans-serif");
-        }
-      } catch (e) {
-        // Ignore localStorage error if disabled
-      }
     }
   }, []);
 
