@@ -38,6 +38,7 @@ export default function ElderLayout() {
             { name: "Medications", path: "/(elder)/medications" },
             { name: "Daily Routine", path: "/(elder)/checklist" },
             { name: "Wellness Sharing", path: "/(elder)/checkin" },
+            { name: "Appointments", path: "/(elder)/appointments" },
             { name: "Care Timeline", path: "/(elder)/timeline" },
           ].map((tab) => {
             const isActive =
@@ -59,7 +60,12 @@ export default function ElderLayout() {
         </View>
 
         <View style={styles.userActions}>
-          <View style={styles.profilePill}>
+          <TouchableOpacity
+            style={styles.profilePill}
+            onPress={() => router.push("/(elder)/profile")}
+            activeOpacity={0.8}
+            accessibilityLabel="Open Elder Profile & Settings"
+          >
             <View style={styles.avatarCircle}>
               <Text style={styles.avatarInitials}>
                 {user?.full_name ? user.full_name.charAt(0) : "E"}
@@ -67,9 +73,9 @@ export default function ElderLayout() {
             </View>
             <View>
               <Text style={styles.profileName}>{user?.full_name || "Eleanor Vance"}</Text>
-              <Text style={styles.profileStatus}>Online • Companion</Text>
+              <Text style={styles.profileStatus}>Online • Settings</Text>
             </View>
-          </View>
+          </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.exitBtn}

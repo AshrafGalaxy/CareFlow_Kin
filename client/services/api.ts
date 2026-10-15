@@ -245,6 +245,10 @@ export const api = {
       const res = await apiClient.get<Appointment[]>("/appointments");
       return res.data;
     },
+    create: async (payload: Partial<Appointment>): Promise<Appointment> => {
+      const res = await apiClient.post<Appointment>("/appointments", payload);
+      return res.data;
+    },
   },
 
   timeline: {
