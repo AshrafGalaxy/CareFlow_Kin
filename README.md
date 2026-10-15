@@ -1,4 +1,4 @@
-# CareFlow Kin
+# Careflow
 
 > **Connected Care Platform & Elder Companion**  
 > Built with an elder-first universal architecture supporting Web (Desktop & Decks), iOS, and Android from a single responsive codebase.
@@ -7,10 +7,10 @@
 
 ## Architectural Overview
 
-CareFlow Kin is engineered to support elderly individuals, their families, and care providers with routine adherence, emotional well-being monitoring, and clinical coordination.
+Careflow is engineered to support elderly individuals, their families, and care providers with routine adherence, emotional well-being monitoring, and clinical coordination.
 
 ```
-CareFlow_Kin/
+Careflow/
 ├── .github/workflows/ci.yml      # Automated GitHub Actions test & verification pipeline
 ├── AGENTS.md                     # Agent directives, commit standards, and operational protocols
 ├── backend/                      # Python 3.11+ / FastAPI asynchronous REST service

@@ -1,7 +1,7 @@
 # Security Policy
 
 ## Overview
-CareFlow Kin is built with an elder-first architecture focusing on patient privacy, server-side access control, and senior dignity. We take security and privacy seriously and welcome vulnerability reports directly from researchers and users.
+Careflow is built with an elder-first architecture focusing on patient privacy, server-side access control, and senior dignity. We take security and privacy seriously and welcome vulnerability reports directly from researchers and users.
 
 ---
 
