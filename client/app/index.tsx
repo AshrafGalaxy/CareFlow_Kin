@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import {
   View,
   Text,
@@ -32,12 +32,24 @@ import {
   Clock,
   Eye,
   Users,
+  Pill,
+  Sun,
+  Stethoscope,
+  UserCheck,
+  HelpCircle,
+  ChevronDown,
+  ChevronUp,
+  Shield,
+  EyeOff,
+  Check,
+  HeartHandshake,
 } from "lucide-react-native";
 
 export default function LandingPage() {
   const router = useRouter();
   const { isSmallMobile, isMobile, isTablet, isDesktop, horizontalPadding } = useResponsive();
   const scrollRef = useRef<ScrollView>(null);
+  const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
   const heroTitleFontSize = isSmallMobile ? 26 : isMobile ? 32 : isTablet ? 42 : 52;
   const heroTitleLineHeight = isSmallMobile ? 34 : isMobile ? 40 : isTablet ? 50 : 62;
@@ -52,6 +64,33 @@ export default function LandingPage() {
       }
     }
   };
+
+  const toggleFaq = (index: number) => {
+    setActiveFaq(activeFaq === index ? null : index);
+  };
+
+  const faqItems = [
+    {
+      q: "What if my parent has never used a computer, tablet, or smartphone?",
+      a: "CareFlow was co-designed alongside geriatric UX specialists specifically for non-tech-savvy seniors. There are zero multi-level menus, gestures, or tiny text. If they can tap a large high-contrast button on a screen, they can use CareFlow with total independence.",
+    },
+    {
+      q: "Can multiple siblings and family members join the same care circle?",
+      a: "Yes. Unlimited family members, spouses, and trusted helpers can join the circle. When your parent confirms their morning medication or shares their mood, everyone sees the update simultaneously—eliminating repetitive, anxious phone calls.",
+    },
+    {
+      q: "How difficult is it to set up prescriptions and daily routines?",
+      a: "It takes under 3 minutes. A family caregiver enters the medication names and dosage schedules once from their phone or laptop. The schedule instantly appears on the elder's deck in color-coded morning, afternoon, and evening slots.",
+    },
+    {
+      q: "Does CareFlow replace emergency medical services or 911?",
+      a: "No. CareFlow is an ambient daily care coordination platform designed for routine adherence, gentle wellness tracking, and family peace of mind. For sudden acute medical crises, always call 911 or your local emergency services directly.",
+    },
+    {
+      q: "What devices are supported? Do we need to purchase proprietary hardware?",
+      a: "No special hardware is required. CareFlow works seamlessly on any iPad, Android tablet, smartphone, or desktop web browser. Most families simply place an inexpensive dedicated tablet in the kitchen or on a bedside table.",
+    },
+  ];
 
   return (
     <ScrollView
@@ -80,19 +119,31 @@ export default function LandingPage() {
                 onPress={() => scrollToSection("features")}
                 accessibilityRole="link"
               >
-                <Text style={styles.navLinkItem}>Features</Text>
+                <Text style={styles.navLinkItem}>Capabilities</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => scrollToSection("how-it-works")}
+                onPress={() => scrollToSection("both-sides")}
                 accessibilityRole="link"
               >
-                <Text style={styles.navLinkItem}>How It Works</Text>
+                <Text style={styles.navLinkItem}>Both Sides of Care</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => scrollToSection("dignity-safety")}
+                onPress={() => scrollToSection("day-in-life")}
                 accessibilityRole="link"
               >
-                <Text style={styles.navLinkItem}>Dignity & Privacy</Text>
+                <Text style={styles.navLinkItem}>A Day in the Life</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => scrollToSection("dignity-manifesto")}
+                accessibilityRole="link"
+              >
+                <Text style={styles.navLinkItem}>Dignity Standard</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => scrollToSection("faq")}
+                accessibilityRole="link"
+              >
+                <Text style={styles.navLinkItem}>FAQ</Text>
               </TouchableOpacity>
             </View>
           )}
@@ -174,29 +225,58 @@ export default function LandingPage() {
           </Text>
         </TouchableOpacity>
 
-        {/* Ergonomic & Trust Highlights Banner */}
-        <View style={styles.trustPillRow}>
-          <View style={styles.trustPill}>
-            <CheckCircle2 size={14} color={Theme.colors.success} />
-            <Text style={styles.trustPillText}>48px+ Touch Boundaries</Text>
+        {/* =========================================================================
+            3. THE 4 DOMAIN-CENTERED HEALTHCARE PILLARS (Replaces technical tags)
+           ========================================================================= */}
+        <View style={[styles.assuranceGrid, isDesktop && styles.assuranceGridDesktop]}>
+          {/* Pillar 1: Zero-Missed Prescriptions */}
+          <View style={styles.assuranceCard}>
+            <View style={[styles.assuranceIconBadge, { backgroundColor: "#E0F2FE" }]}>
+              <Pill size={18} color="#0284C7" />
+            </View>
+            <Text style={styles.assuranceTitle}>Zero-Missed Prescriptions</Text>
+            <Text style={styles.assuranceDesc}>
+              Chronological dosage slots with single-tap taken verification.
+            </Text>
           </View>
-          <View style={styles.trustPill}>
-            <CheckCircle2 size={14} color={Theme.colors.success} />
-            <Text style={styles.trustPillText}>WCAG AAA High-Contrast</Text>
+
+          {/* Pillar 2: One-Tap Morning Check-In */}
+          <View style={styles.assuranceCard}>
+            <View style={[styles.assuranceIconBadge, { backgroundColor: "#FEF3C7" }]}>
+              <Sun size={18} color="#D97706" />
+            </View>
+            <Text style={styles.assuranceTitle}>One-Tap Morning Check-In</Text>
+            <Text style={styles.assuranceDesc}>
+              Gentle wellness signal that reassures family without interrogation calls.
+            </Text>
           </View>
-          <View style={styles.trustPill}>
-            <CheckCircle2 size={14} color={Theme.colors.success} />
-            <Text style={styles.trustPillText}>Zero Confusing Advertisements</Text>
+
+          {/* Pillar 3: Cataract-Safe Visual Clarity */}
+          <View style={styles.assuranceCard}>
+            <View style={[styles.assuranceIconBadge, { backgroundColor: "#CCFBF1" }]}>
+              <Eye size={18} color="#0D9488" />
+            </View>
+            <Text style={styles.assuranceTitle}>Cataract-Safe Visual Clarity</Text>
+            <Text style={styles.assuranceDesc}>
+              High-contrast, glare-free canvas designed for aging eyes and arthritic hands.
+            </Text>
           </View>
-          <View style={styles.trustPill}>
-            <CheckCircle2 size={14} color={Theme.colors.success} />
-            <Text style={styles.trustPillText}>Server-Authoritative Security</Text>
+
+          {/* Pillar 4: Doctor-Ready Health History */}
+          <View style={styles.assuranceCard}>
+            <View style={[styles.assuranceIconBadge, { backgroundColor: "#EDE9FE" }]}>
+              <Stethoscope size={18} color="#7C3AED" />
+            </View>
+            <Text style={styles.assuranceTitle}>Doctor-Ready Health History</Text>
+            <Text style={styles.assuranceDesc}>
+              Verifiable 30-day compliance timeline ready for clinic appointments and telemedicine.
+            </Text>
           </View>
         </View>
       </View>
 
       {/* =========================================================================
-          3. THE TENSION: WHAT EXACTLY WE ARE SOLVING (Before vs. After)
+          4. THE TENSION: WHAT EXACTLY WE ARE SOLVING (Before vs. After)
          ========================================================================= */}
       <View
         id="why-careflow"
@@ -312,7 +392,7 @@ export default function LandingPage() {
       </View>
 
       {/* =========================================================================
-          4. THE FOUR FEATURE SHOWCASES (DOMAIN-AUTHENTIC ISOMETRIC VISUALS)
+          5. THE FOUR FEATURE SHOWCASES (DOMAIN-AUTHENTIC ISOMETRIC VISUALS)
          ========================================================================= */}
       <View
         id="features"
@@ -412,114 +492,218 @@ export default function LandingPage() {
       </View>
 
       {/* =========================================================================
-          5. HOW IT WORKS: THE 3-STEP SENIOR JOURNEY
+          6. BUILT FOR BOTH SIDES OF CARE (Generational Dual-Perspective Matrix)
          ========================================================================= */}
       <View
-        id="how-it-works"
-        style={[styles.sectionContainer, styles.journeySection, { paddingHorizontal: horizontalPadding }]}
+        id="both-sides"
+        style={[styles.sectionContainer, styles.bothSidesSection, { paddingHorizontal: horizontalPadding }]}
       >
         <View style={styles.sectionHeader}>
           <View style={styles.sectionBadge}>
-            <Activity size={14} color={Theme.colors.brandPrimary} />
-            <Text style={styles.sectionBadgeText}>THE EXPERIENCE</Text>
+            <Users size={14} color={Theme.colors.brandPrimary} />
+            <Text style={styles.sectionBadgeText}>DUAL-PERSPECTIVE CARE</Text>
           </View>
           <Text style={styles.sectionTitle}>
-            Designed for Simplicity in Three Gentle Steps.
+            Built for Both Sides of Care: Dignity for Elders, Serenity for Families.
           </Text>
           <Text style={styles.sectionSubtitle}>
-            Healthcare software should never require a manual. CareFlow operates smoothly from sunrise to bedtime.
+            Elderly tech fails when it treats seniors like patients or burdens adult children with false alarms. CareFlow provides two synchronized lenses on the exact same daily routine.
           </Text>
         </View>
 
-        <View style={[styles.stepGrid, isDesktop && styles.stepGridDesktop]}>
-          {/* Step 1 */}
-          <View style={styles.stepCard}>
-            <View style={styles.stepBadge}>
-              <Text style={styles.stepBadgeText}>01</Text>
+        <View style={[styles.bothSidesGrid, isDesktop && styles.bothSidesGridDesktop]}>
+          {/* Side 1: The Elder Experience */}
+          <View style={styles.bothSidesCard}>
+            <View style={styles.perspectiveBadgeRow}>
+              <View style={[styles.perspectivePill, { backgroundColor: "#F0FDF4", borderColor: "#BBF7D0" }]}>
+                <UserCheck size={14} color="#16A34A" />
+                <Text style={[styles.perspectivePillText, { color: "#15803D" }]}>FOR OLDER ADULTS</Text>
+              </View>
+              <Text style={styles.perspectiveRoleTag}>The Daily Morning Companion</Text>
             </View>
-            <Text style={styles.stepTitle}>Glanceable Morning Deck</Text>
-            <Text style={styles.stepDesc}>
-              Upon waking, a calm greeting, weather summary, and immediate view of today's morning medications greet the elder on a glare-free canvas.
+            <Text style={styles.perspectiveCardTitle}>Autonomy, Clarity & Reverence</Text>
+            <Text style={styles.perspectiveCardSubtitle}>
+              An analog-simple digital sanctuary that honors personal rhythm and eliminates feelings of helplessness.
             </Text>
+
+            <View style={styles.perspectiveFeatureList}>
+              <View style={styles.perspectiveItem}>
+                <CheckCircle2 size={18} color="#16A34A" style={styles.perspectiveItemIcon} />
+                <View style={styles.perspectiveItemContent}>
+                  <Text style={styles.perspectiveItemHeader}>Glanceable Morning Deck</Text>
+                  <Text style={styles.perspectiveItemDesc}>
+                    Wakes to warm greetings, weather summaries, and immediate medication clarity without password confusion.
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.perspectiveItem}>
+                <CheckCircle2 size={18} color="#16A34A" style={styles.perspectiveItemIcon} />
+                <View style={styles.perspectiveItemContent}>
+                  <Text style={styles.perspectiveItemHeader}>Single-Tap Mood Affirmation</Text>
+                  <Text style={styles.perspectiveItemDesc}>
+                    Check in with one gentle tap between Great, Good, Okay, or Need Help. No typing, no swiping hurdles.
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.perspectiveItem}>
+                <CheckCircle2 size={18} color="#16A34A" style={styles.perspectiveItemIcon} />
+                <View style={styles.perspectiveItemContent}>
+                  <Text style={styles.perspectiveItemHeader}>Zero Patronizing Alarms</Text>
+                  <Text style={styles.perspectiveItemDesc}>
+                    Replaces shrill sirens with polite, dignified visual cues that maintain calm throughout the living space.
+                  </Text>
+                </View>
+              </View>
+            </View>
           </View>
 
-          {/* Step 2 */}
-          <View style={styles.stepCard}>
-            <View style={styles.stepBadge}>
-              <Text style={styles.stepBadgeText}>02</Text>
+          {/* Side 2: The Family Caregiver Experience */}
+          <View style={styles.bothSidesCard}>
+            <View style={styles.perspectiveBadgeRow}>
+              <View style={[styles.perspectivePill, { backgroundColor: "#F0F9FF", borderColor: "#BAE6FD" }]}>
+                <HeartHandshake size={14} color="#0284C7" />
+                <Text style={[styles.perspectivePillText, { color: "#0369A1" }]}>FOR ADULT CHILDREN & SIBLINGS</Text>
+              </View>
+              <Text style={styles.perspectiveRoleTag}>The Ambient Reassurance Dashboard</Text>
             </View>
-            <Text style={styles.stepTitle}>Single-Tap Confirmation</Text>
-            <Text style={styles.stepDesc}>
-              Taking medication or recording a mood takes a single tap on a generous 48px+ touch button, accompanied by clear visual confirmation.
+            <Text style={styles.perspectiveCardTitle}>Quiet Peace of Mind Without Nagging</Text>
+            <Text style={styles.perspectiveCardSubtitle}>
+              Stay fully informed and coordinated without turning every phone call into a tense medical interrogation.
             </Text>
-          </View>
 
-          {/* Step 3 */}
-          <View style={styles.stepCard}>
-            <View style={styles.stepBadge}>
-              <Text style={styles.stepBadgeText}>03</Text>
+            <View style={styles.perspectiveFeatureList}>
+              <View style={styles.perspectiveItem}>
+                <CheckCircle2 size={18} color="#0284C7" style={styles.perspectiveItemIcon} />
+                <View style={styles.perspectiveItemContent}>
+                  <Text style={styles.perspectiveItemHeader}>Ambient Morning Confirmation</Text>
+                  <Text style={styles.perspectiveItemDesc}>
+                    Receive a calm push alert the moment mom logs her morning meds and check-in, freeing your workday from anxiety.
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.perspectiveItem}>
+                <CheckCircle2 size={18} color="#0284C7" style={styles.perspectiveItemIcon} />
+                <View style={styles.perspectiveItemContent}>
+                  <Text style={styles.perspectiveItemHeader}>Unified Sibling Synchronization</Text>
+                  <Text style={styles.perspectiveItemDesc}>
+                    Brothers and sisters see the exact same real-time ledger, ending duplicate phone calls and coordination friction.
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.perspectiveItem}>
+                <CheckCircle2 size={18} color="#0284C7" style={styles.perspectiveItemIcon} />
+                <View style={styles.perspectiveItemContent}>
+                  <Text style={styles.perspectiveItemHeader}>Doctor-Ready Adherence Timeline</Text>
+                  <Text style={styles.perspectiveItemDesc}>
+                    Walk into medical consults with 30-day verified adherence histories rather than vague memory estimates.
+                  </Text>
+                </View>
+              </View>
             </View>
-            <Text style={styles.stepTitle}>Ambient Family Assurance</Text>
-            <Text style={styles.stepDesc}>
-              Family members receive serene ambient reassurance on their phones. If assistance is ever needed, the circle is notified seamlessly.
-            </Text>
           </View>
         </View>
       </View>
 
       {/* =========================================================================
-          6. CLINICAL TRUST, SECURITY & DIGNITY BANNER
+          7. A DAY IN THE LIFE WITH CAREFLOW (Chronological Scenario Walkthrough)
          ========================================================================= */}
       <View
-        id="dignity-safety"
+        id="day-in-life"
         style={[styles.sectionContainer, { paddingHorizontal: horizontalPadding }]}
       >
-        <View style={styles.trustBanner}>
-          <View style={styles.trustBannerHeader}>
-            <ShieldCheck size={28} color={Theme.colors.brandPrimary} />
-            <Text style={styles.trustBannerTitle}>
-              Built to Rigorous Clinical & Accessibility Standards
-            </Text>
+        <View style={styles.sectionHeader}>
+          <View style={styles.sectionBadge}>
+            <Clock size={14} color={Theme.colors.brandPrimary} />
+            <Text style={styles.sectionBadgeText}>A TYPICAL TUESDAY</Text>
+          </View>
+          <Text style={styles.sectionTitle}>
+            A Day in the Life with CareFlow
+          </Text>
+          <Text style={styles.sectionSubtitle}>
+            Watch how CareFlow silently weaves into a family's daily rhythm, replacing anxious check-in friction with seamless, ambient certainty.
+          </Text>
+        </View>
+
+        <View style={[styles.timelineContainer, isDesktop && styles.timelineContainerDesktop]}>
+          {/* Event 1 */}
+          <View style={styles.timelineItem}>
+            <View style={styles.timelineMarkerCol}>
+              <View style={styles.timelineDot}>
+                <Sun size={16} color="#0284C7" />
+              </View>
+              <View style={styles.timelineConnectorLine} />
+            </View>
+            <View style={styles.timelineCard}>
+              <View style={styles.timelineHeaderRow}>
+                <Text style={styles.timelineTime}>08:00 AM</Text>
+                <Text style={styles.timelineTag}>MORNING WAKE</Text>
+              </View>
+              <Text style={styles.timelineTitle}>Eleanor's Morning Deck Lights Up</Text>
+              <Text style={styles.timelineDesc}>
+                Eleanor walks into her kitchen. Her dedicated tablet displays a warm greeting, local weather, and a crisp view of her morning heart prescription in high contrast.
+              </Text>
+            </View>
           </View>
 
-          <View style={[styles.trustGrid, isDesktop && styles.trustGridDesktop]}>
-            <View style={styles.trustItem}>
-              <View style={styles.trustIconWrap}>
-                <Lock size={20} color={Theme.colors.brandPrimary} />
+          {/* Event 2 */}
+          <View style={styles.timelineItem}>
+            <View style={styles.timelineMarkerCol}>
+              <View style={[styles.timelineDot, { backgroundColor: "#DCFCE7", borderColor: "#86EFAC" }]}>
+                <Check size={16} color="#16A34A" />
               </View>
-              <Text style={styles.trustItemTitle}>Server-Authoritative Security</Text>
-              <Text style={styles.trustItemDesc}>
-                Role-based access control, cryptographic token verification, and strict tenant isolation verified on the backend.
+              <View style={styles.timelineConnectorLine} />
+            </View>
+            <View style={styles.timelineCard}>
+              <View style={styles.timelineHeaderRow}>
+                <Text style={styles.timelineTime}>08:02 AM</Text>
+                <Text style={[styles.timelineTag, { color: "#16A34A", backgroundColor: "#F0FDF4" }]}>1-TAP LOG</Text>
+              </View>
+              <Text style={styles.timelineTitle}>Single-Tap Confirmation</Text>
+              <Text style={styles.timelineDesc}>
+                Eleanor takes her Atorvastatin, taps "Taken" with one touch, and taps "Feeling Good 😊". The pill slot turns soothing green with audible verification.
               </Text>
             </View>
+          </View>
 
-            <View style={styles.trustItem}>
-              <View style={styles.trustIconWrap}>
-                <Eye size={20} color={Theme.colors.brandPrimary} />
+          {/* Event 3 */}
+          <View style={styles.timelineItem}>
+            <View style={styles.timelineMarkerCol}>
+              <View style={[styles.timelineDot, { backgroundColor: "#FEF3C7", borderColor: "#FDE68A" }]}>
+                <Heart size={16} color="#D97706" />
               </View>
-              <Text style={styles.trustItemTitle}>Geriatric WCAG AAA Contrast</Text>
-              <Text style={styles.trustItemDesc}>
-                Obsidian slate typography and vibrant Sky/Teal accents tested for effortless legibility across diverse eye conditions.
+              <View style={styles.timelineConnectorLine} />
+            </View>
+            <View style={styles.timelineCard}>
+              <View style={styles.timelineHeaderRow}>
+                <Text style={styles.timelineTime}>08:05 AM</Text>
+                <Text style={[styles.timelineTag, { color: "#D97706", backgroundColor: "#FFFBEB" }]}>AMBIENT PING</Text>
+              </View>
+              <Text style={styles.timelineTitle}>Daughter Sarah Receives Quiet Relief</Text>
+              <Text style={styles.timelineDesc}>
+                25 miles away, daughter Sarah's phone lights up with a subtle notification: "Mom checked in and took her morning meds." Sarah smiles and heads into her work meeting with complete peace of mind.
               </Text>
             </View>
+          </View>
 
-            <View style={styles.trustItem}>
-              <View style={styles.trustIconWrap}>
-                <Heart size={20} color={Theme.colors.brandPrimary} />
+          {/* Event 4 */}
+          <View style={styles.timelineItem}>
+            <View style={styles.timelineMarkerCol}>
+              <View style={[styles.timelineDot, { backgroundColor: "#EDE9FE", borderColor: "#DDD6FE" }]}>
+                <Stethoscope size={16} color="#7C3AED" />
               </View>
-              <Text style={styles.trustItemTitle}>Zero Cognitive Friction</Text>
-              <Text style={styles.trustItemDesc}>
-                Generous touch boundaries, familiar icons, and plain English descriptions eliminate confusion and anxiety.
-              </Text>
             </View>
-
-            <View style={styles.trustItem}>
-              <View style={styles.trustIconWrap}>
-                <Users size={20} color={Theme.colors.brandPrimary} />
+            <View style={styles.timelineCard}>
+              <View style={styles.timelineHeaderRow}>
+                <Text style={styles.timelineTime}>02:30 PM</Text>
+                <Text style={[styles.timelineTag, { color: "#7C3AED", backgroundColor: "#F5F3FF" }]}>CLINIC VISIT</Text>
               </View>
-              <Text style={styles.trustItemTitle}>Patient Data Sovereignty</Text>
-              <Text style={styles.trustItemDesc}>
-                Health records remain private. No advertising tracking, no data brokers, and full patient ownership of all health history.
+              <Text style={styles.timelineTitle}>Doctor Reviews 30-Day Verifiable History</Text>
+              <Text style={styles.timelineDesc}>
+                At Eleanor's cardiology appointment, Dr. Martinez opens the clinical compliance ledger. Seeing a 98.4% verified adherence streak, he refines Eleanor's dosage with clinical confidence.
               </Text>
             </View>
           </View>
@@ -527,15 +711,128 @@ export default function LandingPage() {
       </View>
 
       {/* =========================================================================
-          7. BOTTOM CONVERSION CTA CARD
+          8. DIGNITY OVER SURVEILLANCE: ETHICAL MANIFESTO
+         ========================================================================= */}
+      <View
+        id="dignity-manifesto"
+        style={[styles.sectionContainer, styles.manifestoSection, { paddingHorizontal: horizontalPadding }]}
+      >
+        <View style={styles.sectionHeader}>
+          <View style={styles.sectionBadge}>
+            <ShieldCheck size={14} color={Theme.colors.brandPrimary} />
+            <Text style={styles.sectionBadgeText}>ETHICAL HEALTHCARE MANIFESTO</Text>
+          </View>
+          <Text style={styles.sectionTitle}>
+            Dignity Over Surveillance: Why We Reject Intrusive Monitoring.
+          </Text>
+          <Text style={styles.sectionSubtitle}>
+            Older adults reject technology when they feel spied on or infantilized. CareFlow is built as an empowering self-directed companion, strictly honoring human sovereignty and privacy.
+          </Text>
+        </View>
+
+        <View style={[styles.manifestoGrid, isDesktop && styles.manifestoGridDesktop]}>
+          <View style={styles.manifestoCard}>
+            <View style={[styles.manifestoIconWrap, { backgroundColor: "#FEE2E2" }]}>
+              <EyeOff size={22} color="#DC2626" />
+            </View>
+            <Text style={styles.manifestoCardTitle}>Zero Webcams or Microphones</Text>
+            <Text style={styles.manifestoCardDesc}>
+              We never install intrusive cameras, microphones, or wearable tracking beacons. Your parent's living space remains their sacred, unmonitored home.
+            </Text>
+          </View>
+
+          <View style={styles.manifestoCard}>
+            <View style={[styles.manifestoIconWrap, { backgroundColor: "#DCFCE7" }]}>
+              <UserCheck size={22} color="#16A34A" />
+            </View>
+            <Text style={styles.manifestoCardTitle}>Sovereign Self-Reporting</Text>
+            <Text style={styles.manifestoCardDesc}>
+              CareFlow empowers the senior as an autonomous agent. They self-report their mood and medications on their own schedule rather than being subjected to passive surveillance.
+            </Text>
+          </View>
+
+          <View style={styles.manifestoCard}>
+            <View style={[styles.manifestoIconWrap, { backgroundColor: "#E0F2FE" }]}>
+              <Lock size={22} color="#0284C7" />
+            </View>
+            <Text style={styles.manifestoCardTitle}>Zero Data Commercialization</Text>
+            <Text style={styles.manifestoCardDesc}>
+              Health logs are strictly isolated by cryptographic server authorization. We will never sell, broker, or monetize your family's health history to third parties or advertisers.
+            </Text>
+          </View>
+        </View>
+      </View>
+
+      {/* =========================================================================
+          9. FREQUENTLY ASKED QUESTIONS (Interactive Accordion)
+         ========================================================================= */}
+      <View
+        id="faq"
+        style={[styles.sectionContainer, { paddingHorizontal: horizontalPadding }]}
+      >
+        <View style={styles.sectionHeader}>
+          <View style={styles.sectionBadge}>
+            <HelpCircle size={14} color={Theme.colors.brandPrimary} />
+            <Text style={styles.sectionBadgeText}>COMMON QUESTIONS</Text>
+          </View>
+          <Text style={styles.sectionTitle}>
+            Frequently Asked Questions
+          </Text>
+          <Text style={styles.sectionSubtitle}>
+            Everything you need to know about setting up CareFlow for your parent or family circle.
+          </Text>
+        </View>
+
+        <View style={styles.faqList}>
+          {faqItems.map((item, idx) => {
+            const isOpen = activeFaq === idx;
+            return (
+              <View key={idx} style={[styles.faqItem, isOpen && styles.faqItemActive]}>
+                <TouchableOpacity
+                  style={styles.faqQuestionRow}
+                  onPress={() => toggleFaq(idx)}
+                  activeOpacity={0.8}
+                  accessibilityRole="button"
+                  accessibilityState={{ expanded: isOpen }}
+                >
+                  <Text style={[styles.faqQuestionText, isOpen && styles.faqQuestionTextActive]}>
+                    {item.q}
+                  </Text>
+                  <View style={styles.faqIconContainer}>
+                    {isOpen ? (
+                      <ChevronUp size={20} color={Theme.colors.brandPrimary} />
+                    ) : (
+                      <ChevronDown size={20} color="#64748B" />
+                    )}
+                  </View>
+                </TouchableOpacity>
+
+                {isOpen && (
+                  <View style={styles.faqAnswerContainer}>
+                    <Text style={styles.faqAnswerText}>{item.a}</Text>
+                  </View>
+                )}
+              </View>
+            );
+          })}
+        </View>
+      </View>
+
+      {/* =========================================================================
+          10. BOTTOM CONVERSION CTA CARD WITH RISK REVERSAL
          ========================================================================= */}
       <View style={[styles.bottomCtaSection, { paddingHorizontal: horizontalPadding }]}>
         <View style={styles.bottomCtaCard}>
+          <View style={styles.bottomCtaBadge}>
+            <Sparkles size={14} color="#38BDF8" />
+            <Text style={styles.bottomCtaBadgeText}>ZERO-RISK FAMILY SETUP</Text>
+          </View>
+
           <Text style={styles.bottomCtaTitle}>
             Give Your Loved Ones the Gift of Dignity and Serenity.
           </Text>
           <Text style={styles.bottomCtaSubtitle}>
-            Join the modern standard in compassionate elder care coordination. Set up your care circle in minutes.
+            Join the modern standard in compassionate elder care coordination. Set up your care circle in under 3 minutes with zero commitment.
           </Text>
 
           <View style={[styles.bottomCtaBtnRow, isDesktop && styles.bottomCtaBtnRowDesktop]}>
@@ -556,11 +853,31 @@ export default function LandingPage() {
               <Text style={styles.bottomCtaSecondaryText}>Sign In to Existing Account</Text>
             </TouchableOpacity>
           </View>
+
+          {/* Risk Reversal Assurance Strip */}
+          <View style={styles.riskReversalStrip}>
+            <View style={styles.riskReversalItem}>
+              <CheckCircle2 size={13} color="#38BDF8" />
+              <Text style={styles.riskReversalText}>Free 30-Day Family Circle</Text>
+            </View>
+            <View style={styles.riskReversalItem}>
+              <CheckCircle2 size={13} color="#38BDF8" />
+              <Text style={styles.riskReversalText}>No Credit Card Required</Text>
+            </View>
+            <View style={styles.riskReversalItem}>
+              <CheckCircle2 size={13} color="#38BDF8" />
+              <Text style={styles.riskReversalText}>3-Minute Tablet Setup</Text>
+            </View>
+            <View style={styles.riskReversalItem}>
+              <CheckCircle2 size={13} color="#38BDF8" />
+              <Text style={styles.riskReversalText}>Invite Unlimited Relatives</Text>
+            </View>
+          </View>
         </View>
       </View>
 
       {/* =========================================================================
-          8. ENTERPRISE MULTI-COLUMN FOOTER
+          11. ENTERPRISE MULTI-COLUMN FOOTER
          ========================================================================= */}
       <View style={styles.footerWrapper}>
         <View style={[styles.footerContainer, { paddingHorizontal: horizontalPadding }]}>
@@ -569,7 +886,7 @@ export default function LandingPage() {
             <View style={styles.footerBrandCol}>
               <CareFlowLogo size={34} showText={true} />
               <Text style={styles.footerMissionText}>
-                Empowering older adults with dignity, autonomy, and serene connection to loved ones and healthcare specialists.
+                Empowering older adults with dignity, autonomy, and serene connection to loved ones and attending healthcare physicians.
               </Text>
               <View style={styles.systemStatusPill}>
                 <View style={styles.systemStatusDot} />
@@ -594,29 +911,35 @@ export default function LandingPage() {
               </TouchableOpacity>
             </View>
 
-            {/* Column 3: Product & Design */}
+            {/* Column 3: Product Showcase */}
             <View style={styles.footerCol}>
               <Text style={styles.footerColHeading}>Product Showcase</Text>
               <TouchableOpacity onPress={() => scrollToSection("why-careflow")}>
                 <Text style={styles.footerLink}>Why Careflow</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => scrollToSection("features")}>
-                <Text style={styles.footerLink}>Feature Instruments</Text>
+                <Text style={styles.footerLink}>Capabilities</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => scrollToSection("how-it-works")}>
-                <Text style={styles.footerLink}>How It Works</Text>
+              <TouchableOpacity onPress={() => scrollToSection("both-sides")}>
+                <Text style={styles.footerLink}>Dual-Perspective Care</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => scrollToSection("dignity-safety")}>
-                <Text style={styles.footerLink}>Geriatric UX Principles</Text>
+              <TouchableOpacity onPress={() => scrollToSection("day-in-life")}>
+                <Text style={styles.footerLink}>A Day in the Life</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => scrollToSection("dignity-manifesto")}>
+                <Text style={styles.footerLink}>Ethical Manifesto</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => scrollToSection("faq")}>
+                <Text style={styles.footerLink}>Family FAQ</Text>
               </TouchableOpacity>
             </View>
 
-            {/* Column 4: Trust, Security & Legal */}
+            {/* Column 4: Trust, Security & Standards */}
             <View style={styles.footerCol}>
               <Text style={styles.footerColHeading}>Trust & Compliance</Text>
-              <Text style={styles.footerStaticItem}>Server-Authoritative Auth</Text>
+              <Text style={styles.footerStaticItem}>Server-Authoritative Security</Text>
+              <Text style={styles.footerStaticItem}>Cataract-Safe Visual Legibility</Text>
               <Text style={styles.footerStaticItem}>HIPAA Compliance Ready</Text>
-              <Text style={styles.footerStaticItem}>WCAG AAA Contrast Standards</Text>
               <Text style={styles.footerStaticItem}>Zero Third-Party Trackers</Text>
             </View>
           </View>
@@ -665,7 +988,7 @@ const styles = StyleSheet.create({
   navLinks: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 32,
+    gap: 28,
   },
   navLinkItem: {
     fontFamily: Theme.fonts.heading,
@@ -730,7 +1053,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 56,
     paddingBottom: 48,
-    maxWidth: 960,
+    maxWidth: 1100,
     alignSelf: "center",
     width: "100%",
   },
@@ -818,7 +1141,7 @@ const styles = StyleSheet.create({
   },
   heroSecondaryPrompt: {
     marginTop: 6,
-    marginBottom: 32,
+    marginBottom: 36,
   },
   heroSecondaryPromptText: {
     fontFamily: Theme.fonts.body,
@@ -831,29 +1154,52 @@ const styles = StyleSheet.create({
     color: Theme.colors.brandPrimary,
     textDecorationLine: "underline",
   },
-  trustPillRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
+
+  // 3. Assurance Pillars Grid (Replaces old tech tags)
+  assuranceGrid: {
+    width: "100%",
     gap: 16,
     marginTop: 8,
   },
-  trustPill: {
+  assuranceGridDesktop: {
     flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
+    alignItems: "stretch",
+  },
+  assuranceCard: {
+    flex: 1,
     backgroundColor: "#FFFFFF",
+    borderRadius: 16,
     borderWidth: 1,
     borderColor: "#E2E8F0",
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 100,
+    padding: 18,
+    alignItems: "flex-start",
+    ...Platform.select({
+      web: {
+        boxShadow: "0 2px 8px rgba(15, 23, 42, 0.04)",
+      },
+    }),
   },
-  trustPillText: {
+  assuranceIconBadge: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 12,
+  },
+  assuranceTitle: {
+    fontFamily: Theme.fonts.heading,
+    fontSize: 14,
+    fontWeight: "700",
+    color: "#0F172A",
+    marginBottom: 4,
+    letterSpacing: -0.1,
+  },
+  assuranceDesc: {
     fontFamily: Theme.fonts.body,
     fontSize: 12,
-    color: "#334155",
-    fontWeight: "500",
+    color: "#64748B",
+    lineHeight: 18,
   },
 
   // Common Section Styling
@@ -900,18 +1246,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#475569",
     textAlign: "center",
-    maxWidth: 700,
+    maxWidth: 720,
     lineHeight: 24,
   },
 
-  // 3. Tension Section
+  // 4. Tension Section
   tensionSection: {
     backgroundColor: "#FFFFFF",
     borderRadius: 24,
     borderWidth: 1,
     borderColor: "#E2E8F0",
     paddingVertical: 56,
-    marginVertical: 24,
+    marginVertical: 20,
   },
   tensionGrid: {
     gap: 24,
@@ -1004,7 +1350,7 @@ const styles = StyleSheet.create({
     lineHeight: 19,
   },
 
-  // 4. Showcase Section
+  // 5. Showcase Section
   showcaseGrid: {
     gap: 24,
   },
@@ -1039,115 +1385,287 @@ const styles = StyleSheet.create({
     lineHeight: 21,
   },
 
-  // 5. Journey Section
-  journeySection: {
+  // 6. Built for Both Sides Section
+  bothSidesSection: {
     backgroundColor: "#FFFFFF",
     borderRadius: 24,
     borderWidth: 1,
     borderColor: "#E2E8F0",
     paddingVertical: 56,
-    marginVertical: 24,
+    marginVertical: 20,
   },
-  stepGrid: {
-    gap: 20,
+  bothSidesGrid: {
+    gap: 24,
   },
-  stepGridDesktop: {
+  bothSidesGridDesktop: {
     flexDirection: "row",
   },
-  stepCard: {
+  bothSidesCard: {
     flex: 1,
     backgroundColor: "#F8FAFC",
-    borderRadius: 16,
+    borderRadius: 20,
     borderWidth: 1,
     borderColor: "#E2E8F0",
-    padding: 24,
+    padding: 28,
   },
-  stepBadge: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: "#E0F2FE",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 16,
-  },
-  stepBadgeText: {
-    fontFamily: Theme.fonts.heading,
-    fontSize: 14,
-    fontWeight: "700",
-    color: "#0284C7",
-  },
-  stepTitle: {
-    fontFamily: Theme.fonts.heading,
-    fontSize: 18,
-    fontWeight: "700",
-    color: "#0F172A",
-    marginBottom: 8,
-  },
-  stepDesc: {
-    fontFamily: Theme.fonts.body,
-    fontSize: 14,
-    color: "#64748B",
-    lineHeight: 22,
-  },
-
-  // 6. Trust Banner
-  trustBanner: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 24,
-    borderWidth: 1,
-    borderColor: "#E2E8F0",
-    padding: 36,
-  },
-  trustBannerHeader: {
+  perspectiveBadgeRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 14,
-    marginBottom: 32,
-    borderBottomWidth: 1,
-    borderBottomColor: "#F1F5F9",
-    paddingBottom: 20,
+    justifyContent: "space-between",
+    marginBottom: 16,
   },
-  trustBannerTitle: {
+  perspectivePill: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 100,
+    borderWidth: 1,
+  },
+  perspectivePillText: {
+    fontFamily: Theme.fonts.heading,
+    fontSize: 10,
+    fontWeight: "700",
+    letterSpacing: 0.5,
+  },
+  perspectiveRoleTag: {
+    fontFamily: Theme.fonts.body,
+    fontSize: 12,
+    color: "#64748B",
+  },
+  perspectiveCardTitle: {
     fontFamily: Theme.fonts.brand,
     fontSize: 22,
     fontWeight: "700",
     color: "#0F172A",
+    marginBottom: 8,
     letterSpacing: -0.3,
   },
-  trustGrid: {
-    gap: 24,
+  perspectiveCardSubtitle: {
+    fontFamily: Theme.fonts.body,
+    fontSize: 14,
+    color: "#475569",
+    lineHeight: 21,
+    marginBottom: 24,
   },
-  trustGridDesktop: {
+  perspectiveFeatureList: {
+    gap: 18,
+  },
+  perspectiveItem: {
     flexDirection: "row",
+    alignItems: "flex-start",
+    gap: 12,
   },
-  trustItem: {
+  perspectiveItemIcon: {
+    marginTop: 2,
+  },
+  perspectiveItemContent: {
     flex: 1,
   },
-  trustIconWrap: {
-    width: 44,
-    height: 44,
-    borderRadius: 12,
-    backgroundColor: "#F0F9FF",
+  perspectiveItemHeader: {
+    fontFamily: Theme.fonts.heading,
+    fontSize: 14,
+    fontWeight: "700",
+    color: "#0F172A",
+    marginBottom: 2,
+  },
+  perspectiveItemDesc: {
+    fontFamily: Theme.fonts.body,
+    fontSize: 13,
+    color: "#64748B",
+    lineHeight: 19,
+  },
+
+  // 7. Timeline Section (A Day in the Life)
+  timelineContainer: {
+    gap: 20,
+  },
+  timelineContainerDesktop: {
+    maxWidth: 900,
+    alignSelf: "center",
+    width: "100%",
+  },
+  timelineItem: {
+    flexDirection: "row",
+    gap: 18,
+  },
+  timelineMarkerCol: {
+    alignItems: "center",
+    width: 36,
+  },
+  timelineDot: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: "#E0F2FE",
+    borderWidth: 1.5,
+    borderColor: "#BAE6FD",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 14,
+    zIndex: 2,
   },
-  trustItemTitle: {
+  timelineConnectorLine: {
+    flex: 1,
+    width: 2,
+    backgroundColor: "#E2E8F0",
+    marginVertical: 4,
+  },
+  timelineCard: {
+    flex: 1,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+    padding: 20,
+    marginBottom: 12,
+    ...Platform.select({
+      web: {
+        boxShadow: "0 2px 8px rgba(15, 23, 42, 0.04)",
+      },
+    }),
+  },
+  timelineHeaderRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 8,
+  },
+  timelineTime: {
+    fontFamily: Theme.fonts.heading,
+    fontSize: 14,
+    fontWeight: "700",
+    color: Theme.colors.brandPrimary,
+  },
+  timelineTag: {
+    fontFamily: Theme.fonts.heading,
+    fontSize: 10,
+    fontWeight: "700",
+    color: "#0284C7",
+    backgroundColor: "#F0F9FF",
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 4,
+    letterSpacing: 0.5,
+  },
+  timelineTitle: {
     fontFamily: Theme.fonts.heading,
     fontSize: 16,
     fontWeight: "700",
     color: "#0F172A",
     marginBottom: 6,
   },
-  trustItemDesc: {
+  timelineDesc: {
+    fontFamily: Theme.fonts.body,
+    fontSize: 14,
+    color: "#64748B",
+    lineHeight: 21,
+  },
+
+  // 8. Ethical Manifesto Section
+  manifestoSection: {
+    backgroundColor: "#0F172A",
+    borderRadius: 24,
+    paddingVertical: 56,
+    paddingHorizontal: 24,
+    marginVertical: 20,
+  },
+  manifestoGrid: {
+    gap: 20,
+  },
+  manifestoGridDesktop: {
+    flexDirection: "row",
+  },
+  manifestoCard: {
+    flex: 1,
+    backgroundColor: "#1E293B",
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: "#334155",
+    padding: 24,
+  },
+  manifestoIconWrap: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 16,
+  },
+  manifestoCardTitle: {
+    fontFamily: Theme.fonts.heading,
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#FFFFFF",
+    marginBottom: 8,
+  },
+  manifestoCardDesc: {
     fontFamily: Theme.fonts.body,
     fontSize: 13,
-    color: "#64748B",
+    color: "#94A3B8",
     lineHeight: 20,
   },
 
-  // 7. Bottom CTA
+  // 9. FAQ Section
+  faqList: {
+    maxWidth: 860,
+    width: "100%",
+    alignSelf: "center",
+    gap: 12,
+  },
+  faqItem: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+    overflow: "hidden",
+  },
+  faqItemActive: {
+    borderColor: Theme.colors.brandPrimary,
+  },
+  faqQuestionRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 18,
+    ...Platform.select({
+      web: { cursor: "pointer" },
+    }),
+  },
+  faqQuestionText: {
+    fontFamily: Theme.fonts.heading,
+    fontSize: 15,
+    fontWeight: "600",
+    color: "#0F172A",
+    flex: 1,
+    paddingRight: 16,
+  },
+  faqQuestionTextActive: {
+    color: Theme.colors.brandPrimary,
+    fontWeight: "700",
+  },
+  faqIconContainer: {
+    width: 28,
+    height: 28,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  faqAnswerContainer: {
+    paddingHorizontal: 18,
+    paddingBottom: 18,
+    paddingTop: 0,
+    borderTopWidth: 1,
+    borderTopColor: "#F1F5F9",
+  },
+  faqAnswerText: {
+    fontFamily: Theme.fonts.body,
+    fontSize: 14,
+    color: "#475569",
+    lineHeight: 22,
+    marginTop: 12,
+  },
+
+  // 10. Bottom CTA
   bottomCtaSection: {
     paddingVertical: 48,
     maxWidth: 1080,
@@ -1159,6 +1677,25 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     padding: 44,
     alignItems: "center",
+  },
+  bottomCtaBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    backgroundColor: "rgba(56, 189, 248, 0.12)",
+    borderWidth: 1,
+    borderColor: "rgba(56, 189, 248, 0.3)",
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 100,
+    marginBottom: 20,
+  },
+  bottomCtaBadgeText: {
+    fontFamily: Theme.fonts.heading,
+    fontSize: 11,
+    fontWeight: "700",
+    color: "#38BDF8",
+    letterSpacing: 0.6,
   },
   bottomCtaTitle: {
     fontFamily: Theme.fonts.brand,
@@ -1182,6 +1719,7 @@ const styles = StyleSheet.create({
     width: "100%",
     maxWidth: 460,
     gap: 12,
+    marginBottom: 28,
   },
   bottomCtaBtnRowDesktop: {
     flexDirection: "row",
@@ -1226,8 +1764,28 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#E2E8F0",
   },
+  riskReversalStrip: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    gap: 20,
+    borderTopWidth: 1,
+    borderTopColor: "#1E293B",
+    paddingTop: 24,
+    width: "100%",
+  },
+  riskReversalItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  riskReversalText: {
+    fontFamily: Theme.fonts.body,
+    fontSize: 12,
+    color: "#94A3B8",
+  },
 
-  // 8. Multi-Column Enterprise Footer
+  // 11. Multi-Column Enterprise Footer
   footerWrapper: {
     backgroundColor: "#FFFFFF",
     borderTopWidth: 1,
