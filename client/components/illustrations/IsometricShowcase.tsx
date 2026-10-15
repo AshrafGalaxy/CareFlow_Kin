@@ -13,594 +13,562 @@ import Svg, {
 } from "react-native-svg";
 import { Theme } from "../../constants/theme";
 
+// Embedded CSS Keyframes for Web (Zero JS runtime overhead, buttery smooth 60fps)
+const ANIMATION_STYLES = `
+  @keyframes cfFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-4px); }
+  }
+  @keyframes cfPulseAura {
+    0%, 100% { opacity: 0.35; transform: scale(1); }
+    50% { opacity: 0.75; transform: scale(1.05); }
+  }
+  @keyframes cfFlowPulse {
+    from { stroke-dashoffset: 36; }
+    to { stroke-dashoffset: 0; }
+  }
+  @keyframes cfRipple {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(1.5px); }
+  }
+  .cf-anim-float {
+    animation: cfFloat 4.5s ease-in-out infinite;
+  }
+  .cf-anim-pulse {
+    transform-origin: center;
+    animation: cfPulseAura 3s ease-in-out infinite;
+  }
+  .cf-anim-flow {
+    stroke-dasharray: 6 6;
+    animation: cfFlowPulse 2.8s linear infinite;
+  }
+  .cf-anim-ripple {
+    animation: cfRipple 3s ease-in-out infinite;
+  }
+`;
+
 // =========================================================================
-// FIGURE 01: ROTARY MEDICATION VAULT
-// An isometric cylindrical dispenser instrument with precision glass chamber,
-// calibrated tick ruler, dosage slots, and optical status sensor.
+// 1. MEDICATION DOCK & SCHEDULE VISUAL
+// An isometric clinical medication organizer tray with color-coded slots,
+// morning dose verified (taken on time), capsule, tablet, and prescription bottle.
 // =========================================================================
-export const RotaryMedicationVault: React.FC<{ width?: number; height?: number }> = ({
+export const MedicationDeckVisual: React.FC<{ width?: number; height?: number }> = ({
   width = 360,
   height = 240,
 }) => {
   return (
-    <Svg width={width} height={height} viewBox="0 0 380 260" fill="none">
+    <Svg width={width} height={height} viewBox="0 0 380 250" fill="none">
       <Defs>
-        <LinearGradient id="vaultBaseGrad" x1="0" y1="0" x2="1" y2="1">
-          <Stop offset="0%" stopColor="#F8FAFC" />
-          <Stop offset="50%" stopColor="#E2E8F0" />
-          <Stop offset="100%" stopColor="#CBD5E1" />
-        </LinearGradient>
-        <LinearGradient id="vaultChamberGrad" x1="0" y1="0" x2="1" y2="0">
-          <Stop offset="0%" stopColor="#E0F2FE" stopOpacity="0.85" />
-          <Stop offset="30%" stopColor="#FFFFFF" stopOpacity="0.95" />
-          <Stop offset="70%" stopColor="#BAE6FD" stopOpacity="0.8" />
-          <Stop offset="100%" stopColor="#7DD3FC" stopOpacity="0.7" />
-        </LinearGradient>
-        <LinearGradient id="vaultCapGrad" x1="0" y1="0" x2="1" y2="1">
+        {Platform.OS === "web" && (
+          // @ts-ignore
+          <style>{ANIMATION_STYLES}</style>
+        )}
+        <LinearGradient id="dockGrad" x1="0" y1="0" x2="1" y2="1">
           <Stop offset="0%" stopColor="#FFFFFF" />
-          <Stop offset="60%" stopColor="#E2E8F0" />
-          <Stop offset="100%" stopColor="#94A3B8" />
+          <Stop offset="60%" stopColor="#F8FAFC" />
+          <Stop offset="100%" stopColor="#E2E8F0" />
         </LinearGradient>
-        <LinearGradient id="pillGrad1" x1="0" y1="0" x2="1" y2="1">
+        <LinearGradient id="bottleGrad" x1="0" y1="0" x2="1" y2="0">
+          <Stop offset="0%" stopColor="#FB923C" />
+          <Stop offset="50%" stopColor="#F97316" />
+          <Stop offset="100%" stopColor="#EA580C" />
+        </LinearGradient>
+        <LinearGradient id="capsuleBlueGrad" x1="0" y1="0" x2="1" y2="1">
           <Stop offset="0%" stopColor="#38BDF8" />
           <Stop offset="100%" stopColor="#0284C7" />
         </LinearGradient>
-        <LinearGradient id="pillGrad2" x1="0" y1="0" x2="1" y2="1">
-          <Stop offset="0%" stopColor="#34D399" />
-          <Stop offset="100%" stopColor="#059669" />
-        </LinearGradient>
       </Defs>
 
-      {/* 1. Base Plate Halo / Shadow */}
-      <Path
-        d="M60 190 L190 248 L320 190 L190 132 Z"
-        fill="#0F172A"
-        fillOpacity="0.06"
-      />
+      {/* Floating Group */}
+      <G className="cf-anim-float">
+        {/* Soft Ambient Shadow */}
+        <Path
+          d="M50 180 L200 240 L340 180 L190 120 Z"
+          fill="#0F172A"
+          fillOpacity="0.04"
+        />
 
-      {/* 2. Heavy Isometric Base Plate */}
-      {/* Lower Thickness */}
-      <Path
-        d="M65 182 L190 238 L315 182 L315 194 L190 250 L65 194 Z"
-        fill="#94A3B8"
-        stroke="#64748B"
-        strokeWidth="0.8"
-      />
-      {/* Top Slab Surface */}
-      <Polygon
-        points="65,182 190,126 315,182 190,238"
-        fill="url(#vaultBaseGrad)"
-        stroke="#CBD5E1"
-        strokeWidth="1"
-      />
+        {/* Prescription Bottle (Left Background) */}
+        <G transform="translate(65, 80)">
+          {/* Bottle Shadow */}
+          <Path d="M-15 45 C-15 52 25 52 25 45 C25 38 -15 38 -15 45 Z" fill="#0F172A" fillOpacity="0.06" />
+          {/* Bottle Body */}
+          <Path d="M-12 12 L-12 42 C-12 50 22 50 22 42 L22 12 Z" fill="url(#bottleGrad)" stroke="#C2410C" strokeWidth="0.8" />
+          <Path d="M-12 12 C-12 6 22 6 22 12 C22 18 -12 18 -12 12 Z" fill="#FDBA74" stroke="#EA580C" strokeWidth="0.8" />
+          {/* White Cap */}
+          <Path d="M-8 0 L-8 8 C-8 12 18 12 18 8 L18 0 Z" fill="#FFFFFF" stroke="#CBD5E1" strokeWidth="0.8" />
+          <Path d="M-8 0 C-8 -3 18 -3 18 0 C18 3 -8 3 -8 0 Z" fill="#F1F5F9" stroke="#CBD5E1" strokeWidth="0.8" />
+          {/* Rx Label */}
+          <Path d="M-10 18 L-10 36 C-10 40 20 40 20 36 L20 18 Z" fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="0.6" />
+          <Line x1="-4" y1="24" x2="14" y2="24" stroke="#0284C7" strokeWidth="1.2" />
+          <Line x1="-4" y1="28" x2="10" y2="28" stroke="#94A3B8" strokeWidth="0.8" />
+          <Line x1="-4" y1="32" x2="6" y2="32" stroke="#94A3B8" strokeWidth="0.8" />
+        </G>
 
-      {/* Base Mounting Screw Dots */}
-      <Circle cx="85" cy="182" r="2.2" fill="#64748B" />
-      <Circle cx="190" cy="228" r="2.2" fill="#64748B" />
-      <Circle cx="295" cy="182" r="2.2" fill="#64748B" />
-      <Circle cx="190" cy="136" r="2.2" fill="#64748B" />
-
-      {/* Calibrated Tick Ruler on front edge */}
-      <Line x1="110" y1="202" x2="110" y2="207" stroke="#64748B" strokeWidth="1" />
-      <Line x1="125" y1="209" x2="125" y2="213" stroke="#94A3B8" strokeWidth="0.8" />
-      <Line x1="140" y1="216" x2="140" y2="220" stroke="#94A3B8" strokeWidth="0.8" />
-      <Line x1="155" y1="223" x2="155" y2="227" stroke="#64748B" strokeWidth="1" />
-      <Line x1="170" y1="229" x2="170" y2="233" stroke="#94A3B8" strokeWidth="0.8" />
-      <Line x1="210" y1="229" x2="210" y2="233" stroke="#94A3B8" strokeWidth="0.8" />
-      <Line x1="225" y1="223" x2="225" y2="227" stroke="#64748B" strokeWidth="1" />
-      <Line x1="240" y1="216" x2="240" y2="220" stroke="#94A3B8" strokeWidth="0.8" />
-      <Line x1="255" y1="209" x2="255" y2="213" stroke="#94A3B8" strokeWidth="0.8" />
-      <Line x1="270" y1="202" x2="270" y2="207" stroke="#64748B" strokeWidth="1" />
-
-      {/* 3. Lower Turntable Collar */}
-      <Path
-        d="M125 174 C125 186 255 186 255 174 L255 186 C255 198 125 198 125 186 Z"
-        fill="#CBD5E1"
-        stroke="#94A3B8"
-        strokeWidth="0.8"
-      />
-      <Path
-        d="M125 174 C125 162 255 162 255 174 C255 186 125 186 125 174 Z"
-        fill="#E2E8F0"
-        stroke="#94A3B8"
-        strokeWidth="0.8"
-      />
-
-      {/* 4. Cylindrical Glass Dosage Chamber */}
-      <Path
-        d="M130 90 L130 168 C130 182 250 182 250 168 L250 90 Z"
-        fill="url(#vaultChamberGrad)"
-        stroke="#0284C7"
-        strokeWidth="1.2"
-        strokeOpacity="0.4"
-      />
-
-      {/* Internal Dosage Slots & Pills (Observed through Glass) */}
-      {/* Pill Slot 1 (Left - Blue Capsule) */}
-      <G opacity="0.9">
-        <Rect
-          x="150"
-          y="126"
-          width="20"
-          height="10"
-          rx="5"
-          transform="rotate(-25 160 131)"
-          fill="url(#pillGrad1)"
-          stroke="#0369A1"
+        {/* Isometric Pill Organizer Dock */}
+        {/* Base Thickness */}
+        <Path
+          d="M100 160 L240 222 L350 168 L350 178 L240 232 L100 170 Z"
+          fill="#94A3B8"
+          stroke="#64748B"
           strokeWidth="0.8"
         />
-        {/* Capsule Half Divider */}
-        <Path d="M158 122 L154 139" stroke="#FFFFFF" strokeWidth="0.8" strokeOpacity="0.8" />
-      </G>
+        {/* Top Surface */}
+        <Polygon
+          points="100,160 210,105 350,168 240,222"
+          fill="url(#dockGrad)"
+          stroke="#CBD5E1"
+          strokeWidth="1.2"
+        />
 
-      {/* Pill Slot 2 (Right - Green Capsule) */}
-      <G opacity="0.9">
-        <Rect
-          x="205"
-          y="136"
-          width="22"
-          height="10"
-          rx="5"
-          transform="rotate(20 216 141)"
-          fill="url(#pillGrad2)"
-          stroke="#047857"
+        {/* Slot 1: MORNING 08:00 (TAKEN ON TIME) */}
+        <G transform="translate(145, 142)">
+          {/* Recessed Pill Well */}
+          <Polygon points="-18,-9 0,-18 18,-9 0,0" fill="#E2E8F0" stroke="#CBD5E1" strokeWidth="0.8" />
+          {/* Glowing Aura Ring */}
+          <G className="cf-anim-pulse">
+            <Circle cx="0" cy="-9" r="14" fill="#10B981" fillOpacity="0.25" />
+          </G>
+          {/* Active 3D Capsule */}
+          <Rect
+            x="-10"
+            y="-14"
+            width="20"
+            height="10"
+            rx="5"
+            transform="rotate(-25 0 -9)"
+            fill="url(#capsuleBlueGrad)"
+            stroke="#0369A1"
+            strokeWidth="0.8"
+          />
+          {/* Capsule White Half */}
+          <Path d="M-2 -18 L-5 -1" stroke="#FFFFFF" strokeWidth="0.8" strokeOpacity="0.9" />
+          {/* Emerald Checkmark Badge */}
+          <Circle cx="16" cy="-18" r="8" fill="#10B981" stroke="#FFFFFF" strokeWidth="1.5" />
+          <Path d="M13 -18 L15.5 -15.5 L19.5 -20.5" stroke="#FFFFFF" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+        </G>
+
+        {/* Slot 2: NOON 12:30 (UPCOMING) */}
+        <G transform="translate(195, 120)">
+          <Polygon points="-18,-9 0,-18 18,-9 0,0" fill="#F1F5F9" stroke="#E2E8F0" strokeWidth="0.8" />
+          {/* Round Orange Tablet */}
+          <Circle cx="0" cy="-9" r="6" fill="#FDBA74" stroke="#EA580C" strokeWidth="0.8" />
+          <Line x1="-4" y1="-9" x2="4" y2="-9" stroke="#EA580C" strokeWidth="0.6" strokeOpacity="0.7" />
+        </G>
+
+        {/* Slot 3: EVENING 19:00 */}
+        <G transform="translate(245, 148)">
+          <Polygon points="-18,-9 0,-18 18,-9 0,0" fill="#F1F5F9" stroke="#E2E8F0" strokeWidth="0.8" />
+          {/* Oval Mint Tablet */}
+          <Rect
+            x="-7"
+            y="-12"
+            width="14"
+            height="7"
+            rx="3.5"
+            transform="rotate(30 0 -9)"
+            fill="#6EE7B7"
+            stroke="#059669"
+            strokeWidth="0.8"
+          />
+        </G>
+
+        {/* Slot 4: BEDTIME 21:30 */}
+        <G transform="translate(295, 175)">
+          <Polygon points="-18,-9 0,-18 18,-9 0,0" fill="#F1F5F9" stroke="#E2E8F0" strokeWidth="0.8" />
+          {/* Lavender Capsule */}
+          <Rect
+            x="-9"
+            y="-13"
+            width="18"
+            height="8"
+            rx="4"
+            transform="rotate(-20 0 -9)"
+            fill="#C4B5FD"
+            stroke="#7C3AED"
+            strokeWidth="0.8"
+          />
+        </G>
+
+        {/* Timing Engravings on Dock Face */}
+        <Line x1="130" y1="184" x2="160" y2="198" stroke="#0284C7" strokeWidth="2" strokeLinecap="round" />
+        <Line x1="180" y1="206" x2="210" y2="220" stroke="#CBD5E1" strokeWidth="1.5" strokeLinecap="round" />
+        <Line x1="250" y1="210" x2="280" y2="196" stroke="#CBD5E1" strokeWidth="1.5" strokeLinecap="round" />
+      </G>
+    </Svg>
+  );
+};
+
+// =========================================================================
+// 2. WELLNESS & EMOTIVE CHECK-IN VISUAL
+// An isometric healthcare tablet displaying the 4 warm emotive check-in cards
+// (Great, Good, Okay, Need Help) with calm breathing aura and vitals pulse wave.
+// =========================================================================
+export const WellnessCheckinVisual: React.FC<{ width?: number; height?: number }> = ({
+  width = 360,
+  height = 240,
+}) => {
+  return (
+    <Svg width={width} height={height} viewBox="0 0 380 250" fill="none">
+      <Defs>
+        {Platform.OS === "web" && (
+          // @ts-ignore
+          <style>{ANIMATION_STYLES}</style>
+        )}
+        <LinearGradient id="screenGrad" x1="0" y1="0" x2="1" y2="1">
+          <Stop offset="0%" stopColor="#FFFFFF" />
+          <Stop offset="100%" stopColor="#F8FAFC" />
+        </LinearGradient>
+        <LinearGradient id="activeCardGrad" x1="0" y1="0" x2="1" y2="1">
+          <Stop offset="0%" stopColor="#F0F9FF" />
+          <Stop offset="100%" stopColor="#E0F2FE" />
+        </LinearGradient>
+      </Defs>
+
+      <G className="cf-anim-float">
+        {/* Base Ambient Shadow */}
+        <Path
+          d="M60 190 L190 248 L330 190 L190 130 Z"
+          fill="#0F172A"
+          fillOpacity="0.05"
+        />
+
+        {/* Tablet Stand Bracket */}
+        <Polygon points="160,185 190,170 220,185 190,200" fill="#94A3B8" stroke="#64748B" strokeWidth="0.8" />
+        <Polygon points="180,150 190,145 200,150 190,185" fill="#CBD5E1" stroke="#94A3B8" strokeWidth="0.8" />
+
+        {/* Isometric Tablet Frame */}
+        {/* Back Thickness */}
+        <Path
+          d="M85 145 L225 210 L315 155 L315 163 L225 218 L85 153 Z"
+          fill="#64748B"
+          stroke="#475569"
           strokeWidth="0.8"
         />
-        <Path d="M216 132 L220 150" stroke="#FFFFFF" strokeWidth="0.8" strokeOpacity="0.8" />
+        {/* Front White Bezel */}
+        <Polygon
+          points="85,145 175,90 315,155 225,210"
+          fill="#FFFFFF"
+          stroke="#CBD5E1"
+          strokeWidth="1.2"
+        />
+
+        {/* High-Contrast Glare-Free Screen Area */}
+        <Polygon
+          points="95,145 175,98 305,155 225,202"
+          fill="url(#screenGrad)"
+          stroke="#E2E8F0"
+          strokeWidth="0.8"
+        />
+
+        {/* Greeting Banner on Screen */}
+        <Line x1="125" y1="130" x2="175" y2="108" stroke="#0F172A" strokeWidth="2" strokeLinecap="round" />
+        <Line x1="125" y1="136" x2="160" y2="120" stroke="#64748B" strokeWidth="1.2" strokeLinecap="round" />
+
+        {/* 4 Emotive Mood Options (Isometric Cards on Tablet) */}
+        {/* 1. GREAT */}
+        <G transform="translate(130, 150)">
+          <Polygon points="-14,-6 0,-13 14,-6 0,1" fill="#ECFDF5" stroke="#A7F3D0" strokeWidth="0.8" />
+          <Circle cx="0" cy="-6" r="3" fill="#10B981" />
+        </G>
+
+        {/* 2. GOOD (SELECTED WITH AURA) */}
+        <G transform="translate(170, 132)">
+          {/* Subtle Breathing Aura */}
+          <G className="cf-anim-pulse">
+            <Circle cx="0" cy="-6" r="16" fill="#38BDF8" fillOpacity="0.25" />
+          </G>
+          <Polygon points="-16,-7 0,-15 16,-7 0,1" fill="url(#activeCardGrad)" stroke="#0284C7" strokeWidth="1.4" />
+          {/* Radiant Sky Mood Icon */}
+          <Circle cx="0" cy="-7" r="4" fill="#0284C7" />
+          <Circle cx="0" cy="-7" r="2" fill="#FFFFFF" />
+        </G>
+
+        {/* 3. OKAY */}
+        <G transform="translate(210, 154)">
+          <Polygon points="-14,-6 0,-13 14,-6 0,1" fill="#FFFBEB" stroke="#FDE68A" strokeWidth="0.8" />
+          <Circle cx="0" cy="-6" r="3" fill="#F59E0B" />
+        </G>
+
+        {/* 4. NEED HELP */}
+        <G transform="translate(250, 174)">
+          <Polygon points="-14,-6 0,-13 14,-6 0,1" fill="#FEF2F2" stroke="#FECACA" strokeWidth="0.8" />
+          <Circle cx="0" cy="-6" r="3" fill="#EF4444" />
+        </G>
+
+        {/* Ambient Sinus Rhythm Wave (Calm Heartbeat Line) */}
+        <Path
+          d="M135 178 L160 166 L168 170 L172 158 L176 174 L180 168 L265 198"
+          fill="none"
+          stroke="#0D9488"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          opacity="0.8"
+        />
+
+        {/* Status Pill Badge Floating Over Deck */}
+        <G transform="translate(215, 85)">
+          <Rect x="-45" y="-12" width="90" height="24" rx="12" fill="#FFFFFF" stroke="#BAE6FD" strokeWidth="1" />
+          <Circle cx="-32" cy="0" r="4" fill="#10B981" />
+          <Line x1="-22" y1="-2" x2="32" y2="-2" stroke="#0369A1" strokeWidth="1.8" strokeLinecap="round" />
+          <Line x1="-22" y1="3" x2="18" y2="3" stroke="#64748B" strokeWidth="1.2" strokeLinecap="round" />
+        </G>
       </G>
-
-      {/* Internal Central Spindle Rod */}
-      <Path
-        d="M187 80 L187 165 C187 168 193 168 193 165 L193 80 Z"
-        fill="#94A3B8"
-        stroke="#64748B"
-        strokeWidth="0.6"
-      />
-
-      {/* Horizontal Chamber Ring Lathe Grooves */}
-      <Path
-        d="M130 120 C130 132 250 132 250 120"
-        fill="none"
-        stroke="#38BDF8"
-        strokeWidth="0.8"
-        strokeDasharray="4 2"
-        opacity="0.7"
-      />
-      <Path
-        d="M130 148 C130 160 250 160 250 148"
-        fill="none"
-        stroke="#38BDF8"
-        strokeWidth="0.8"
-        strokeDasharray="4 2"
-        opacity="0.7"
-      />
-
-      {/* 5. Precision Top Milled Cap & Bezel */}
-      <Path
-        d="M126 80 C126 92 254 92 254 80 L254 88 C254 100 126 100 126 88 Z"
-        fill="#94A3B8"
-        stroke="#64748B"
-        strokeWidth="0.8"
-      />
-      <Path
-        d="M126 80 C126 68 254 68 254 80 C254 92 126 92 126 80 Z"
-        fill="url(#vaultCapGrad)"
-        stroke="#CBD5E1"
-        strokeWidth="1"
-      />
-
-      {/* Top Knurled Adjuster Crown */}
-      <Path
-        d="M172 66 C172 72 208 72 208 66 L208 72 C208 78 172 78 172 72 Z"
-        fill="#64748B"
-        stroke="#475569"
-        strokeWidth="0.8"
-      />
-      <Path
-        d="M172 66 C172 60 208 60 208 66 C208 72 172 72 172 66 Z"
-        fill="#E2E8F0"
-        stroke="#94A3B8"
-        strokeWidth="0.8"
-      />
-      {/* Crown Teeth */}
-      <Line x1="180" y1="67" x2="180" y2="73" stroke="#94A3B8" strokeWidth="0.8" />
-      <Line x1="186" y1="69" x2="186" y2="75" stroke="#94A3B8" strokeWidth="0.8" />
-      <Line x1="194" y1="69" x2="194" y2="75" stroke="#94A3B8" strokeWidth="0.8" />
-      <Line x1="200" y1="67" x2="200" y2="73" stroke="#94A3B8" strokeWidth="0.8" />
-
-      {/* 6. Active Fiber-Optic LED Indicator */}
-      <Circle cx="190" cy="184" r="5" fill="#10B981" />
-      <Circle cx="190" cy="184" r="9" stroke="#10B981" strokeWidth="1" opacity="0.4" />
-      <Circle cx="190" cy="184" r="2" fill="#FFFFFF" />
-
-      {/* Optical Alignment Beam */}
-      <Line
-        x1="190"
-        y1="184"
-        x2="190"
-        y2="214"
-        stroke="#10B981"
-        strokeWidth="1.2"
-        strokeDasharray="2 2"
-        opacity="0.8"
-      />
     </Svg>
   );
 };
 
 // =========================================================================
-// FIGURE 02: EMOTIVE WELLNESS DIAL
-// An isometric haptic touchplate instrument with 4 quadrant states,
-// weighted balance needle, concentric pulse rings, and notes cartridge.
+// 3. DAILY ROUTINE & HYDRATION CARE TRACK
+// An isometric morning routine station with a graduated crystal hydration glass,
+// water level ripple, and stepped daily habit milestone cards.
 // =========================================================================
-export const EmotiveWellnessDial: React.FC<{ width?: number; height?: number }> = ({
+export const DailyRoutineVisual: React.FC<{ width?: number; height?: number }> = ({
   width = 360,
   height = 240,
 }) => {
   return (
-    <Svg width={width} height={height} viewBox="0 0 380 260" fill="none">
+    <Svg width={width} height={height} viewBox="0 0 380 250" fill="none">
       <Defs>
-        <LinearGradient id="dialBaseGrad" x1="0" y1="0" x2="1" y2="1">
-          <Stop offset="0%" stopColor="#FFFFFF" />
-          <Stop offset="50%" stopColor="#F1F5F9" />
-          <Stop offset="100%" stopColor="#E2E8F0" />
+        {Platform.OS === "web" && (
+          // @ts-ignore
+          <style>{ANIMATION_STYLES}</style>
+        )}
+        <LinearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
+          <Stop offset="0%" stopColor="#38BDF8" stopOpacity="0.8" />
+          <Stop offset="100%" stopColor="#0284C7" stopOpacity="0.95" />
         </LinearGradient>
-        <LinearGradient id="needleGrad" x1="0" y1="0" x2="1" y2="1">
-          <Stop offset="0%" stopColor="#0D9488" />
-          <Stop offset="100%" stopColor="#047857" />
+        <LinearGradient id="glassGrad" x1="0" y1="0" x2="1" y2="0">
+          <Stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.7" />
+          <Stop offset="50%" stopColor="#E0F2FE" stopOpacity="0.3" />
+          <Stop offset="100%" stopColor="#BAE6FD" stopOpacity="0.6" />
         </LinearGradient>
       </Defs>
 
-      {/* 1. Base Shadow */}
-      <Path
-        d="M60 190 L190 248 L320 190 L190 132 Z"
-        fill="#0F172A"
-        fillOpacity="0.05"
-      />
+      <G className="cf-anim-float">
+        {/* Soft Base Shadow */}
+        <Path
+          d="M50 180 L200 242 L340 180 L190 120 Z"
+          fill="#0F172A"
+          fillOpacity="0.05"
+        />
 
-      {/* 2. Heavy Square Base Plate with Chamfered Corners */}
-      <Path
-        d="M70 178 L190 234 L310 178 L310 188 L190 244 L70 188 Z"
-        fill="#94A3B8"
-        stroke="#64748B"
-        strokeWidth="0.8"
-      />
-      <Polygon
-        points="70,178 190,122 310,178 190,234"
-        fill="url(#dialBaseGrad)"
-        stroke="#CBD5E1"
-        strokeWidth="1"
-      />
+        {/* Graduated Crystal Hydration Tumbler (Left Foreground) */}
+        <G transform="translate(95, 120)">
+          {/* Glass Shadow */}
+          <Path d="M-18 60 C-18 68 28 68 28 60 C28 52 -18 52 -18 60 Z" fill="#0F172A" fillOpacity="0.06" />
 
-      {/* Inset Plate Boundary */}
-      <Polygon
-        points="80,178 190,128 300,178 190,228"
-        fill="none"
-        stroke="#E2E8F0"
-        strokeWidth="0.8"
-      />
+          {/* Water Fluid Body (With Ripple Class) */}
+          <G className="cf-anim-ripple">
+            <Path
+              d="M-14 28 L-10 56 C-10 62 20 62 20 56 L24 28 Z"
+              fill="url(#waterGrad)"
+              stroke="#0369A1"
+              strokeWidth="0.8"
+            />
+            {/* Water Surface Ellipse */}
+            <Path
+              d="M-14 28 C-14 24 24 24 24 28 C24 32 -14 32 -14 28 Z"
+              fill="#7DD3FC"
+              stroke="#38BDF8"
+              strokeWidth="0.6"
+            />
+          </G>
 
-      {/* Corner Fastener Screws */}
-      <Circle cx="86" cy="178" r="2.2" fill="#64748B" />
-      <Circle cx="190" cy="225" r="2.2" fill="#64748B" />
-      <Circle cx="294" cy="178" r="2.2" fill="#64748B" />
-      <Circle cx="190" cy="131" r="2.2" fill="#64748B" />
+          {/* Glass Outer Wall */}
+          <Path
+            d="M-16 8 L-11 58 C-11 65 22 65 22 58 L27 8 Z"
+            fill="url(#glassGrad)"
+            stroke="#94A3B8"
+            strokeWidth="1"
+          />
+          {/* Rim Ellipse */}
+          <Path
+            d="M-16 8 C-16 3 27 3 27 8 C27 13 -16 13 -16 8 Z"
+            fill="#FFFFFF"
+            fillOpacity="0.6"
+            stroke="#CBD5E1"
+            strokeWidth="0.8"
+          />
 
-      {/* 3. Circular Bezel Ring (Puck) */}
-      <Path
-        d="M110 162 C110 188 270 188 270 162 L270 174 C270 200 110 200 110 174 Z"
-        fill="#94A3B8"
-        stroke="#64748B"
-        strokeWidth="0.8"
-      />
-      <Path
-        d="M110 162 C110 136 270 136 270 162 C270 188 110 188 110 162 Z"
-        fill="#FFFFFF"
-        stroke="#CBD5E1"
-        strokeWidth="1.2"
-      />
+          {/* Graduation Ticks (1.5L Target) */}
+          <Line x1="16" y1="20" x2="22" y2="20" stroke="#0284C7" strokeWidth="1" />
+          <Line x1="17" y1="32" x2="22" y2="32" stroke="#0284C7" strokeWidth="1.2" />
+          <Line x1="18" y1="44" x2="22" y2="44" stroke="#0284C7" strokeWidth="1" />
 
-      {/* Concentric Haptic Pulse Waves */}
-      <Path
-        d="M125 162 C125 144 255 144 255 162 C255 180 125 180 125 162 Z"
-        fill="none"
-        stroke="#E0F2FE"
-        strokeWidth="1"
-      />
-      <Path
-        d="M140 162 C140 152 240 152 240 162 C240 172 140 172 140 162 Z"
-        fill="none"
-        stroke="#BAE6FD"
-        strokeWidth="1.2"
-        strokeDasharray="3 3"
-      />
+          {/* Floating Hydration Status Badge */}
+          <Circle cx="5" cy="5" r="9" fill="#0284C7" stroke="#FFFFFF" strokeWidth="1.5" />
+          <Path d="M5 -1 C5 -1 8 3 8 5 C8 6.6 6.6 8 5 8 C3.4 8 2 6.6 2 5 C2 3 5 -1 5 -1 Z" fill="#FFFFFF" />
+        </G>
 
-      {/* 4 Quadrant Mood Tick Arc Marks */}
-      {/* Top Quadrant: GREAT (#10B981) */}
-      <Line x1="190" y1="140" x2="190" y2="147" stroke="#10B981" strokeWidth="2.5" />
-      {/* Right Quadrant: GOOD (#0D9488) */}
-      <Line x1="250" y1="162" x2="242" y2="162" stroke="#0D9488" strokeWidth="2.5" />
-      {/* Bottom Quadrant: OKAY (#F59E0B) */}
-      <Line x1="190" y1="184" x2="190" y2="177" stroke="#F59E0B" strokeWidth="2" />
-      {/* Left Quadrant: NEEDS ATTENTION (#EF4444) */}
-      <Line x1="130" y1="162" x2="138" y2="162" stroke="#EF4444" strokeWidth="2" />
+        {/* Stepped Routine Habit Cards (Stacked in Isometric Perspective) */}
+        {/* Card 1: MORNING WALK (COMPLETED) */}
+        <G transform="translate(195, 95)">
+          {/* Thickness */}
+          <Path d="M-40 22 L50 62 L90 42 L90 48 L50 68 L-40 28 Z" fill="#CBD5E1" stroke="#94A3B8" strokeWidth="0.8" />
+          {/* Card Face */}
+          <Polygon points="-40,22 0,4 90,42 50,62" fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="1.2" />
+          {/* Checkmark Dot */}
+          <Circle cx="-20" cy="22" r="5" fill="#10B981" />
+          <Path d="M-22 22 L-21 24 L-18 20" stroke="#FFFFFF" strokeWidth="1.2" strokeLinecap="round" />
+          {/* Text Lines */}
+          <Line x1="-10" y1="20" x2="40" y2="42" stroke="#0F172A" strokeWidth="2" strokeLinecap="round" />
+          <Line x1="-10" y1="26" x2="20" y2="39" stroke="#64748B" strokeWidth="1.2" strokeLinecap="round" />
+        </G>
 
-      {/* Intermediate Fine Vernier Ticks */}
-      <Line x1="160" y1="147" x2="163" y2="151" stroke="#94A3B8" strokeWidth="1" />
-      <Line x1="220" y1="147" x2="217" y2="151" stroke="#94A3B8" strokeWidth="1" />
-      <Line x1="230" y1="174" x2="226" y2="171" stroke="#94A3B8" strokeWidth="1" />
-      <Line x1="150" y1="174" x2="154" y2="171" stroke="#94A3B8" strokeWidth="1" />
+        {/* Card 2: HYDRATION TARGET (IN PROGRESS - 80%) */}
+        <G transform="translate(215, 125)">
+          <Path d="M-40 22 L50 62 L90 42 L90 48 L50 68 L-40 28 Z" fill="#CBD5E1" stroke="#94A3B8" strokeWidth="0.8" />
+          <Polygon points="-40,22 0,4 90,42 50,62" fill="#F0F9FF" stroke="#BAE6FD" strokeWidth="1.2" />
+          <Circle cx="-20" cy="22" r="5" fill="#0284C7" />
+          <Line x1="-10" y1="20" x2="45" y2="44" stroke="#0F172A" strokeWidth="2" strokeLinecap="round" />
+          {/* Progress Bar Track */}
+          <Line x1="-10" y1="28" x2="45" y2="52" stroke="#E2E8F0" strokeWidth="3" strokeLinecap="round" />
+          <Line x1="-10" y1="28" x2="34" y2="47" stroke="#0284C7" strokeWidth="3" strokeLinecap="round" />
+        </G>
 
-      {/* 4. Center Sensor Hub & Balance Needle */}
-      <Circle cx="190" cy="162" r="16" fill="#F8FAFC" stroke="#94A3B8" strokeWidth="1" />
-      <Circle cx="190" cy="162" r="8" fill="#E2E8F0" stroke="#64748B" strokeWidth="0.8" />
-
-      {/* Needle pointing toward GOOD (Right quadrant ~22° offset) */}
-      <Polygon
-        points="188,162 192,162 238,155 190,165"
-        fill="url(#needleGrad)"
-        stroke="#047857"
-        strokeWidth="0.8"
-      />
-      <Circle cx="190" cy="162" r="3.5" fill="#0D9488" />
-      <Circle cx="190" cy="162" r="1.5" fill="#FFFFFF" />
-
-      {/* 5. Brass Notes Tape Cartridge on the Side */}
-      <Polygon
-        points="276,140 320,160 320,172 276,152"
-        fill="#CBD5E1"
-        stroke="#64748B"
-        strokeWidth="0.8"
-      />
-      <Polygon
-        points="276,140 320,160 305,166 261,146"
-        fill="#F1F5F9"
-        stroke="#94A3B8"
-        strokeWidth="0.6"
-      />
-      {/* Tape Slot Slit */}
-      <Line x1="284" y1="148" x2="310" y2="160" stroke="#0F172A" strokeWidth="1" />
+        {/* Card 3: BLOOD PRESSURE CHECK (COMPLETED) */}
+        <G transform="translate(235, 155)">
+          <Path d="M-40 22 L50 62 L90 42 L90 48 L50 68 L-40 28 Z" fill="#CBD5E1" stroke="#94A3B8" strokeWidth="0.8" />
+          <Polygon points="-40,22 0,4 90,42 50,62" fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="1.2" />
+          <Circle cx="-20" cy="22" r="5" fill="#10B981" />
+          <Path d="M-22 22 L-21 24 L-18 20" stroke="#FFFFFF" strokeWidth="1.2" strokeLinecap="round" />
+          <Line x1="-10" y1="20" x2="35" y2="40" stroke="#0F172A" strokeWidth="2" strokeLinecap="round" />
+          <Line x1="-10" y1="26" x2="15" y2="37" stroke="#64748B" strokeWidth="1.2" strokeLinecap="round" />
+        </G>
+      </G>
     </Svg>
   );
 };
 
 // =========================================================================
-// FIGURE 03: TACTILE ROUTINE RAIL
-// An isometric dual-rail index slider mechanism with precision end stops,
-// brass rack teeth, and 4 milestone sliding blocks (3 engaged).
+// 4. CONNECTED CARE CIRCLE NETWORK VISUAL
+// An isometric care network linking the elder to family guardian (daughter)
+// and attending geriatrician with subtle animated telemetry flow lines.
 // =========================================================================
-export const TactileRoutineRail: React.FC<{ width?: number; height?: number }> = ({
+export const CareCircleVisual: React.FC<{ width?: number; height?: number }> = ({
   width = 360,
   height = 240,
 }) => {
   return (
-    <Svg width={width} height={height} viewBox="0 0 380 260" fill="none">
+    <Svg width={width} height={height} viewBox="0 0 380 250" fill="none">
       <Defs>
-        <LinearGradient id="railBedGrad" x1="0" y1="0" x2="1" y2="1">
-          <Stop offset="0%" stopColor="#FFFFFF" />
-          <Stop offset="50%" stopColor="#F8FAFC" />
-          <Stop offset="100%" stopColor="#E2E8F0" />
-        </LinearGradient>
-        <LinearGradient id="steelRodGrad" x1="0" y1="0" x2="0" y2="1">
-          <Stop offset="0%" stopColor="#FFFFFF" />
-          <Stop offset="50%" stopColor="#CBD5E1" />
-          <Stop offset="100%" stopColor="#64748B" />
-        </LinearGradient>
-        <LinearGradient id="blockDoneGrad" x1="0" y1="0" x2="1" y2="1">
-          <Stop offset="0%" stopColor="#E0F2FE" />
-          <Stop offset="100%" stopColor="#BAE6FD" />
+        {Platform.OS === "web" && (
+          // @ts-ignore
+          <style>{ANIMATION_STYLES}</style>
+        )}
+        <LinearGradient id="elderHaloGrad" x1="0" y1="0" x2="1" y2="1">
+          <Stop offset="0%" stopColor="#0284C7" />
+          <Stop offset="100%" stopColor="#0D9488" />
         </LinearGradient>
       </Defs>
 
-      {/* 1. Base Plate Halo */}
-      <Path
-        d="M50 175 L200 245 L340 175 L190 105 Z"
-        fill="#0F172A"
-        fillOpacity="0.05"
-      />
+      <G className="cf-anim-float">
+        {/* Soft Base Ground Shadow */}
+        <Path
+          d="M60 180 L190 242 L330 180 L190 120 Z"
+          fill="#0F172A"
+          fillOpacity="0.04"
+        />
 
-      {/* 2. Heavy Bedplate */}
-      <Path
-        d="M55 168 L195 238 L335 168 L335 178 L195 248 L55 178 Z"
-        fill="#94A3B8"
-        stroke="#64748B"
-        strokeWidth="0.8"
-      />
-      <Polygon
-        points="55,168 195,98 335,168 195,238"
-        fill="url(#railBedGrad)"
-        stroke="#CBD5E1"
-        strokeWidth="1"
-      />
+        {/* Flowing Telemetry Arcs (Animated Dash Offset) */}
+        {/* Elder -> Daughter Connection */}
+        <G className="cf-anim-flow">
+          <Path
+            d="M140 145 C170 125 210 110 260 100"
+            stroke="#0284C7"
+            strokeWidth="2.5"
+            fill="none"
+            strokeLinecap="round"
+          />
+        </G>
+        {/* Elder -> Doctor Connection */}
+        <G className="cf-anim-flow">
+          <Path
+            d="M140 145 C180 160 215 170 260 180"
+            stroke="#0D9488"
+            strokeWidth="2.5"
+            fill="none"
+            strokeLinecap="round"
+          />
+        </G>
 
-      {/* End Blocks (Rail Anchor Mounts) */}
-      {/* Left Anchor Pillar */}
-      <Polygon points="75,160 95,150 95,164 75,174" fill="#94A3B8" stroke="#64748B" strokeWidth="0.8" />
-      <Polygon points="75,160 95,150 115,160 95,170" fill="#E2E8F0" stroke="#CBD5E1" strokeWidth="0.8" />
-      <Circle cx="95" cy="160" r="1.8" fill="#475569" />
+        {/* Central Privacy Consent Key Shield */}
+        <G transform="translate(195, 140)">
+          <Circle cx="0" cy="0" r="14" fill="#FFFFFF" stroke="#BAE6FD" strokeWidth="1.2" />
+          {/* Lock Icon */}
+          <Rect x="-5" y="-3" width="10" height="8" rx="2" fill="#0284C7" />
+          <Path d="M-3 -3 L-3 -6 C-3 -7.6 3 -7.6 3 -6 L3 -3" stroke="#0284C7" strokeWidth="1.4" fill="none" />
+        </G>
 
-      {/* Right Anchor Pillar */}
-      <Polygon points="295,160 315,150 315,164 295,174" fill="#94A3B8" stroke="#64748B" strokeWidth="0.8" />
-      <Polygon points="295,160 315,150 335,160 315,170" fill="#E2E8F0" stroke="#CBD5E1" strokeWidth="0.8" />
-      <Circle cx="315" cy="160" r="1.8" fill="#475569" />
+        {/* NODE 1: ELDER DECK (ELEANOR) - Main Hero Plinth */}
+        <G transform="translate(130, 145)">
+          {/* Base Plinth */}
+          <Path d="M-35 15 L0 30 L35 15 L35 22 L0 37 L-35 22 Z" fill="#94A3B8" stroke="#64748B" strokeWidth="0.8" />
+          <Polygon points="-35,15 0,0 35,15 0,30" fill="#FFFFFF" stroke="#CBD5E1" strokeWidth="1.2" />
+          {/* Pulsing Aura Ring */}
+          <G className="cf-anim-pulse">
+            <Circle cx="0" cy="15" r="24" fill="#38BDF8" fillOpacity="0.25" />
+          </G>
+          {/* Avatar Shield */}
+          <Circle cx="0" cy="0" r="18" fill="url(#elderHaloGrad)" stroke="#FFFFFF" strokeWidth="2" />
+          {/* Heart Emblem */}
+          <Path
+            d="M0 -3 C-5 -8 -11 -2 -6 4 L0 10 L6 4 C11 -2 5 -8 0 -3 Z"
+            fill="#FFFFFF"
+          />
+          {/* Label Chip */}
+          <Rect x="-28" y="24" width="56" height="16" rx="8" fill="#F0F9FF" stroke="#BAE6FD" strokeWidth="0.8" />
+          <Line x1="-16" y1="32" x2="16" y2="32" stroke="#0369A1" strokeWidth="2" strokeLinecap="round" />
+        </G>
 
-      {/* 3. Dual Polished Steel Guide Rails */}
-      {/* Rear Rail */}
-      <Line x1="105" y1="152" x2="305" y2="152" stroke="url(#steelRodGrad)" strokeWidth="4.5" strokeLinecap="round" />
-      {/* Front Rail */}
-      <Line x1="105" y1="168" x2="305" y2="168" stroke="url(#steelRodGrad)" strokeWidth="4.5" strokeLinecap="round" />
+        {/* NODE 2: FAMILY GUARDIAN (SARAH - DAUGHTER) */}
+        <G transform="translate(270, 95)">
+          {/* Plinth */}
+          <Polygon points="-25,10 0,0 25,10 0,20" fill="#FFFFFF" stroke="#CBD5E1" strokeWidth="1" />
+          <Circle cx="0" cy="0" r="14" fill="#0284C7" stroke="#FFFFFF" strokeWidth="1.8" />
+          {/* Family Member Icon */}
+          <Circle cx="0" cy="-3" r="4" fill="#FFFFFF" />
+          <Path d="M-6 8 C-6 4 6 4 6 8" stroke="#FFFFFF" strokeWidth="1.6" strokeLinecap="round" />
+          {/* Live Notification Bubble */}
+          <G transform="translate(10, -12)">
+            <Rect x="-4" y="-8" width="48" height="16" rx="8" fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="0.8" />
+            <Circle cx="2" cy="0" r="2.5" fill="#10B981" />
+            <Line x1="8" y1="0" x2="38" y2="0" stroke="#334155" strokeWidth="1.5" strokeLinecap="round" />
+          </G>
+        </G>
 
-      {/* Brass Rack Pinion Teeth between the rails */}
-      <Line x1="125" y1="160" x2="125" y2="164" stroke="#D97706" strokeWidth="1" />
-      <Line x1="135" y1="160" x2="135" y2="164" stroke="#D97706" strokeWidth="1" />
-      <Line x1="145" y1="160" x2="145" y2="164" stroke="#D97706" strokeWidth="1" />
-      <Line x1="155" y1="160" x2="155" y2="164" stroke="#D97706" strokeWidth="1" />
-      <Line x1="165" y1="160" x2="165" y2="164" stroke="#D97706" strokeWidth="1" />
-      <Line x1="175" y1="160" x2="175" y2="164" stroke="#D97706" strokeWidth="1" />
-      <Line x1="185" y1="160" x2="185" y2="164" stroke="#D97706" strokeWidth="1" />
-      <Line x1="195" y1="160" x2="195" y2="164" stroke="#D97706" strokeWidth="1" />
-      <Line x1="205" y1="160" x2="205" y2="164" stroke="#D97706" strokeWidth="1" />
-      <Line x1="215" y1="160" x2="215" y2="164" stroke="#D97706" strokeWidth="1" />
-      <Line x1="225" y1="160" x2="225" y2="164" stroke="#D97706" strokeWidth="1" />
-      <Line x1="235" y1="160" x2="235" y2="164" stroke="#D97706" strokeWidth="1" />
-      <Line x1="245" y1="160" x2="245" y2="164" stroke="#D97706" strokeWidth="1" />
-      <Line x1="255" y1="160" x2="255" y2="164" stroke="#D97706" strokeWidth="1" />
-      <Line x1="265" y1="160" x2="265" y2="164" stroke="#D97706" strokeWidth="1" />
-      <Line x1="275" y1="160" x2="275" y2="164" stroke="#D97706" strokeWidth="1" />
-
-      {/* 4. Sliding Milestone Carriages */}
-      {/* Block 1: Morning Vitals (COMPLETED - Engaged) */}
-      <G transform="translate(115, 142)">
-        <Polygon points="0,18 18,8 36,18 18,28" fill="url(#blockDoneGrad)" stroke="#0284C7" strokeWidth="0.8" />
-        <Polygon points="0,18 18,28 18,34 0,24" fill="#0284C7" stroke="#0369A1" strokeWidth="0.8" />
-        <Polygon points="18,28 36,18 36,24 18,34" fill="#0369A1" stroke="#0284C7" strokeWidth="0.8" />
-        {/* Status Lock Pin (Green) */}
-        <Circle cx="18" cy="18" r="2.5" fill="#10B981" />
-      </G>
-
-      {/* Block 2: Hydration 1.5L (COMPLETED - Engaged) */}
-      <G transform="translate(160, 142)">
-        <Polygon points="0,18 18,8 36,18 18,28" fill="url(#blockDoneGrad)" stroke="#0284C7" strokeWidth="0.8" />
-        <Polygon points="0,18 18,28 18,34 0,24" fill="#0284C7" stroke="#0369A1" strokeWidth="0.8" />
-        <Polygon points="18,28 36,18 36,24 18,34" fill="#0369A1" stroke="#0284C7" strokeWidth="0.8" />
-        <Circle cx="18" cy="18" r="2.5" fill="#10B981" />
-      </G>
-
-      {/* Block 3: Afternoon Walk (COMPLETED - Engaged) */}
-      <G transform="translate(205, 142)">
-        <Polygon points="0,18 18,8 36,18 18,28" fill="url(#blockDoneGrad)" stroke="#0284C7" strokeWidth="0.8" />
-        <Polygon points="0,18 18,28 18,34 0,24" fill="#0284C7" stroke="#0369A1" strokeWidth="0.8" />
-        <Polygon points="18,28 36,18 36,24 18,34" fill="#0369A1" stroke="#0284C7" strokeWidth="0.8" />
-        <Circle cx="18" cy="18" r="2.5" fill="#10B981" />
-      </G>
-
-      {/* Block 4: Evening Blood Pressure (UPCOMING - Idle resting slot) */}
-      <G transform="translate(250, 142)">
-        <Polygon points="0,18 18,8 36,18 18,28" fill="#F1F5F9" stroke="#94A3B8" strokeWidth="0.8" />
-        <Polygon points="0,18 18,28 18,34 0,24" fill="#94A3B8" stroke="#64748B" strokeWidth="0.8" />
-        <Polygon points="18,28 36,18 36,24 18,34" fill="#64748B" stroke="#475569" strokeWidth="0.8" />
-        <Circle cx="18" cy="18" r="2" fill="#CBD5E1" />
+        {/* NODE 3: DOCTOR / CLINICIAN (DR. CHEN) */}
+        <G transform="translate(270, 185)">
+          <Polygon points="-25,10 0,0 25,10 0,20" fill="#FFFFFF" stroke="#CBD5E1" strokeWidth="1" />
+          <Circle cx="0" cy="0" r="14" fill="#0D9488" stroke="#FFFFFF" strokeWidth="1.8" />
+          {/* Stethoscope / Cross Emblem */}
+          <Line x1="0" y1="-5" x2="0" y2="5" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" />
+          <Line x1="-5" y1="0" x2="5" y2="0" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" />
+          {/* Sync Badge */}
+          <G transform="translate(10, 10)">
+            <Rect x="-4" y="-8" width="48" height="16" rx="8" fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="0.8" />
+            <Circle cx="2" cy="0" r="2.5" fill="#0D9488" />
+            <Line x1="8" y1="0" x2="36" y2="0" stroke="#334155" strokeWidth="1.5" strokeLinecap="round" />
+          </G>
+        </G>
       </G>
     </Svg>
   );
 };
 
 // =========================================================================
-// FIGURE 04: CARE CIRCLE OPTICAL BRIDGE
-// An isometric dual-node communication console linking the elder home deck
-// to family and doctor consoles via a focused collimated optical beam.
-// =========================================================================
-export const CareCircleBridge: React.FC<{ width?: number; height?: number }> = ({
-  width = 360,
-  height = 240,
-}) => {
-  return (
-    <Svg width={width} height={height} viewBox="0 0 380 260" fill="none">
-      <Defs>
-        <LinearGradient id="bridgeBaseGrad" x1="0" y1="0" x2="1" y2="1">
-          <Stop offset="0%" stopColor="#FFFFFF" />
-          <Stop offset="50%" stopColor="#F8FAFC" />
-          <Stop offset="100%" stopColor="#E2E8F0" />
-        </LinearGradient>
-        <LinearGradient id="beamGrad" x1="0" y1="0" x2="1" y2="0">
-          <Stop offset="0%" stopColor="#0284C7" stopOpacity="0.9" />
-          <Stop offset="50%" stopColor="#38BDF8" stopOpacity="0.5" />
-          <Stop offset="100%" stopColor="#0D9488" stopOpacity="0.9" />
-        </LinearGradient>
-      </Defs>
-
-      {/* 1. Base Shadow */}
-      <Path
-        d="M50 175 L190 245 L330 175 L190 105 Z"
-        fill="#0F172A"
-        fillOpacity="0.05"
-      />
-
-      {/* 2. Heavy Dual-Plinth Base Plate */}
-      <Path
-        d="M55 168 L190 236 L325 168 L325 178 L190 246 L55 178 Z"
-        fill="#94A3B8"
-        stroke="#64748B"
-        strokeWidth="0.8"
-      />
-      <Polygon
-        points="55,168 190,100 325,168 190,236"
-        fill="url(#bridgeBaseGrad)"
-        stroke="#CBD5E1"
-        strokeWidth="1"
-      />
-
-      {/* Corner Fastener Screws */}
-      <Circle cx="70" cy="168" r="2.2" fill="#64748B" />
-      <Circle cx="190" cy="226" r="2.2" fill="#64748B" />
-      <Circle cx="310" cy="168" r="2.2" fill="#64748B" />
-      <Circle cx="190" cy="110" r="2.2" fill="#64748B" />
-
-      {/* 3. Left Transmission Tower (Elder Node) */}
-      <G transform="translate(105, 120)">
-        {/* Plinth */}
-        <Path d="M-25 25 L0 38 L25 25 L25 32 L0 45 L-25 32 Z" fill="#94A3B8" stroke="#64748B" strokeWidth="0.8" />
-        <Polygon points="-25,25 0,12 25,25 0,38" fill="#E2E8F0" stroke="#CBD5E1" strokeWidth="0.8" />
-        {/* Tower Body */}
-        <Path d="M-12 18 L0 24 L12 18 L12 -18 L0 -12 L-12 -18 Z" fill="#CBD5E1" stroke="#94A3B8" strokeWidth="0.8" />
-        <Path d="M0 24 L12 18 L12 -18 L0 -12 Z" fill="#94A3B8" stroke="#64748B" strokeWidth="0.8" />
-        {/* Crown Reflector Ring */}
-        <Circle cx="0" cy="-22" r="9" fill="#0284C7" stroke="#0369A1" strokeWidth="1" />
-        <Circle cx="0" cy="-22" r="4" fill="#FFFFFF" />
-      </G>
-
-      {/* 4. Right Transmission Tower (Care Circle & Clinician Node) */}
-      <G transform="translate(275, 120)">
-        <Path d="M-25 25 L0 38 L25 25 L25 32 L0 45 L-25 32 Z" fill="#94A3B8" stroke="#64748B" strokeWidth="0.8" />
-        <Polygon points="-25,25 0,12 25,25 0,38" fill="#E2E8F0" stroke="#CBD5E1" strokeWidth="0.8" />
-        <Path d="M-12 18 L0 24 L12 18 L12 -18 L0 -12 L-12 -18 Z" fill="#CBD5E1" stroke="#94A3B8" strokeWidth="0.8" />
-        <Path d="M0 24 L12 18 L12 -18 L0 -12 Z" fill="#94A3B8" stroke="#64748B" strokeWidth="0.8" />
-        <Circle cx="0" cy="-22" r="9" fill="#0D9488" stroke="#047857" strokeWidth="1" />
-        <Circle cx="0" cy="-22" r="4" fill="#FFFFFF" />
-      </G>
-
-      {/* 5. Center Optical Bridge Router & Consent Key Switch */}
-      <G transform="translate(190, 168)">
-        <Path d="M-22 11 L0 22 L22 11 L22 18 L0 29 L-22 18 Z" fill="#64748B" stroke="#475569" strokeWidth="0.8" />
-        <Polygon points="-22,11 0,0 22,11 0,22" fill="#F8FAFC" stroke="#CBD5E1" strokeWidth="1" />
-        {/* Brass Rotary Consent Switch */}
-        <Circle cx="0" cy="11" r="7" fill="#E2E8F0" stroke="#94A3B8" strokeWidth="0.8" />
-        <Line x1="-4" y1="11" x2="4" y2="11" stroke="#0284C7" strokeWidth="2" strokeLinecap="round" />
-      </G>
-
-      {/* 6. Focused Optical Transmission Beam */}
-      <Line
-        x1="105"
-        y1="98"
-        x2="275"
-        y2="98"
-        stroke="url(#beamGrad)"
-        strokeWidth="3.5"
-        strokeLinecap="round"
-      />
-      {/* Wave Pulse Nodes */}
-      <Circle cx="150" cy="98" r="4" fill="#38BDF8" opacity="0.8" />
-      <Circle cx="190" cy="98" r="5" fill="#FFFFFF" stroke="#0284C7" strokeWidth="1" />
-      <Circle cx="230" cy="98" r="4" fill="#34D399" opacity="0.8" />
-
-      {/* Downward Consent Routing Guides */}
-      <Line x1="105" y1="98" x2="190" y2="175" stroke="#BAE6FD" strokeWidth="1" strokeDasharray="2 3" opacity="0.6" />
-      <Line x1="275" y1="98" x2="190" y2="175" stroke="#99F6E4" strokeWidth="1" strokeDasharray="2 3" opacity="0.6" />
-    </Svg>
-  );
-};
-
-// =========================================================================
-// ANATOMY SHOWCASE CARD WRAPPER
-// Adheres strictly to the Anatomy layout guidelines:
-// - Top-left: Figure Number (Fig n)
-// - Top-right: Part / Assembly Name
-// - Center: The crafted isometric SVG illustration
-// - Bottom-left: Mechanical interaction hint
-// - Bottom-right: Live telemetry / status readout
+// ISOMETRIC SHOWCASE CARD WRAPPER
+// Minimalist, premium presentation:
+// - Top-left: Clinical Category Badge (No "FIG 01" / "FIG 02")
+// - Top-right: Feature Title
+// - Center: Domain-authentic isometric illustration with micro-animations
+// - Bottom-left: User-centered explanation hint
+// - Bottom-right: Live status / telemetry badge
 // =========================================================================
 export interface IsometricCardProps {
-  figureNumber: string;
+  category: string;
   title: string;
   interactionHint: string;
   liveReadout: string;
@@ -609,7 +577,7 @@ export interface IsometricCardProps {
 }
 
 export const IsometricCard: React.FC<IsometricCardProps> = ({
-  figureNumber,
+  category,
   title,
   interactionHint,
   liveReadout,
@@ -644,18 +612,18 @@ export const IsometricCard: React.FC<IsometricCardProps> = ({
 
   return (
     <View style={cardStyles.card}>
-      {/* Top Header Card Metadata */}
+      {/* Top Header Card Metadata (NO Fig 01 / Fig 02) */}
       <View style={cardStyles.headerRow}>
-        <View style={cardStyles.figBadge}>
-          <Text style={cardStyles.figText}>{figureNumber}</Text>
+        <View style={cardStyles.categoryBadge}>
+          <Text style={cardStyles.categoryText}>{category}</Text>
         </View>
         <Text style={cardStyles.titleText}>{title}</Text>
       </View>
 
-      {/* Center SVG Instrument Presentation */}
+      {/* Center SVG Illustration */}
       <View style={cardStyles.svgContainer}>{children}</View>
 
-      {/* Bottom Footer Telemetry & Hint */}
+      {/* Bottom Footer Telemetry & Explanation */}
       <View style={cardStyles.footerRow}>
         <Text style={cardStyles.hintText}>{interactionHint}</Text>
 
@@ -698,17 +666,19 @@ const cardStyles = StyleSheet.create({
     borderBottomColor: "#F1F5F9",
     paddingBottom: 12,
   },
-  figBadge: {
-    backgroundColor: "#F1F5F9",
+  categoryBadge: {
+    backgroundColor: "#F0F9FF",
+    borderWidth: 1,
+    borderColor: "#BAE6FD",
     borderRadius: 6,
     paddingHorizontal: 8,
     paddingVertical: 3,
   },
-  figText: {
+  categoryText: {
     fontFamily: Theme.fonts.heading,
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: "700",
-    color: "#475569",
+    color: Theme.colors.brandPrimary,
     letterSpacing: 0.5,
   },
   titleText: {
@@ -721,7 +691,7 @@ const cardStyles = StyleSheet.create({
   svgContainer: {
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 16,
+    paddingVertical: 14,
     overflow: "hidden",
   },
   footerRow: {

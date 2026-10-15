@@ -13,10 +13,10 @@ import { useResponsive } from "../hooks/useResponsive";
 import { CareFlowLogo } from "../components/CareFlowLogo";
 import { GoogleAuthButton } from "../components/GoogleAuthButton";
 import {
-  RotaryMedicationVault,
-  EmotiveWellnessDial,
-  TactileRoutineRail,
-  CareCircleBridge,
+  MedicationDeckVisual,
+  WellnessCheckinVisual,
+  DailyRoutineVisual,
+  CareCircleVisual,
   IsometricCard,
 } from "../components/illustrations/IsometricShowcase";
 import {
@@ -31,9 +31,7 @@ import {
   AlertCircle,
   Clock,
   Eye,
-  Sliders,
   Users,
-  Compass,
 } from "lucide-react-native";
 
 export default function LandingPage() {
@@ -206,7 +204,7 @@ export default function LandingPage() {
       >
         <View style={styles.sectionHeader}>
           <View style={styles.sectionBadge}>
-            <Compass size={14} color={Theme.colors.brandPrimary} />
+            <Heart size={14} color={Theme.colors.brandPrimary} />
             <Text style={styles.sectionBadgeText}>THE PROBLEM WE SOLVE</Text>
           </View>
           <Text style={styles.sectionTitle}>
@@ -314,7 +312,7 @@ export default function LandingPage() {
       </View>
 
       {/* =========================================================================
-          4. THE FOUR FEATURE SHOWCASES (ANATOMY-INSPIRED ISOMETRIC SVGs)
+          4. THE FOUR FEATURE SHOWCASES (DOMAIN-AUTHENTIC ISOMETRIC VISUALS)
          ========================================================================= */}
       <View
         id="features"
@@ -322,29 +320,29 @@ export default function LandingPage() {
       >
         <View style={styles.sectionHeader}>
           <View style={styles.sectionBadge}>
-            <Sliders size={14} color={Theme.colors.brandPrimary} />
-            <Text style={styles.sectionBadgeText}>ENGINEERED INSTRUMENTS • ANATOMY OF CAREFLOW</Text>
+            <Activity size={14} color={Theme.colors.brandPrimary} />
+            <Text style={styles.sectionBadgeText}>CORE HEALTHCARE CAPABILITIES</Text>
           </View>
           <Text style={styles.sectionTitle}>
-            Physical Precision Meets Compassionate Software.
+            Thoughtfully Designed for Every Daily Health Need.
           </Text>
           <Text style={styles.sectionSubtitle}>
-            Every core capability in CareFlow is crafted like a fine mechanical instrument — purposeful, robust, and immediately understandable at a glance.
+            From time-critical prescriptions to daily hydration and ambient family communication, CareFlow transforms fragmented routines into serene, dependable habits.
           </Text>
         </View>
 
         {/* 2x2 Showcase Grid */}
         <View style={[styles.showcaseGrid, isDesktop && styles.showcaseGridDesktop]}>
-          {/* FIG 01: Rotary Medication Vault */}
+          {/* Card 1: Medication Deck */}
           <View style={[styles.showcaseCol, isDesktop && styles.showcaseColDesktop]}>
             <IsometricCard
-              figureNumber="FIG 01"
-              title="Rotary Medication Vault & Ledger"
-              interactionHint="Calibrated carousel chamber with optical status sensor"
+              category="MEDICATION SCHEDULE"
+              title="Daily Medication Dock & Ledger"
+              interactionHint="Chronological color-coded dosage slots with instant taken verification"
               liveReadout="98.4% ADHERENCE • 0 MISSED"
               readoutStatus="success"
             >
-              <RotaryMedicationVault width={isSmallMobile ? 300 : isMobile ? 340 : 380} height={230} />
+              <MedicationDeckVisual width={isSmallMobile ? 300 : isMobile ? 340 : 380} height={230} />
             </IsometricCard>
             <View style={styles.featureDetails}>
               <Text style={styles.featureItemTitle}>Precision Medication Dispensing & Tracking</Text>
@@ -354,16 +352,16 @@ export default function LandingPage() {
             </View>
           </View>
 
-          {/* FIG 02: Emotive Wellness Dial */}
+          {/* Card 2: Emotive Check-In */}
           <View style={[styles.showcaseCol, isDesktop && styles.showcaseColDesktop]}>
             <IsometricCard
-              figureNumber="FIG 02"
-              title="Emotive Wellness & Mood Touchplate"
-              interactionHint="Calibrated 4-quadrant haptic gauge with balance needle"
+              category="WELLNESS CHECK-IN"
+              title="One-Tap Daily Wellness Console"
+              interactionHint="Large tactile emotion cards with ambient sinus rhythm tracking"
               liveReadout="STATUS: GOOD • 1-TAP RECORDED"
               readoutStatus="active"
             >
-              <EmotiveWellnessDial width={isSmallMobile ? 300 : isMobile ? 340 : 380} height={230} />
+              <WellnessCheckinVisual width={isSmallMobile ? 300 : isMobile ? 340 : 380} height={230} />
             </IsometricCard>
             <View style={styles.featureDetails}>
               <Text style={styles.featureItemTitle}>One-Tap Emotive Check-Ins</Text>
@@ -373,16 +371,16 @@ export default function LandingPage() {
             </View>
           </View>
 
-          {/* FIG 03: Tactile Routine Rail */}
+          {/* Card 3: Daily Routine & Hydration */}
           <View style={[styles.showcaseCol, isDesktop && styles.showcaseColDesktop]}>
             <IsometricCard
-              figureNumber="FIG 03"
-              title="Tactile Daily Routine Index Rail"
-              interactionHint="Dual polished guide rails with milestone detent blocks"
+              category="ROUTINE & HYDRATION"
+              title="Daily Care & Habit Station"
+              interactionHint="Crystal graduated hydration goal with stepped milestone cards"
               liveReadout="3 OF 4 MILESTONES COMPLETED"
               readoutStatus="active"
             >
-              <TactileRoutineRail width={isSmallMobile ? 300 : isMobile ? 340 : 380} height={230} />
+              <DailyRoutineVisual width={isSmallMobile ? 300 : isMobile ? 340 : 380} height={230} />
             </IsometricCard>
             <View style={styles.featureDetails}>
               <Text style={styles.featureItemTitle}>Daily Routine & Wellness Checklist</Text>
@@ -392,16 +390,16 @@ export default function LandingPage() {
             </View>
           </View>
 
-          {/* FIG 04: Care Circle Optical Bridge */}
+          {/* Card 4: Care Circle */}
           <View style={[styles.showcaseCol, isDesktop && styles.showcaseColDesktop]}>
             <IsometricCard
-              figureNumber="FIG 04"
-              title="Care Circle Optical Telemetry Bridge"
-              interactionHint="Dual-pylon transmission link with rotary consent switch"
+              category="CARE CIRCLE NETWORK"
+              title="Family & Doctor Care Circle"
+              interactionHint="Luminous privacy-gated telemetry connecting elder, family & physician"
               liveReadout="FAMILY & CLINIC NODES SYNCED"
               readoutStatus="success"
             >
-              <CareCircleBridge width={isSmallMobile ? 300 : isMobile ? 340 : 380} height={230} />
+              <CareCircleVisual width={isSmallMobile ? 300 : isMobile ? 340 : 380} height={230} />
             </IsometricCard>
             <View style={styles.featureDetails}>
               <Text style={styles.featureItemTitle}>Connected Family & Clinical Circle</Text>
