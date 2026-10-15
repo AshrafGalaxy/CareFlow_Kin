@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, ActivityIndicator, Alert, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, ActivityIndicator, Alert, TouchableOpacity, Platform } from "react-native";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { Theme } from "../../constants/theme";
@@ -180,49 +180,71 @@ export default function ElderHomeScreen() {
 
       {/* 1. Desktop & Deck Top Summary Metrics Ribbon */}
       <View style={[styles.metricsRibbon, isMobile && styles.metricsRibbonMobile]}>
-        <View style={[styles.metricCard, isMobile && styles.metricCardMobile, isSmallMobile && styles.metricCardSmall, { borderLeftColor: Theme.colors.primary }]}>
-          <View style={[styles.metricIconWrap, isSmallMobile && styles.metricIconWrapSmall]}>
-            <TrendingUp size={isSmallMobile ? 18 : 22} color={Theme.colors.primary} />
+        {/* KPI 1: Adherence */}
+        <View style={[styles.metricCard, isMobile && styles.metricCardMobile, isSmallMobile && styles.metricCardSmall]}>
+          <View style={styles.metricCardHeader}>
+            <View style={[styles.metricIconWrap, { backgroundColor: "#F0F9FF" }, isSmallMobile && styles.metricIconWrapSmall]}>
+              <TrendingUp size={isSmallMobile ? 15 : 18} color="#0284C7" />
+            </View>
+            <View style={[styles.metricBadge, { backgroundColor: "#F0F9FF" }]}>
+              <Text style={[styles.metricBadgeText, { color: "#0284C7" }]}>95% Target</Text>
+            </View>
           </View>
-          <View style={styles.metricInfo}>
+          <View style={styles.metricBody}>
             <Text style={[styles.metricLabel, isSmallMobile && styles.metricLabelSmall]} numberOfLines={1}>ADHERENCE</Text>
             <Text style={[styles.metricValue, isSmallMobile && styles.metricValueSmall]}>{Math.round(home.adherence_rate_percentage)}%</Text>
-            <Text style={[styles.metricSub, isSmallMobile && styles.metricSubSmall]} numberOfLines={1}>95% Target</Text>
           </View>
         </View>
 
-        <View style={[styles.metricCard, isMobile && styles.metricCardMobile, isSmallMobile && styles.metricCardSmall, { borderLeftColor: Theme.colors.brightTealBlue }]}>
-          <View style={[styles.metricIconWrap, isSmallMobile && styles.metricIconWrapSmall, { backgroundColor: Theme.colors.frostedBlue2 }]}>
-            <CheckSquare size={isSmallMobile ? 18 : 22} color={Theme.colors.brightTealBlue} />
+        {/* KPI 2: Routine */}
+        <View style={[styles.metricCard, isMobile && styles.metricCardMobile, isSmallMobile && styles.metricCardSmall]}>
+          <View style={styles.metricCardHeader}>
+            <View style={[styles.metricIconWrap, { backgroundColor: "#EEF2FF" }, isSmallMobile && styles.metricIconWrapSmall]}>
+              <CheckSquare size={isSmallMobile ? 15 : 18} color="#4F46E5" />
+            </View>
+            <View style={[styles.metricBadge, { backgroundColor: "#EEF2FF" }]}>
+              <Text style={[styles.metricBadgeText, { color: "#4F46E5" }]}>{checklistPercent}% Done</Text>
+            </View>
           </View>
-          <View style={styles.metricInfo}>
+          <View style={styles.metricBody}>
             <Text style={[styles.metricLabel, isSmallMobile && styles.metricLabelSmall]} numberOfLines={1}>ROUTINE</Text>
             <Text style={[styles.metricValue, isSmallMobile && styles.metricValueSmall]}>
               {home.checklist_completed_count} / {home.checklist_total_count}
             </Text>
-            <Text style={[styles.metricSub, isSmallMobile && styles.metricSubSmall]} numberOfLines={1}>{checklistPercent}% Done</Text>
           </View>
         </View>
 
-        <View style={[styles.metricCard, isMobile && styles.metricCardMobile, isSmallMobile && styles.metricCardSmall, { borderLeftColor: Theme.colors.turquoiseSurf }]}>
-          <View style={[styles.metricIconWrap, isSmallMobile && styles.metricIconWrapSmall, { backgroundColor: Theme.colors.lightCyan }]}>
-            <Pill size={isSmallMobile ? 18 : 22} color={Theme.colors.blueGreen} />
+        {/* KPI 3: Doses */}
+        <View style={[styles.metricCard, isMobile && styles.metricCardMobile, isSmallMobile && styles.metricCardSmall]}>
+          <View style={styles.metricCardHeader}>
+            <View style={[styles.metricIconWrap, { backgroundColor: "#F0FDFA" }, isSmallMobile && styles.metricIconWrapSmall]}>
+              <Pill size={isSmallMobile ? 15 : 18} color="#0D9488" />
+            </View>
+            <View style={[styles.metricBadge, { backgroundColor: "#F0FDFA" }]}>
+              <Text style={[styles.metricBadgeText, { color: "#0D9488" }]}>{home.next_medications[0]?.times_of_day || "Scheduled"}</Text>
+            </View>
           </View>
-          <View style={styles.metricInfo}>
+          <View style={styles.metricBody}>
             <Text style={[styles.metricLabel, isSmallMobile && styles.metricLabelSmall]} numberOfLines={1}>DOSES</Text>
             <Text style={[styles.metricValue, isSmallMobile && styles.metricValueSmall]}>{home.next_medications.length}</Text>
-            <Text style={[styles.metricSub, isSmallMobile && styles.metricSubSmall]} numberOfLines={1}>{home.next_medications[0]?.times_of_day || "Scheduled"}</Text>
           </View>
         </View>
 
-        <View style={[styles.metricCard, isMobile && styles.metricCardMobile, isSmallMobile && styles.metricCardSmall, { borderLeftColor: Theme.colors.success }]}>
-          <View style={[styles.metricIconWrap, isSmallMobile && styles.metricIconWrapSmall, { backgroundColor: Theme.colors.successLight }]}>
-            <Smile size={isSmallMobile ? 18 : 22} color={Theme.colors.success} />
+        {/* KPI 4: Wellness */}
+        <View style={[styles.metricCard, isMobile && styles.metricCardMobile, isSmallMobile && styles.metricCardSmall]}>
+          <View style={styles.metricCardHeader}>
+            <View style={[styles.metricIconWrap, { backgroundColor: "#ECFDF5" }, isSmallMobile && styles.metricIconWrapSmall]}>
+              <Smile size={isSmallMobile ? 15 : 18} color="#10B981" />
+            </View>
+            <View style={[styles.metricBadge, { backgroundColor: checkinDone ? "#ECFDF5" : "#FEF3C7" }]}>
+              <Text style={[styles.metricBadgeText, { color: checkinDone ? "#059669" : "#D97706" }]}>
+                {checkinDone ? "Synced" : "Pending"}
+              </Text>
+            </View>
           </View>
-          <View style={styles.metricInfo}>
+          <View style={styles.metricBody}>
             <Text style={[styles.metricLabel, isSmallMobile && styles.metricLabelSmall]} numberOfLines={1}>WELLNESS</Text>
             <Text style={[styles.metricValue, isSmallMobile && styles.metricValueSmall]}>{checkinDone ? "Logged" : "Ready"}</Text>
-            <Text style={[styles.metricSub, isSmallMobile && styles.metricSubSmall]} numberOfLines={1}>{checkinDone ? "Circle Synced" : "5-Sec Check"}</Text>
           </View>
         </View>
       </View>
@@ -443,16 +465,21 @@ const styles = StyleSheet.create({
   },
   metricCard: {
     flex: 1,
-    minWidth: 200,
+    minWidth: 170,
     backgroundColor: Theme.colors.card,
-    borderRadius: Theme.ergonomics.cardRadius,
+    borderRadius: 14,
     borderWidth: 1,
     borderColor: Theme.colors.border,
-    borderLeftWidth: 5,
-    padding: Theme.spacing.md,
-    flexDirection: "row",
-    alignItems: "center",
-    ...Theme.shadows.sm,
+    padding: 14,
+    justifyContent: "space-between",
+    ...Platform.select({
+      web: {
+        boxShadow: "0 1px 3px rgba(15, 23, 42, 0.04), 0 2px 8px rgba(15, 23, 42, 0.02)",
+      },
+      default: {
+        ...Theme.shadows.sm,
+      },
+    }),
   },
   metricCardMobile: {
     minWidth: 0,
@@ -462,26 +489,39 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   metricCardSmall: {
-    padding: 8,
+    padding: 10,
+  },
+  metricCardHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 8,
   },
   metricIconWrap: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: Theme.colors.primaryLight,
+    width: 36,
+    height: 36,
+    borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: Theme.spacing.md,
-    flexShrink: 0,
   },
   metricIconWrapSmall: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    marginRight: 6,
+    width: 30,
+    height: 30,
+    borderRadius: 8,
   },
-  metricInfo: {
-    flex: 1,
+  metricBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 9999,
+  },
+  metricBadgeText: {
+    fontFamily: Theme.fonts.heading,
+    fontSize: 11,
+    fontWeight: "600",
+    letterSpacing: 0.2,
+  },
+  metricBody: {
+    gap: 2,
   },
   metricLabel: {
     fontFamily: Theme.fonts.heading,
@@ -499,20 +539,10 @@ const styles = StyleSheet.create({
     fontSize: Theme.typography.subheading + 2,
     fontWeight: "700",
     color: Theme.colors.text,
-    marginTop: 2,
+    letterSpacing: -0.3,
   },
   metricValueSmall: {
     fontSize: 18,
-  },
-  metricSub: {
-    fontFamily: Theme.fonts.body,
-    fontSize: 12,
-    color: Theme.colors.accent,
-    fontWeight: "600",
-    marginTop: 2,
-  },
-  metricSubSmall: {
-    fontSize: 10,
   },
 
 

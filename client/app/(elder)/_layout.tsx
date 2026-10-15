@@ -41,7 +41,7 @@ export default function ElderLayout() {
   // Render Desktop / Tablet Sidebar Navigation
   const renderSidebar = () => (
     <View style={[styles.sidebar, isTablet && styles.sidebarTablet]}>
-      {/* Brand & Deck Header */}
+      {/* Brand Header */}
       <View style={styles.sidebarHeader}>
         <TouchableOpacity
           onPress={() => router.push("/")}
@@ -50,9 +50,6 @@ export default function ElderLayout() {
         >
           <CareFlowLogo size={32} showText={!isTablet} />
         </TouchableOpacity>
-        <View style={styles.deckTag}>
-          <Text style={styles.deckTagText}>ELDER DECK</Text>
-        </View>
       </View>
 
       {/* Navigation List */}
@@ -159,9 +156,6 @@ export default function ElderLayout() {
         <TouchableOpacity onPress={() => router.push("/")} activeOpacity={0.8}>
           <CareFlowLogo size={28} showText={!isSmallMobile} />
         </TouchableOpacity>
-        <View style={styles.deckTagSmall}>
-          <Text style={styles.deckTagSmallText}>DECK</Text>
-        </View>
       </View>
 
       <View style={styles.mobileActions}>
@@ -296,22 +290,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
   brandRow: {
-    marginBottom: 8,
-  },
-  deckTag: {
-    backgroundColor: Theme.colors.primaryLight,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: Theme.colors.borderActive,
-  },
-  deckTagText: {
-    fontFamily: Theme.fonts.heading,
-    fontSize: 10,
-    fontWeight: "600",
-    color: Theme.colors.primary,
-    letterSpacing: 0.8,
+    marginBottom: 0,
   },
 
   navSection: {
@@ -472,21 +451,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
-  },
-  deckTagSmall: {
-    backgroundColor: Theme.colors.primaryLight,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 4,
-    borderWidth: 1,
-    borderColor: Theme.colors.borderActive,
-  },
-  deckTagSmallText: {
-    fontFamily: Theme.fonts.heading,
-    fontSize: 9,
-    fontWeight: "600",
-    color: Theme.colors.primary,
-    letterSpacing: 0.8,
   },
   mobileActions: {
     flexDirection: "row",

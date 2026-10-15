@@ -38,6 +38,40 @@ export default function RootLayout() {
           "https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap";
         document.head.appendChild(link);
       }
+
+      // 3. Inject Sleek Minimalist Custom Scrollbar Styles
+      const existingScrollbar = document.getElementById("careflow-custom-scrollbar");
+      if (!existingScrollbar) {
+        const style = document.createElement("style");
+        style.id = "careflow-custom-scrollbar";
+        style.textContent = `
+          /* Global Sleek Minimalist Scrollbar */
+          ::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+          }
+          ::-webkit-scrollbar-track {
+            background: transparent;
+          }
+          ::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.4);
+            border-radius: 9999px;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            transition: background 0.2s ease;
+          }
+          ::-webkit-scrollbar-thumb:hover {
+            background: rgba(100, 116, 139, 0.7);
+            background-clip: padding-box;
+          }
+          /* Firefox scrollbar styling */
+          * {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(148, 163, 184, 0.4) transparent;
+          }
+        `;
+        document.head.appendChild(style);
+      }
     }
   }, []);
 

@@ -113,19 +113,19 @@ export default function LandingPage() {
                 onPress={() => scrollToSection("features")}
                 accessibilityRole="link"
               >
-                <Text style={styles.navLinkItem}>Features</Text>
+                <Text style={styles.navLinkItem}>Care Pillars</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => scrollToSection("day-in-life")}
                 accessibilityRole="link"
               >
-                <Text style={styles.navLinkItem}>How It Works</Text>
+                <Text style={styles.navLinkItem}>Daily Rhythm</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => scrollToSection("faq")}
                 accessibilityRole="link"
               >
-                <Text style={styles.navLinkItem}>FAQ</Text>
+                <Text style={styles.navLinkItem}>Family Questions</Text>
               </TouchableOpacity>
             </View>
           )}
@@ -875,7 +875,7 @@ export default function LandingPage() {
               </Text>
               <View style={styles.systemStatusPill}>
                 <View style={styles.systemStatusDot} />
-                <Text style={styles.systemStatusText}>All Systems Operational • API v1.0</Text>
+                <Text style={styles.systemStatusText}>All Systems Operational</Text>
               </View>
             </View>
 
