@@ -735,6 +735,7 @@ export default function LandingPage() {
             <View style={[styles.manifestoIconWrap, { backgroundColor: "#FEE2E2" }]}>
               <EyeOff size={22} color="#DC2626" />
             </View>
+            <Text style={[styles.manifestoCardTag, { color: "#DC2626" }]}>SANCTUARY GUARANTEE</Text>
             <Text style={styles.manifestoCardTitle}>Zero Webcams or Microphones</Text>
             <Text style={styles.manifestoCardDesc}>
               We never install intrusive cameras, microphones, or wearable tracking beacons. Your parent's living space remains their sacred, unmonitored home.
@@ -745,6 +746,7 @@ export default function LandingPage() {
             <View style={[styles.manifestoIconWrap, { backgroundColor: "#DCFCE7" }]}>
               <UserCheck size={22} color="#16A34A" />
             </View>
+            <Text style={[styles.manifestoCardTag, { color: "#16A34A" }]}>PATIENT SOVEREIGNTY</Text>
             <Text style={styles.manifestoCardTitle}>Sovereign Self-Reporting</Text>
             <Text style={styles.manifestoCardDesc}>
               CareFlow empowers the senior as an autonomous agent. They self-report their mood and medications on their own schedule rather than being subjected to passive surveillance.
@@ -755,6 +757,7 @@ export default function LandingPage() {
             <View style={[styles.manifestoIconWrap, { backgroundColor: "#E0F2FE" }]}>
               <Lock size={22} color="#0284C7" />
             </View>
+            <Text style={[styles.manifestoCardTag, { color: "#0284C7" }]}>ZERO DATA BROKERING</Text>
             <Text style={styles.manifestoCardTitle}>Zero Data Commercialization</Text>
             <Text style={styles.manifestoCardDesc}>
               Health logs are strictly isolated by cryptographic server authorization. We will never sell, broker, or monetize your family's health history to third parties or advertisers.
@@ -824,7 +827,7 @@ export default function LandingPage() {
       <View style={[styles.bottomCtaSection, { paddingHorizontal: horizontalPadding }]}>
         <View style={styles.bottomCtaCard}>
           <View style={styles.bottomCtaBadge}>
-            <Sparkles size={14} color="#38BDF8" />
+            <Sparkles size={14} color={Theme.colors.brandPrimary} />
             <Text style={styles.bottomCtaBadgeText}>ZERO-RISK FAMILY SETUP</Text>
           </View>
 
@@ -857,19 +860,19 @@ export default function LandingPage() {
           {/* Risk Reversal Assurance Strip */}
           <View style={styles.riskReversalStrip}>
             <View style={styles.riskReversalItem}>
-              <CheckCircle2 size={13} color="#38BDF8" />
+              <CheckCircle2 size={14} color="#16A34A" />
               <Text style={styles.riskReversalText}>Free 30-Day Family Circle</Text>
             </View>
             <View style={styles.riskReversalItem}>
-              <CheckCircle2 size={13} color="#38BDF8" />
+              <CheckCircle2 size={14} color="#16A34A" />
               <Text style={styles.riskReversalText}>No Credit Card Required</Text>
             </View>
             <View style={styles.riskReversalItem}>
-              <CheckCircle2 size={13} color="#38BDF8" />
+              <CheckCircle2 size={14} color="#16A34A" />
               <Text style={styles.riskReversalText}>3-Minute Tablet Setup</Text>
             </View>
             <View style={styles.riskReversalItem}>
-              <CheckCircle2 size={13} color="#38BDF8" />
+              <CheckCircle2 size={14} color="#16A34A" />
               <Text style={styles.riskReversalText}>Invite Unlimited Relatives</Text>
             </View>
           </View>
@@ -1564,11 +1567,18 @@ const styles = StyleSheet.create({
 
   // 8. Ethical Manifesto Section
   manifestoSection: {
-    backgroundColor: "#0F172A",
+    backgroundColor: "#FFFFFF",
     borderRadius: 24,
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
     paddingVertical: 56,
     paddingHorizontal: 24,
     marginVertical: 20,
+    ...Platform.select({
+      web: {
+        boxShadow: "0 4px 20px rgba(15, 23, 42, 0.04)",
+      },
+    }),
   },
   manifestoGrid: {
     gap: 20,
@@ -1578,10 +1588,10 @@ const styles = StyleSheet.create({
   },
   manifestoCard: {
     flex: 1,
-    backgroundColor: "#1E293B",
-    borderRadius: 16,
+    backgroundColor: "#F8FAFC",
+    borderRadius: 18,
     borderWidth: 1,
-    borderColor: "#334155",
+    borderColor: "#E2E8F0",
     padding: 24,
   },
   manifestoIconWrap: {
@@ -1590,20 +1600,28 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 16,
+    marginBottom: 14,
+  },
+  manifestoCardTag: {
+    fontFamily: Theme.fonts.heading,
+    fontSize: 10,
+    fontWeight: "700",
+    letterSpacing: 0.5,
+    marginBottom: 6,
   },
   manifestoCardTitle: {
     fontFamily: Theme.fonts.heading,
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: "700",
-    color: "#FFFFFF",
+    color: "#0F172A",
     marginBottom: 8,
+    letterSpacing: -0.2,
   },
   manifestoCardDesc: {
     fontFamily: Theme.fonts.body,
-    fontSize: 13,
-    color: "#94A3B8",
-    lineHeight: 20,
+    fontSize: 14,
+    color: "#64748B",
+    lineHeight: 21,
   },
 
   // 9. FAQ Section
@@ -1673,20 +1691,27 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   bottomCtaCard: {
-    backgroundColor: "#0F172A",
+    backgroundColor: "#FFFFFF",
     borderRadius: 24,
+    borderWidth: 1.5,
+    borderColor: "#BAE6FD",
     padding: 44,
     alignItems: "center",
+    ...Platform.select({
+      web: {
+        boxShadow: "0 10px 30px rgba(2, 132, 199, 0.08)",
+      },
+    }),
   },
   bottomCtaBadge: {
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
-    backgroundColor: "rgba(56, 189, 248, 0.12)",
+    backgroundColor: "#F0F9FF",
     borderWidth: 1,
-    borderColor: "rgba(56, 189, 248, 0.3)",
-    paddingHorizontal: 12,
-    paddingVertical: 4,
+    borderColor: "#BAE6FD",
+    paddingHorizontal: 14,
+    paddingVertical: 5,
     borderRadius: 100,
     marginBottom: 20,
   },
@@ -1694,14 +1719,14 @@ const styles = StyleSheet.create({
     fontFamily: Theme.fonts.heading,
     fontSize: 11,
     fontWeight: "700",
-    color: "#38BDF8",
+    color: Theme.colors.brandPrimary,
     letterSpacing: 0.6,
   },
   bottomCtaTitle: {
     fontFamily: Theme.fonts.brand,
     fontSize: 28,
     fontWeight: "700",
-    color: "#FFFFFF",
+    color: "#0F172A",
     textAlign: "center",
     marginBottom: 12,
     letterSpacing: -0.4,
@@ -1709,7 +1734,7 @@ const styles = StyleSheet.create({
   bottomCtaSubtitle: {
     fontFamily: Theme.fonts.body,
     fontSize: 16,
-    color: "#94A3B8",
+    color: "#475569",
     textAlign: "center",
     maxWidth: 620,
     marginBottom: 28,
@@ -1733,9 +1758,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: 20,
+    paddingHorizontal: 22,
     ...Platform.select({
-      web: { cursor: "pointer" },
+      web: {
+        cursor: "pointer",
+        boxShadow: "0 4px 14px rgba(2, 132, 199, 0.25)",
+      },
     }),
   },
   bottomCtaPrimaryText: {
@@ -1747,13 +1775,13 @@ const styles = StyleSheet.create({
   bottomCtaSecondaryBtn: {
     flex: 1,
     minHeight: 50,
-    backgroundColor: "transparent",
+    backgroundColor: "#F8FAFC",
     borderWidth: 1.5,
-    borderColor: "#334155",
+    borderColor: "#CBD5E1",
     borderRadius: Theme.ergonomics.buttonRadius,
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: 20,
+    paddingHorizontal: 22,
     ...Platform.select({
       web: { cursor: "pointer" },
     }),
@@ -1762,7 +1790,7 @@ const styles = StyleSheet.create({
     fontFamily: Theme.fonts.heading,
     fontSize: 14,
     fontWeight: "600",
-    color: "#E2E8F0",
+    color: "#0F172A",
   },
   riskReversalStrip: {
     flexDirection: "row",
@@ -1770,7 +1798,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 20,
     borderTopWidth: 1,
-    borderTopColor: "#1E293B",
+    borderTopColor: "#E2E8F0",
     paddingTop: 24,
     width: "100%",
   },
@@ -1781,8 +1809,9 @@ const styles = StyleSheet.create({
   },
   riskReversalText: {
     fontFamily: Theme.fonts.body,
-    fontSize: 12,
-    color: "#94A3B8",
+    fontSize: 13,
+    color: "#334155",
+    fontWeight: "500",
   },
 
   // 11. Multi-Column Enterprise Footer
