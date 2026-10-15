@@ -13,8 +13,9 @@ import { Theme } from "../../constants/theme";
 import { useResponsive } from "../../hooks/useResponsive";
 import { BigButton } from "../../components/BigButton";
 import { CareFlowLogo } from "../../components/CareFlowLogo";
+import { GoogleAuthButton } from "../../components/GoogleAuthButton";
 import { useAuth } from "../../context/AuthContext";
-import { LogIn, ArrowLeft, KeyRound, Sparkles, UserCheck } from "lucide-react-native";
+import { LogIn, ArrowLeft } from "lucide-react-native";
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -49,12 +50,6 @@ export default function LoginScreen() {
     }
   };
 
-  const fillAndLoginDemo = async () => {
-    setEmail("eleanor@careflow.com");
-    setPassword("ElderPass123!");
-    await handleLogin("eleanor@careflow.com", "ElderPass123!");
-  };
-
   return (
     <ScrollView
       style={styles.container}
@@ -84,21 +79,16 @@ export default function LoginScreen() {
           </Text>
         </View>
 
-        {/* 1-Tap Quick Demo Fast-Login */}
-        <TouchableOpacity
-          style={[styles.demoPill, isSmallMobile && { padding: 10, gap: 10 }]}
-          onPress={fillAndLoginDemo}
-          activeOpacity={0.8}
-        >
-          <View style={[styles.demoIconWrap, isSmallMobile && { width: 32, height: 32, borderRadius: 16 }]}>
-            <Sparkles size={isSmallMobile ? 16 : 18} color="#0077B6" />
-          </View>
-          <View style={styles.demoTextWrap}>
-            <Text style={[styles.demoTitle, isSmallMobile && { fontSize: 12 }]}>1-Tap Demo Sign In (Eleanor Vance)</Text>
-            <Text style={[styles.demoSubtitle, isSmallMobile && { fontSize: 11 }]}>Instantly unlocks the elder daily care deck</Text>
-          </View>
-        </TouchableOpacity>
 
+        {/* Google Authentication Option */}
+        <GoogleAuthButton variant="signin" />
+
+        {/* Divider */}
+        <View style={styles.dividerRow}>
+          <View style={styles.dividerLine} />
+          <Text style={styles.dividerText}>or continue with email</Text>
+          <View style={styles.dividerLine} />
+        </View>
 
         {/* Error notification */}
         {errorMsg ? (
@@ -221,40 +211,6 @@ const styles = StyleSheet.create({
     marginTop: 6,
     lineHeight: 22,
   },
-  demoPill: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 12,
-    borderRadius: 12,
-    backgroundColor: "#F0F9FF",
-    borderWidth: 1.5,
-    borderColor: "#BAE6FD",
-    gap: 12,
-    marginBottom: Theme.spacing.lg,
-  },
-  demoIconWrap: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: "#E0F2FE",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  demoTextWrap: {
-    flex: 1,
-  },
-  demoTitle: {
-    fontFamily: Theme.fonts.heading,
-    fontSize: 13,
-    fontWeight: "600",
-    color: "#0369A1",
-  },
-  demoSubtitle: {
-    fontFamily: Theme.fonts.body,
-    fontSize: 12,
-    color: "#0284C7",
-    marginTop: 2,
-  },
   errorBox: {
     backgroundColor: Theme.colors.urgentLight,
     borderWidth: 1,
@@ -321,5 +277,21 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
     color: Theme.colors.primary,
+  },
+  dividerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: Theme.spacing.md,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: Theme.colors.borderSubtle,
+  },
+  dividerText: {
+    marginHorizontal: 12,
+    fontFamily: Theme.fonts.body,
+    fontSize: 13,
+    color: Theme.colors.textMuted,
   },
 });

@@ -14,6 +14,7 @@ import { Theme } from "../../constants/theme";
 import { useResponsive } from "../../hooks/useResponsive";
 import { BigButton } from "../../components/BigButton";
 import { CareFlowLogo } from "../../components/CareFlowLogo";
+import { GoogleAuthButton } from "../../components/GoogleAuthButton";
 import { useAuth } from "../../context/AuthContext";
 import { UserPlus, ArrowLeft, CheckCircle2, Shield, Heart, Stethoscope } from "lucide-react-native";
 
@@ -104,6 +105,16 @@ export default function RegisterScreen() {
           </Text>
         </View>
 
+
+        {/* Google Authentication Option */}
+        <GoogleAuthButton variant="signup" />
+
+        {/* Divider */}
+        <View style={styles.dividerRow}>
+          <View style={styles.dividerLine} />
+          <Text style={styles.dividerText}>or register with email</Text>
+          <View style={styles.dividerLine} />
+        </View>
 
         {/* Error notification */}
         {errorMsg ? (
@@ -393,5 +404,21 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
     color: Theme.colors.primary,
+  },
+  dividerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: Theme.spacing.md,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: Theme.colors.borderSubtle,
+  },
+  dividerText: {
+    marginHorizontal: 12,
+    fontFamily: Theme.fonts.body,
+    fontSize: 13,
+    color: Theme.colors.textMuted,
   },
 });
