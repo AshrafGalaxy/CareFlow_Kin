@@ -21,6 +21,9 @@
 - **Canonical Scope Isolation**:
   - Commit messages, titles, and descriptions must strictly refer to tracked, repository-level assets.
   - Never mention, document, or cite private local scripts, untracked helper files, or developer-specific local tooling in version control messages.
+- **Remote Synchronization (Mandatory Push Protocol)**:
+  - Immediately push verified local commits to the upstream remote repository (`git push origin <branch>`) upon completing each logical domain milestone.
+  - Never allow local commits to accumulate unpushed, ensuring the remote repository reflects the authoritative state of development at all times.
 
 ## 3. Engineering Tenets
 - **Git Hygiene and .gitignore Integrity**: Rigorously maintain `.gitignore`. Never allow untracked files, virtual environments, build outputs, or environment files into version control.
@@ -43,3 +46,4 @@
 - **Cross-User Data Bleed**: Executing database queries lacking explicit tenant or user ownership filters.
 - **Inadequate Interface Contrast**: Employing low-contrast color combinations or undersized tap targets unsuitable for older adults.
 - **Local Artifact Disclosure**: Referencing uncommitted, private, or developer-specific local files within commit messages, pull requests, or repository-facing documentation.
+- **Unpushed Commit Stagnation**: Accumulating completed commits locally without synchronizing and pushing them upstream to the remote repository.
