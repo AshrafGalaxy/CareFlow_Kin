@@ -199,6 +199,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   itemTitle: {
+    fontFamily: Theme.fonts.heading,
     fontSize: Theme.typography.subheading,
     fontWeight: "800",
     color: Theme.colors.text,
@@ -208,17 +209,20 @@ const styles = StyleSheet.create({
     color: Theme.colors.textMuted,
   },
   timeBadge: {
-    fontSize: 12,
+    fontFamily: Theme.fonts.heading,
+    fontSize: 11,
     fontWeight: "700",
     color: Theme.colors.accent,
     textTransform: "uppercase",
     marginTop: 2,
+    letterSpacing: 0.5,
   },
   itemDesc: {
+    fontFamily: Theme.fonts.body,
     fontSize: Theme.typography.bodySmall,
     color: Theme.colors.textMuted,
     marginTop: 4,
-    lineHeight: 22,
+    lineHeight: 20,
   },
   actionsRow: {
     flexDirection: "row",
@@ -227,7 +231,7 @@ const styles = StyleSheet.create({
   },
   actionBtn: {
     flex: 1,
-    minHeight: 48,
+    minHeight: 46,
   },
   statusPillDone: {
     flex: 1,
@@ -238,8 +242,10 @@ const styles = StyleSheet.create({
     backgroundColor: Theme.colors.successLight,
     paddingVertical: Theme.spacing.sm,
     borderRadius: Theme.ergonomics.buttonRadius,
+    minHeight: 46,
   },
   statusTextDone: {
+    fontFamily: Theme.fonts.heading,
     fontSize: Theme.typography.body,
     fontWeight: "700",
     color: Theme.colors.success,
@@ -253,8 +259,10 @@ const styles = StyleSheet.create({
     backgroundColor: Theme.colors.accentLight,
     paddingVertical: Theme.spacing.sm,
     borderRadius: Theme.ergonomics.buttonRadius,
+    minHeight: 46,
   },
   statusTextSkipped: {
+    fontFamily: Theme.fonts.heading,
     fontSize: Theme.typography.body,
     fontWeight: "700",
     color: Theme.colors.accent,

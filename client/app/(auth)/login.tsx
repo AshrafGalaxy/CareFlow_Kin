@@ -1,203 +1,322 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet, Alert, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  Platform,
+} from "react-native";
 import { useRouter } from "expo-router";
 import { Theme } from "../../constants/theme";
 import { BigButton } from "../../components/BigButton";
-import { ResponsiveContainer } from "../../components/ResponsiveContainer";
+import { CareFlowLogo } from "../../components/CareFlowLogo";
 import { useAuth } from "../../context/AuthContext";
-import { LogIn, UserCheck } from "lucide-react-native";
+import { LogIn, ArrowLeft, KeyRound, Sparkles, UserCheck } from "lucide-react-native";
 
 export default function LoginScreen() {
   const router = useRouter();
-  const { login, register } = useAuth();
-  const [isRegistering, setIsRegistering] = useState(false);
+  const { login } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const handleSubmit = async () => {
-    if (!email || !password || (isRegistering && !fullName)) {
-      Alert.alert("Missing Details", "Please fill in all requested fields.");
+  const handleLogin = async (overrideEmail?: string, overridePass?: string) => {
+    setErrorMsg("");
+    const targetEmail = (overrideEmail || email).trim().toLowerCase();
+    const targetPass = overridePass || password;
+
+    if (!targetEmail || !targetPass) {
+      setErrorMsg("Please enter both email and password.");
       return;
     }
 
     setLoading(true);
     try {
-      if (isRegistering) {
-        await register(email, password, fullName, "ELDER");
-      } else {
-        await login(email, password);
-      }
+      await login(targetEmail, targetPass);
       router.replace("/(elder)");
     } catch (err: any) {
-      const msg = err.response?.data?.detail || "Could not sign in. Please check your credentials.";
-      Alert.alert("Authentication", msg);
+      const detail =
+        err.response?.data?.detail || "Invalid email or password. Please verify your credentials.";
+      setErrorMsg(typeof detail === "string" ? detail : "Unable to sign in.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDemoFill = () => {
-    setEmail("eleanor@careflow.org");
-    setPassword("SecurePassword123!");
-    setFullName("Eleanor Vance");
+  const fillAndLoginDemo = async () => {
+    setEmail("eleanor@careflow.com");
+    setPassword("ElderPass123!");
+    await handleLogin("eleanor@careflow.com", "ElderPass123!");
   };
 
   return (
-    <ResponsiveContainer>
-      <View style={styles.formContainer}>
-        <Text style={styles.title}>{isRegistering ? "Create Careflow Account" : "Sign In to Careflow"}</Text>
-        <Text style={styles.subtitle}>
-          {isRegistering
-            ? "Register to begin tracking your medications, routine, and care network."
-            : "Enter your credentials to access your daily care dashboard."}
-        </Text>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.scrollContent}
+      keyboardShouldPersistTaps="handled"
+    >
+      <View style={styles.cardContainer}>
+        {/* Top Header Bar */}
+        <View style={styles.topBar}>
+          <TouchableOpacity
+            style={styles.backBtn}
+            onPress={() => router.push("/")}
+            accessibilityLabel="Back to Home"
+          >
+            <ArrowLeft size={20} color={Theme.colors.primary} />
+            <Text style={styles.backBtnText}>Home</Text>
+          </TouchableOpacity>
 
-        <View style={styles.fieldGroup}>
-          {isRegistering && (
-            <View style={styles.inputWrapper}>
-              <Text style={styles.label}>Full Name</Text>
-              <TextInput
-                style={styles.input}
-                value={fullName}
-                onChangeText={setFullName}
-                placeholder="e.g. Eleanor Vance"
-                placeholderTextColor={Theme.colors.textMuted}
-                accessibilityLabel="Full Name input"
-              />
-            </View>
-          )}
-
-          <View style={styles.inputWrapper}>
-            <Text style={styles.label}>Email Address</Text>
-            <TextInput
-              style={styles.input}
-              value={email}
-              onChangeText={setEmail}
-              placeholder="e.g. eleanor@careflow.org"
-              placeholderTextColor={Theme.colors.textMuted}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              accessibilityLabel="Email input"
-            />
-          </View>
-
-          <View style={styles.inputWrapper}>
-            <Text style={styles.label}>Password</Text>
-            <TextInput
-              style={styles.input}
-              value={password}
-              onChangeText={setPassword}
-              placeholder="Your secure password"
-              placeholderTextColor={Theme.colors.textMuted}
-              secureTextEntry
-              accessibilityLabel="Password input"
-            />
-          </View>
+          <CareFlowLogo size={36} showText={true} />
         </View>
 
-        <BigButton
-          title={isRegistering ? "Create Account" : "Sign In"}
-          onPress={handleSubmit}
-          loading={loading}
-          icon={<LogIn size={22} color="#FFF" />}
-          style={styles.submitBtn}
-        />
-
-        <TouchableOpacity
-          onPress={handleDemoFill}
-          style={styles.demoFillBtn}
-          accessibilityRole="button"
-          accessibilityLabel="Auto-fill Eleanor demo credentials"
-        >
-          <UserCheck size={20} color={Theme.colors.primary} />
-          <Text style={styles.demoFillText}>Auto-fill Eleanor Demo Credentials</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => setIsRegistering(!isRegistering)}
-          style={styles.switchModeBtn}
-        >
-          <Text style={styles.switchModeText}>
-            {isRegistering
-              ? "Already have an account? Sign In"
-              : "Need a new account? Register here"}
+        {/* Heading */}
+        <View style={styles.header}>
+          <Text style={styles.title}>Welcome Back</Text>
+          <Text style={styles.subtitle}>
+            Sign in to access your daily care deck, medication reminders, and wellness updates.
           </Text>
+        </View>
+
+        {/* 1-Tap Quick Demo Fast-Login */}
+        <TouchableOpacity
+          style={styles.demoPill}
+          onPress={fillAndLoginDemo}
+          activeOpacity={0.8}
+        >
+          <View style={styles.demoIconWrap}>
+            <Sparkles size={18} color="#0077B6" />
+          </View>
+          <View style={styles.demoTextWrap}>
+            <Text style={styles.demoTitle}>1-Tap Demo Sign In (Eleanor Vance)</Text>
+            <Text style={styles.demoSubtitle}>Instantly unlocks the elder daily care deck</Text>
+          </View>
         </TouchableOpacity>
+
+        {/* Error notification */}
+        {errorMsg ? (
+          <View style={styles.errorBox}>
+            <Text style={styles.errorText}>{errorMsg}</Text>
+          </View>
+        ) : null}
+
+        {/* Form Fields */}
+        <View style={styles.form}>
+          <View style={styles.inputGroup}>
+            <Text style={styles.inputLabel}>Email Address</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="eleanor@careflow.com"
+              placeholderTextColor={Theme.colors.textLight}
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoCorrect={false}
+            />
+          </View>
+
+          <View style={styles.inputGroup}>
+            <View style={styles.labelRow}>
+              <Text style={styles.inputLabel}>Password</Text>
+            </View>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter your password"
+              placeholderTextColor={Theme.colors.textLight}
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+            />
+          </View>
+
+          {/* Submit Action */}
+          <BigButton
+            title={loading ? "Authenticating..." : "Sign In to Careflow"}
+            onPress={() => handleLogin()}
+            disabled={loading}
+            style={styles.submitBtn}
+            icon={<LogIn size={20} color="#FFFFFF" />}
+          />
+        </View>
+
+        {/* Footer Navigation */}
+        <View style={styles.footerRow}>
+          <Text style={styles.footerPrompt}>Need a new Careflow account?</Text>
+          <TouchableOpacity onPress={() => router.push("/(auth)/register")}>
+            <Text style={styles.registerLink}>Create Account</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </ResponsiveContainer>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  formContainer: {
-    paddingVertical: Theme.spacing.lg,
+  container: {
+    flex: 1,
+    backgroundColor: Theme.colors.background,
   },
-  title: {
-    fontSize: Theme.typography.heading,
-    fontWeight: "800",
+  scrollContent: {
+    paddingVertical: Theme.spacing.xl,
+    paddingHorizontal: Theme.spacing.md,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  cardContainer: {
+    width: "100%",
+    maxWidth: 520,
+    backgroundColor: Theme.colors.card,
+    borderRadius: Theme.ergonomics.cardRadius + 4,
+    borderWidth: 1,
+    borderColor: Theme.colors.border,
+    padding: Theme.spacing.xl,
+    ...Theme.shadows.lg,
+  },
+  topBar: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: Theme.spacing.lg,
+    paddingBottom: Theme.spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: Theme.colors.borderSubtle,
+  },
+  backBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    backgroundColor: Theme.colors.primaryLight,
+  },
+  backBtnText: {
+    fontFamily: Theme.fonts.heading,
+    fontSize: 14,
+    fontWeight: "700",
     color: Theme.colors.primary,
   },
+  header: {
+    marginBottom: Theme.spacing.md,
+  },
+  title: {
+    fontFamily: Theme.fonts.brand,
+    fontSize: Theme.typography.heading,
+    fontWeight: "800",
+    color: Theme.colors.primaryDark,
+    letterSpacing: -0.5,
+  },
   subtitle: {
+    fontFamily: Theme.fonts.body,
     fontSize: Theme.typography.body,
     color: Theme.colors.textMuted,
-    marginTop: Theme.spacing.xs,
-    marginBottom: Theme.spacing.xl,
-    lineHeight: 26,
+    marginTop: 6,
+    lineHeight: 22,
   },
-  fieldGroup: {
+  demoPill: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 12,
+    borderRadius: 12,
+    backgroundColor: "#F0F9FF",
+    borderWidth: 1.5,
+    borderColor: "#BAE6FD",
+    gap: 12,
+    marginBottom: Theme.spacing.lg,
+  },
+  demoIconWrap: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: "#E0F2FE",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  demoTextWrap: {
+    flex: 1,
+  },
+  demoTitle: {
+    fontFamily: Theme.fonts.heading,
+    fontSize: 13,
+    fontWeight: "700",
+    color: "#0369A1",
+  },
+  demoSubtitle: {
+    fontFamily: Theme.fonts.body,
+    fontSize: 12,
+    color: "#0284C7",
+    marginTop: 2,
+  },
+  errorBox: {
+    backgroundColor: Theme.colors.urgentLight,
+    borderWidth: 1,
+    borderColor: Theme.colors.urgent,
+    borderRadius: 10,
+    padding: Theme.spacing.sm,
+    marginBottom: Theme.spacing.md,
+  },
+  errorText: {
+    fontFamily: Theme.fonts.body,
+    fontSize: 13,
+    color: Theme.colors.urgent,
+    fontWeight: "600",
+  },
+  form: {
     gap: Theme.spacing.md,
   },
-  inputWrapper: {
-    marginBottom: Theme.spacing.sm,
+  inputGroup: {
+    gap: 6,
   },
-  label: {
-    fontSize: Theme.typography.body,
+  labelRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  inputLabel: {
+    fontFamily: Theme.fonts.heading,
+    fontSize: 13,
     fontWeight: "700",
     color: Theme.colors.text,
-    marginBottom: Theme.spacing.xs,
+    letterSpacing: 0.2,
   },
   input: {
-    minHeight: Theme.ergonomics.minTouchTarget,
-    borderWidth: Theme.ergonomics.borderWidth,
+    minHeight: 50,
+    borderRadius: 12,
+    borderWidth: 1.5,
     borderColor: Theme.colors.border,
-    borderRadius: Theme.ergonomics.buttonRadius,
+    backgroundColor: "#FAFCFE",
     paddingHorizontal: Theme.spacing.md,
-    fontSize: Theme.typography.bodyLarge,
+    fontFamily: Theme.fonts.body,
+    fontSize: 15,
     color: Theme.colors.text,
-    backgroundColor: Theme.colors.card,
   },
   submitBtn: {
-    marginTop: Theme.spacing.lg,
+    marginTop: Theme.spacing.sm,
   },
-  demoFillBtn: {
+  footerRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: Theme.spacing.xs,
-    marginTop: Theme.spacing.md,
-    padding: Theme.spacing.md,
-    backgroundColor: Theme.colors.primaryLight,
-    borderRadius: Theme.ergonomics.buttonRadius,
-    borderWidth: 1,
-    borderColor: Theme.colors.primary,
+    gap: 8,
+    marginTop: Theme.spacing.xl,
+    paddingTop: Theme.spacing.md,
+    borderTopWidth: 1,
+    borderTopColor: Theme.colors.borderSubtle,
   },
-  demoFillText: {
-    fontSize: Theme.typography.body,
-    fontWeight: "700",
+  footerPrompt: {
+    fontFamily: Theme.fonts.body,
+    fontSize: 14,
+    color: Theme.colors.textMuted,
+  },
+  registerLink: {
+    fontFamily: Theme.fonts.heading,
+    fontSize: 14,
+    fontWeight: "800",
     color: Theme.colors.primary,
-  },
-  switchModeBtn: {
-    marginTop: Theme.spacing.lg,
-    alignItems: "center",
-    padding: Theme.spacing.sm,
-  },
-  switchModeText: {
-    fontSize: Theme.typography.body,
-    color: Theme.colors.accent,
-    fontWeight: "700",
-    textDecorationLine: "underline",
   },
 });

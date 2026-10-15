@@ -22,7 +22,7 @@ export const BigButton: React.FC<BigButtonProps> = ({
   style,
 }) => {
   const getBackgroundColor = () => {
-    if (disabled) return Theme.colors.border;
+    if (disabled) return "#E2E8F0";
     switch (variant) {
       case "primary":
         return Theme.colors.primary;
@@ -31,16 +31,16 @@ export const BigButton: React.FC<BigButtonProps> = ({
       case "success":
         return Theme.colors.success;
       case "outline":
-        return Theme.colors.card;
+        return "#FFFFFF";
       default:
         return Theme.colors.primary;
     }
   };
 
   const getTextColor = () => {
-    if (disabled) return Theme.colors.textMuted;
+    if (disabled) return "#94A3B8";
     if (variant === "outline") return Theme.colors.primary;
-    return Theme.colors.textInverse;
+    return "#FFFFFF";
   };
 
   const isOutline = variant === "outline";
@@ -55,7 +55,7 @@ export const BigButton: React.FC<BigButtonProps> = ({
         {
           backgroundColor: getBackgroundColor(),
           borderColor: isOutline ? Theme.colors.primary : "transparent",
-          borderWidth: isOutline ? Theme.ergonomics.borderWidth : 0,
+          borderWidth: isOutline ? 1.5 : 0,
         },
         style,
       ]}
@@ -77,17 +77,13 @@ export const BigButton: React.FC<BigButtonProps> = ({
 
 const styles = StyleSheet.create({
   button: {
-    minHeight: Theme.ergonomics.minTouchTarget,
-    paddingVertical: Theme.spacing.md,
-    paddingHorizontal: Theme.spacing.lg,
+    minHeight: 50,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
     borderRadius: Theme.ergonomics.buttonRadius,
     justifyContent: "center",
     alignItems: "center",
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
+    ...Theme.shadows.sm,
   },
   contentRow: {
     flexDirection: "row",
@@ -95,11 +91,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   iconContainer: {
-    marginRight: Theme.spacing.sm,
+    marginRight: 8,
   },
   text: {
-    fontSize: Theme.typography.bodyLarge,
+    fontFamily: Theme.fonts.heading,
+    fontSize: 15,
     fontWeight: "700",
     textAlign: "center",
+    letterSpacing: 0.1,
   },
 });

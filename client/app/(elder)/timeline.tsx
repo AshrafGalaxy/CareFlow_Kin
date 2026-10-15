@@ -161,10 +161,11 @@ const styles = StyleSheet.create({
   contentCard: {
     flex: 1,
     backgroundColor: Theme.colors.card,
-    borderWidth: Theme.ergonomics.borderWidth,
+    borderWidth: 1,
     borderColor: Theme.colors.border,
-    borderRadius: Theme.ergonomics.cardRadius,
+    borderRadius: 14,
     padding: Theme.spacing.md,
+    ...Theme.shadows.sm,
   },
   timestampRow: {
     flexDirection: "row",
@@ -173,24 +174,29 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   badgeText: {
-    fontSize: 12,
+    fontFamily: Theme.fonts.heading,
+    fontSize: 11,
     fontWeight: "700",
     color: Theme.colors.accent,
     textTransform: "uppercase",
+    letterSpacing: 0.5,
   },
   timeText: {
-    fontSize: 12,
+    fontFamily: Theme.fonts.mono,
+    fontSize: 11,
     color: Theme.colors.textMuted,
   },
   eventTitle: {
+    fontFamily: Theme.fonts.heading,
     fontSize: Theme.typography.body,
     fontWeight: "800",
     color: Theme.colors.text,
   },
   eventDesc: {
+    fontFamily: Theme.fonts.body,
     fontSize: Theme.typography.bodySmall,
     color: Theme.colors.textMuted,
     marginTop: 4,
-    lineHeight: 22,
+    lineHeight: 20,
   },
 });

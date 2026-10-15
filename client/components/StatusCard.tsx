@@ -24,13 +24,13 @@ export const StatusCard: React.FC<StatusCardProps> = ({
   const getBadgeColors = () => {
     switch (badgeVariant) {
       case "success":
-        return { bg: Theme.colors.successLight, text: Theme.colors.success };
+        return { bg: "#ECFDF5", text: "#059669", border: "#A7F3D0" };
       case "accent":
-        return { bg: Theme.colors.accentLight, text: Theme.colors.accent };
+        return { bg: "#EFF6FF", text: "#0284C7", border: "#BAE6FD" };
       case "primary":
-        return { bg: Theme.colors.primaryLight, text: Theme.colors.primary };
+        return { bg: Theme.colors.primaryLight, text: Theme.colors.primary, border: "rgba(2, 62, 138, 0.2)" };
       default:
-        return { bg: Theme.colors.frostedBlue2, text: Theme.colors.textMuted };
+        return { bg: "#F1F5F9", text: Theme.colors.textMuted, border: "#E2E8F0" };
     }
   };
 
@@ -47,7 +47,12 @@ export const StatusCard: React.FC<StatusCardProps> = ({
           </View>
         </View>
         {badge && (
-          <View style={[styles.badge, { backgroundColor: badgeColor.bg }]}>
+          <View
+            style={[
+              styles.badge,
+              { backgroundColor: badgeColor.bg, borderColor: badgeColor.border },
+            ]}
+          >
             <Text style={[styles.badgeText, { color: badgeColor.text }]}>{badge}</Text>
           </View>
         )}
@@ -61,15 +66,11 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: Theme.colors.card,
     borderRadius: Theme.ergonomics.cardRadius,
-    borderWidth: Theme.ergonomics.borderWidth,
+    borderWidth: 1,
     borderColor: Theme.colors.border,
     padding: Theme.spacing.lg,
     marginBottom: Theme.spacing.md,
-    elevation: 2,
-    shadowColor: Theme.colors.deepTwilight,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
+    ...Theme.shadows.sm,
   },
   headerRow: {
     flexDirection: "row",
@@ -85,9 +86,9 @@ const styles = StyleSheet.create({
   },
   iconWrapper: {
     marginRight: Theme.spacing.md,
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     backgroundColor: Theme.colors.primaryLight,
     alignItems: "center",
     justifyContent: "center",
@@ -99,26 +100,30 @@ const styles = StyleSheet.create({
     paddingRight: Theme.spacing.xs,
   },
   title: {
+    fontFamily: Theme.fonts.heading,
     fontSize: Theme.typography.subheading,
     fontWeight: "700",
     color: Theme.colors.text,
     letterSpacing: -0.3,
   },
   subtitle: {
+    fontFamily: Theme.fonts.body,
     fontSize: Theme.typography.bodySmall,
     color: Theme.colors.textMuted,
     marginTop: 2,
     lineHeight: 20,
   },
   badge: {
-    paddingVertical: 6,
+    paddingVertical: 5,
     paddingHorizontal: 12,
-    borderRadius: 12,
+    borderRadius: 10,
+    borderWidth: 1,
     flexShrink: 0,
     alignSelf: "flex-start",
   },
   badgeText: {
-    fontSize: 13,
+    fontFamily: Theme.fonts.heading,
+    fontSize: 12,
     fontWeight: "700",
     letterSpacing: 0.2,
   },

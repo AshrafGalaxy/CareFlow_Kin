@@ -199,11 +199,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   metricVal: {
+    fontFamily: Theme.fonts.brand,
     fontSize: Theme.typography.display,
     fontWeight: "800",
     color: Theme.colors.primary,
   },
   metricLabel: {
+    fontFamily: Theme.fonts.body,
     fontSize: Theme.typography.bodySmall,
     color: Theme.colors.textMuted,
     marginTop: 2,
@@ -214,6 +216,7 @@ const styles = StyleSheet.create({
     backgroundColor: Theme.colors.border,
   },
   sectionHeading: {
+    fontFamily: Theme.fonts.heading,
     fontSize: Theme.typography.subheading,
     fontWeight: "800",
     color: Theme.colors.text,
@@ -222,19 +225,20 @@ const styles = StyleSheet.create({
   medCard: {
     backgroundColor: Theme.colors.card,
     borderRadius: Theme.ergonomics.cardRadius,
-    borderWidth: Theme.ergonomics.borderWidth,
+    borderWidth: 1,
     borderColor: Theme.colors.border,
     padding: Theme.spacing.lg,
-    marginBottom: Theme.spacing.lg,
+    marginBottom: Theme.spacing.md,
+    ...Theme.shadows.sm,
   },
   medHeader: {
     flexDirection: "row",
     alignItems: "center",
   },
   medIconBox: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     backgroundColor: Theme.colors.primaryLight,
     alignItems: "center",
     justifyContent: "center",
@@ -244,11 +248,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   medName: {
+    fontFamily: Theme.fonts.heading,
     fontSize: Theme.typography.subheading,
     fontWeight: "800",
-    color: Theme.colors.primary,
+    color: Theme.colors.text,
   },
   medDosage: {
+    fontFamily: Theme.fonts.heading,
     fontSize: Theme.typography.body,
     fontWeight: "600",
     color: Theme.colors.accent,
@@ -256,26 +262,29 @@ const styles = StyleSheet.create({
   },
   medDetailsBox: {
     marginVertical: Theme.spacing.md,
-    gap: 4,
+    gap: 6,
   },
   detailItem: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 6,
+    gap: 8,
   },
   detailText: {
+    fontFamily: Theme.fonts.mono,
     fontSize: Theme.typography.bodySmall,
     color: Theme.colors.text,
     fontWeight: "600",
   },
   instructionText: {
+    fontFamily: Theme.fonts.body,
     fontSize: Theme.typography.bodySmall,
     color: Theme.colors.textMuted,
     fontStyle: "italic",
     marginTop: 2,
   },
   prescriberText: {
-    fontSize: 14,
+    fontFamily: Theme.fonts.body,
+    fontSize: 13,
     color: Theme.colors.textMuted,
   },
   btnRow: {
@@ -285,6 +294,6 @@ const styles = StyleSheet.create({
   },
   actionBtn: {
     flex: 1,
-    minHeight: 48,
+    minHeight: 46,
   },
 });

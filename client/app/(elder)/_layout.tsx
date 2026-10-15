@@ -1,56 +1,84 @@
 import React from "react";
 import { Tabs } from "expo-router";
 import { Theme } from "../../constants/theme";
-import { Home, Pill, CheckSquare, Smile, Clock, UserCheck } from "lucide-react-native";
+import { Home, Pill, CheckSquare, Smile, Clock, LogOut } from "lucide-react-native";
 import { useWindowDimensions, View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useRouter, usePathname } from "expo-router";
+import { CareFlowLogo } from "../../components/CareFlowLogo";
+import { useAuth } from "../../context/AuthContext";
 
 export default function ElderLayout() {
   const { width } = useWindowDimensions();
-  const isDesktop = width >= Theme.breakpoints.medium;
+  const isDesktop = width >= Theme.breakpoints.compact;
   const router = useRouter();
   const pathname = usePathname();
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    router.replace("/");
+  };
 
   // Desktop Navigation Deck Header
   const renderDesktopHeader = () => (
-    <View style={styles.desktopNav}>
-      <View style={styles.brandGroup}>
-        <View style={styles.brandLogoBox}>
-          <Text style={styles.brandLogoGlyph}>CF</Text>
+    <View style={styles.desktopNavWrapper}>
+      <View style={styles.desktopNav}>
+        <View style={styles.brandGroup}>
+          <TouchableOpacity onPress={() => router.push("/")} activeOpacity={0.8}>
+            <CareFlowLogo size={36} showText={true} />
+          </TouchableOpacity>
+          <View style={styles.deckTag}>
+            <Text style={styles.deckTagText}>ELDER DECK</Text>
+          </View>
         </View>
-        <View>
-          <Text style={styles.navBrand}>Careflow</Text>
-          <Text style={styles.navSub}>Elder Care Deck</Text>
-        </View>
-      </View>
 
-      <View style={styles.navLinks}>
-        {[
-          { name: "Overview", path: "/(elder)" },
-          { name: "Medications", path: "/(elder)/medications" },
-          { name: "Daily Checklist", path: "/(elder)/checklist" },
-          { name: "Wellness Sharing", path: "/(elder)/checkin" },
-          { name: "Care Timeline", path: "/(elder)/timeline" },
-        ].map((tab) => {
-          const isActive = pathname === tab.path || (tab.path === "/(elder)" && pathname === "/(elder)/index");
-          return (
-            <TouchableOpacity
-              key={tab.path}
-              onPress={() => router.push(tab.path as any)}
-              style={[styles.desktopTab, isActive && styles.desktopTabActive]}
-              activeOpacity={0.7}
-            >
-              <Text style={[styles.desktopTabText, isActive && styles.desktopTabTextActive]}>
-                {tab.name}
+        <View style={styles.navLinks}>
+          {[
+            { name: "Overview", path: "/(elder)" },
+            { name: "Medications", path: "/(elder)/medications" },
+            { name: "Daily Routine", path: "/(elder)/checklist" },
+            { name: "Wellness Sharing", path: "/(elder)/checkin" },
+            { name: "Care Timeline", path: "/(elder)/timeline" },
+          ].map((tab) => {
+            const isActive =
+              pathname === tab.path ||
+              (tab.path === "/(elder)" && (pathname === "/(elder)/index" || pathname === "/(elder)"));
+            return (
+              <TouchableOpacity
+                key={tab.path}
+                onPress={() => router.push(tab.path as any)}
+                style={[styles.desktopTab, isActive && styles.desktopTabActive]}
+                activeOpacity={0.7}
+              >
+                <Text style={[styles.desktopTabText, isActive && styles.desktopTabTextActive]}>
+                  {tab.name}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+
+        <View style={styles.userActions}>
+          <View style={styles.profilePill}>
+            <View style={styles.avatarCircle}>
+              <Text style={styles.avatarInitials}>
+                {user?.full_name ? user.full_name.charAt(0) : "E"}
               </Text>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
+            </View>
+            <View>
+              <Text style={styles.profileName}>{user?.full_name || "Eleanor Vance"}</Text>
+              <Text style={styles.profileStatus}>Online • Companion</Text>
+            </View>
+          </View>
 
-      <View style={styles.profilePill}>
-        <UserCheck size={18} color={Theme.colors.success} />
-        <Text style={styles.profileText}>Eleanor V. (Active)</Text>
+          <TouchableOpacity
+            style={styles.exitBtn}
+            onPress={handleLogout}
+            accessibilityLabel="Log out and return to landing page"
+          >
+            <LogOut size={16} color={Theme.colors.textMuted} />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -72,35 +100,48 @@ export default function ElderLayout() {
           name="index"
           options={{
             title: "Home",
-            tabBarIcon: ({ color, size }) => <Home color={color} size={24} />,
+            tabBarIcon: ({ color }) => <Home color={color} size={22} />,
           }}
         />
         <Tabs.Screen
           name="medications"
           options={{
             title: "Meds",
-            tabBarIcon: ({ color, size }) => <Pill color={color} size={24} />,
+            tabBarIcon: ({ color }) => <Pill color={color} size={22} />,
           }}
         />
         <Tabs.Screen
           name="checklist"
           options={{
             title: "Routine",
-            tabBarIcon: ({ color, size }) => <CheckSquare color={color} size={24} />,
+            tabBarIcon: ({ color }) => <CheckSquare color={color} size={22} />,
           }}
         />
         <Tabs.Screen
           name="checkin"
           options={{
             title: "Wellness",
-            tabBarIcon: ({ color, size }) => <Smile color={color} size={24} />,
+            tabBarIcon: ({ color }) => <Smile color={color} size={22} />,
           }}
         />
         <Tabs.Screen
           name="timeline"
           options={{
             title: "Timeline",
-            tabBarIcon: ({ color, size }) => <Clock color={color} size={24} />,
+            tabBarIcon: ({ color }) => <Clock color={color} size={22} />,
+          }}
+        />
+        {/* Hidden internal routes from tab bar */}
+        <Tabs.Screen
+          name="profile"
+          options={{
+            href: null,
+          }}
+        />
+        <Tabs.Screen
+          name="appointments"
+          options={{
+            href: null,
           }}
         />
       </Tabs>
@@ -113,51 +154,41 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Theme.colors.background,
   },
+  desktopNavWrapper: {
+    backgroundColor: "#FFFFFF",
+    borderBottomWidth: 1,
+    borderBottomColor: Theme.colors.border,
+    ...Theme.shadows.sm,
+  },
   desktopNav: {
+    maxWidth: 1200,
+    width: "100%",
+    marginHorizontal: "auto",
+    paddingHorizontal: Theme.spacing.lg,
+    paddingVertical: Theme.spacing.md,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: Theme.colors.card,
-    borderBottomWidth: Theme.ergonomics.borderWidth,
-    borderBottomColor: Theme.colors.border,
-    paddingHorizontal: Theme.spacing.xl,
-    paddingVertical: Theme.spacing.md,
-    shadowColor: Theme.colors.deepTwilight,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    elevation: 3,
   },
   brandGroup: {
     flexDirection: "row",
     alignItems: "center",
-    gap: Theme.spacing.sm,
+    gap: 12,
   },
-  brandLogoBox: {
-    width: 44,
-    height: 44,
-    borderRadius: 14,
-    backgroundColor: Theme.colors.primary,
-    alignItems: "center",
-    justifyContent: "center",
+  deckTag: {
+    backgroundColor: Theme.colors.primaryLight,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: "rgba(0, 119, 182, 0.2)",
   },
-  brandLogoGlyph: {
-    color: "#FFFFFF",
-    fontSize: 20,
-    fontWeight: "900",
-    letterSpacing: -0.5,
-  },
-  navBrand: {
-    fontSize: Theme.typography.subheading - 2,
+  deckTagText: {
+    fontFamily: Theme.fonts.heading,
+    fontSize: 10,
     fontWeight: "800",
-    color: Theme.colors.text,
-    letterSpacing: -0.5,
-  },
-  navSub: {
-    fontSize: 12,
-    fontWeight: "700",
-    color: Theme.colors.brightTealBlue,
-    letterSpacing: 0.5,
+    color: Theme.colors.accent,
+    letterSpacing: 0.8,
   },
   navLinks: {
     flexDirection: "row",
@@ -165,16 +196,17 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   desktopTab: {
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderRadius: Theme.ergonomics.buttonRadius,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 10,
     backgroundColor: "transparent",
   },
   desktopTabActive: {
     backgroundColor: Theme.colors.primaryLight,
   },
   desktopTabText: {
-    fontSize: 16,
+    fontFamily: Theme.fonts.heading,
+    fontSize: 14,
     fontWeight: "600",
     color: Theme.colors.textMuted,
   },
@@ -182,36 +214,73 @@ const styles = StyleSheet.create({
     color: Theme.colors.primary,
     fontWeight: "800",
   },
+  userActions: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
   profilePill: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
-    backgroundColor: Theme.colors.surfaceLight,
-    borderWidth: 1.5,
+    gap: 10,
+    backgroundColor: "#F8FAFC",
+    borderWidth: 1,
     borderColor: Theme.colors.border,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 24,
   },
-  profileText: {
-    fontSize: 14,
+  avatarCircle: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: Theme.colors.primary,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  avatarInitials: {
+    fontFamily: Theme.fonts.heading,
+    fontSize: 13,
+    fontWeight: "800",
+    color: "#FFFFFF",
+  },
+  profileName: {
+    fontFamily: Theme.fonts.heading,
+    fontSize: 13,
     fontWeight: "700",
     color: Theme.colors.text,
   },
+  profileStatus: {
+    fontFamily: Theme.fonts.body,
+    fontSize: 11,
+    color: "#059669",
+    fontWeight: "600",
+  },
+  exitBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: Theme.colors.border,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#FFFFFF",
+  },
   mobileTabBar: {
-    minHeight: 68,
-    paddingBottom: 8,
-    paddingTop: 8,
-    backgroundColor: Theme.colors.card,
-    borderTopWidth: Theme.ergonomics.borderWidth,
+    minHeight: 64,
+    paddingBottom: 6,
+    paddingTop: 6,
+    backgroundColor: "#FFFFFF",
+    borderTopWidth: 1,
     borderTopColor: Theme.colors.border,
-    elevation: 8,
+    ...Theme.shadows.md,
   },
   tabItem: {
     paddingVertical: 2,
   },
   tabLabel: {
-    fontSize: 12,
+    fontFamily: Theme.fonts.heading,
+    fontSize: 11,
     fontWeight: "700",
     marginTop: 2,
   },
