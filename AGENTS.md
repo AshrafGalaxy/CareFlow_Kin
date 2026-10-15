@@ -24,6 +24,12 @@
 - **Remote Synchronization (Mandatory Push Protocol)**:
   - Immediately push verified local commits to the upstream remote repository (`git push origin <branch>`) upon completing each logical domain milestone.
   - Never allow local commits to accumulate unpushed, ensuring the remote repository reflects the authoritative state of development at all times.
+- **Prohibition of "Landing Page" Terminology**:
+  - Never use the colloquial phrase "landing page" in commit subjects, commit bodies, pull request descriptions, or branch titles.
+  - Employ canonical, domain-specific architectural descriptors instead (e.g., `public index`, `marketing portal`, `public entry view`, `product showcase`).
+- **Exclusion of Explicit Filenames in Commit Headers**:
+  - Never cite explicit file names, file paths, or file extensions (e.g., `in AGENTS.md`, `index.tsx`) in commit subject lines or headers.
+  - Employ architectural, subsystem, or documentation domain scopes instead (e.g., `docs(protocols)`, `feat(client)`, `fix(api)`).
 
 ## 3. Engineering Tenets
 - **Git Hygiene and .gitignore Integrity**: Rigorously maintain `.gitignore`. Never allow untracked files, virtual environments, build outputs, or environment files into version control.
@@ -47,3 +53,5 @@
 - **Inadequate Interface Contrast**: Employing low-contrast color combinations or undersized tap targets unsuitable for older adults.
 - **Local Artifact Disclosure**: Referencing uncommitted, private, or developer-specific local files within commit messages, pull requests, or repository-facing documentation.
 - **Unpushed Commit Stagnation**: Accumulating completed commits locally without synchronizing and pushing them upstream to the remote repository.
+- **Colloquial Page Nomenclature ("Landing Page")**: Using colloquial marketing labels like "landing page" in commit headers or logs rather than precise architectural domain scopes (`public portal`, `entry view`, `public index`).
+- **Explicit File Citation in Commit Headers**: Citing raw filenames or extensions (e.g., "in AGENTS.md", "index.tsx") within commit titles rather than canonical architectural scopes.
