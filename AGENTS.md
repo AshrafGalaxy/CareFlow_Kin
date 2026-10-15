@@ -30,6 +30,9 @@
 - **Exclusion of Explicit Filenames in Commit Headers**:
   - Never cite explicit file names, file paths, or file extensions (e.g., `in AGENTS.md`, `index.tsx`) in commit subject lines or headers.
   - Employ architectural, subsystem, or documentation domain scopes instead (e.g., `docs(protocols)`, `feat(client)`, `fix(api)`).
+- **Simplicity and Understandability**:
+  - Always write simple, clear, and easily understandable commit messages.
+  - Avoid overly dense, convoluted, or unnatural jargon. State what changed in direct, plain English.
 
 ## 3. Engineering Tenets
 - **Git Hygiene and .gitignore Integrity**: Rigorously maintain `.gitignore`. Never allow untracked files, virtual environments, build outputs, or environment files into version control.
@@ -55,3 +58,4 @@
 - **Unpushed Commit Stagnation**: Accumulating completed commits locally without synchronizing and pushing them upstream to the remote repository.
 - **Colloquial Page Nomenclature ("Landing Page")**: Using colloquial marketing labels like "landing page" in commit headers or logs rather than precise architectural domain scopes (`public portal`, `entry view`, `public index`).
 - **Explicit File Citation in Commit Headers**: Citing raw filenames or extensions (e.g., "in AGENTS.md", "index.tsx") within commit titles rather than canonical architectural scopes.
+- **Overly Convoluted Commit Language**: Using dense, obscure, or unnatural wording instead of simple, straightforward language that anyone can easily read and understand.
