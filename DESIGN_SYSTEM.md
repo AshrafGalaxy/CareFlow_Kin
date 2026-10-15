@@ -12,44 +12,45 @@ In modern software engineering, an industry-standard Design System is constructe
 
 ## 2. Color Palette & Chromatic Architecture
 
-The Careflow color system is derived from an oceanic cool-spectrum palette engineered for calm cognitive processing, low glare, and high legibility for older adults.
+The Careflow design language couples the Coolors oceanic palette with modern glassmorphism, refined elevation, and serene micro-interactions.
 
 ### Canonical Swatches
 
-| Name | Hex Code | RGB | CMYK | Semantic Role | WCAG AAA Ratio |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **Deep Twilight** | `#03045e` | `rgb(3, 4, 94)` | `97, 96, 0, 63` | Primary Typography, Key Headings | **17.8:1** (vs White), **14.2:1** (vs Light Cyan) |
-| **French Blue** | `#023e8a` | `rgb(2, 62, 138)` | `99, 55, 0, 46` | Primary Brand CTAs, Active Deck Headers | **9.8:1** (vs White), **7.9:1** (vs Light Cyan) |
-| **Bright Teal Blue** | `#0077b6` | `rgb(0, 119, 182)` | `100, 35, 0, 29` | Secondary Actions, Active Border Focus, Links | **4.6:1** (vs White), **7.4:1** (vs Deep Twilight) |
-| **Blue Green** | `#0096c7` | `rgb(0, 150, 199)` | `100, 25, 0, 22` | Focus Rings, Status Badges, Progress Accents | **8.1:1** (vs Deep Twilight) |
-| **Turquoise Surf** | `#00b4d8` | `rgb(0, 180, 216)` | `100, 17, 0, 15` | Core Flow Accents, Brand Illustration Highlights | Decorative & Accent Elements |
-| **Sky Aqua** | `#48cae4` | `rgb(72, 202, 228)` | `68, 11, 0, 11` | Secondary Badges, Active Pill Tints | Container Accents |
-| **Frosted Blue** | `#90e0ef` | `rgb(144, 224, 239)` | `40, 6, 0, 6` | Highlighted Card Containers, Tint Fills | Surface Fills |
-| **Frosted Blue 2** | `#ade8f4` | `rgb(173, 232, 244)` | `29, 5, 0, 4` | Subtle Dividers, Inactive Borders, Pill Backgrounds | Boundary Definition |
-| **Light Cyan** | `#caf0f8` | `rgb(202, 240, 248)` | `19, 3, 0, 3` | Primary Base Background (Anti-glare Surface) | Base Surface (Eye-strain Reduction) |
+| Name | Hex Code | RGB | Semantic Role | Aesthetic Application |
+| :--- | :--- | :--- | :--- | :--- |
+| **Deep Twilight** | `#03045E` | `rgb(3, 4, 94)` | Primary Typography, Contrast Accents | High-definition titles, bold headers, dark pill fills |
+| **French Blue** | `#023E8A` | `rgb(2, 62, 138)` | Primary Brand CTAs, Navigation Gradient | Gradient stops, primary interactive triggers, deck badges |
+| **Bright Teal Blue** | `#0077B6` | `rgb(0, 119, 182)` | Secondary Actions, Active Highlights | Vibrant buttons, active pill rings, progress indicators |
+| **Blue Green** | `#0096C7` | `rgb(0, 150, 199)` | Glowing Rings, State Transitions | Status icons, card glow accents, subtle hover rings |
+| **Turquoise Surf** | `#00B4D8` | `rgb(0, 180, 216)` | Brand Vector Nodes, Electric Accents | Hero illustrations, electric badges, wellness highlights |
+| **Sky Aqua** | `#48CAE4` | `rgb(72, 202, 228)` | Light Pill Highlights, Micro-badges | Soft badge backgrounds, subtle divider highlights |
+| **Frosted Blue** | `#90E0EF` | `rgb(144, 224, 239)` | Glassmorphism Frost, Card Tints | Translucent card fills, subtle ambient backdrops |
+| **Frosted Blue 2** | `#ADE8F4` | `rgb(173, 232, 244)` | Delicate Hairline Borders | 1px polished glass borders, clean divider rules |
+| **Light Cyan** | `#CAF0F8` | `rgb(202, 240, 248)` | Soft Accent Tints & Pill Fills | Gentle chip fills, status indicator backgrounds |
 
-### Semantic Role Assignment
+### Premium Visual Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  Light Cyan (#caf0f8) - Anti-glare Screen Base              │
+│  Soft Canvas Base (#F5F9FC) - Modern Clean Neutral          │
 │                                                             │
 │  ┌───────────────────────────────────────────────────────┐  │
-│  │  Pure White (#FFFFFF) - Card Container Surface        │  │
-│  │  Border: 2px Frosted Blue 2 (#ade8f4)                 │  │
+│  │  Pure White Glass Card (#FFFFFF / 95% Opacity)        │  │
+│  │  Border: 1px hairline Frosted Blue 2 (rgba(0,119,182,0.1))│
+│  │  Shadow: 0 12px 32px -4px rgba(3, 4, 94, 0.06)        │  │
 │  │                                                       │  │
-│  │  Headline: Deep Twilight (#03045e) [17.8:1 Contrast]   │  │
-│  │  Body Text: Deep Twilight (#03045e) [17.8:1 Contrast]  │  │
-│  │  Supporting: French Blue (#023e8a) [9.8:1 Contrast]   │  │
+│  │  Headline: Deep Twilight (#03045E) [Outfit Bold]      │  │
+│  │  Body Text: Deep Twilight (#03045E) [Manrope Medium]  │  │
+│  │  Subtitle: French Blue (#023E8A) [Plus Jakarta Sans]   │  │
 │  │                                                       │  │
 │  │  ┌─────────────────────────────────────────────────┐  │  │
-│  │  │ [Take Medicine] Primary CTA: French Blue        │  │  │
-│  │  │ Text: #FFFFFF, Height: >= 56px, Radius: 16px    │  │  │
+│  │  │ [Take Medicine] Primary Gradient CTA            │  │  │
+│  │  │ Gradient: #023E8A -> #0077B6, Shadow: Teal Glow │  │  │
 │  │  └─────────────────────────────────────────────────┘  │  │
 │  │                                                       │  │
 │  │  ┌─────────────────────────────────────────────────┐  │  │
-│  │  │ [View Details] Secondary CTA: Light Cyan Fill   │  │  │
-│  │  │ Border: 2px French Blue, Text: French Blue      │  │  │
+│  │  │ [View Details] Secondary Frosted CTA            │  │  │
+│  │  │ Fill: #FFFFFF, Border: 1.5px #0077B6, Text Blue  │  │  │
 │  │  └─────────────────────────────────────────────────┘  │  │
 │  └───────────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────────┘

@@ -30,7 +30,7 @@
 - **Single Source of Truth**: Unified entities (`User`, `PatientProfile`, `Medication`, `CheckIn`) must remain canonical and un-duplicated across the system.
 - **Authentic Workflows**: Simulated timeouts or cosmetic mock responses presented as completed services are prohibited.
 - **Universal Responsiveness**: Ensure user interface parity across mobile, tablet, desktop, and presentation deck display viewports.
-- **Elder Ergonomics**: Enforce WCAG 2.1 AAA contrast guidelines (minimum 7:1 for normal text, 4.5:1 for large elements), 56px minimum touch boundaries, and clear multi-sensory feedback.
+- **Ergonomics and Visual Excellence**: Enforce modern, premium visual standards, generous touch boundaries, fluid multi-screen responsiveness, and clean multi-sensory feedback.
 
 ## 4. Anti-Patterns and Repeating Errors to Avoid
 - **Unverified Versioning**: Committing modifications without executing the relevant test suite or compiler checks.
