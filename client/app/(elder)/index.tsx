@@ -447,6 +447,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   loadingText: {
+    fontFamily: Theme.fonts.heading,
     marginTop: Theme.spacing.md,
     fontSize: Theme.typography.bodyLarge,
     fontWeight: "600",
@@ -531,6 +532,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.6,
   },
   metricLabelSmall: {
+    fontFamily: Theme.fonts.heading,
     fontSize: 9,
     letterSpacing: 0.3,
   },
@@ -542,6 +544,7 @@ const styles = StyleSheet.create({
     letterSpacing: -0.3,
   },
   metricValueSmall: {
+    fontFamily: Theme.fonts.brand,
     fontSize: 18,
   },
 
@@ -848,9 +851,9 @@ const styles = StyleSheet.create({
     marginBottom: Theme.spacing.xs,
   },
   careCircleTitle: {
-    fontFamily: Theme.fonts.heading,
+    fontFamily: Theme.fonts.brand,
     fontSize: Theme.typography.bodyLarge,
-    fontWeight: "600",
+    fontWeight: "700",
     color: Theme.colors.text,
   },
   careCircleSubtitle: {

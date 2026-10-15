@@ -473,6 +473,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   langCheckText: {
+    fontFamily: Theme.fonts.heading,
     color: "#FFFFFF",
     fontSize: 12,
     fontWeight: "700",

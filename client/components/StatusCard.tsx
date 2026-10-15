@@ -121,13 +121,14 @@ const styles = StyleSheet.create({
     paddingRight: Theme.spacing.xs,
   },
   title: {
-    fontFamily: Theme.fonts.heading,
+    fontFamily: Theme.fonts.brand,
     fontSize: Theme.typography.subheading,
-    fontWeight: "600",
+    fontWeight: "700",
     color: Theme.colors.text,
-    letterSpacing: -0.2,
+    letterSpacing: -0.3,
   },
   titleSmall: {
+    fontFamily: Theme.fonts.brand,
     fontSize: 17,
     lineHeight: 22,
   },
@@ -157,6 +158,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
   },
   badgeTextSmall: {
+    fontFamily: Theme.fonts.heading,
     fontSize: 10,
   },
   content: {

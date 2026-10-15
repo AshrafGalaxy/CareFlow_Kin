@@ -24,32 +24,43 @@ export default function RootLayout() {
         link.id = "careflow-fonts-gs";
         link.rel = "stylesheet";
         link.href =
-          "https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap";
+          "https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap";
         document.head.appendChild(link);
       }
 
-      // 2. Load Google Fonts Manrope
+      // 2. Load Google Fonts Manrope & Plus Jakarta Sans fallback
       const existingGf = document.getElementById("careflow-fonts-gf");
       if (!existingGf) {
         const link = document.createElement("link");
         link.id = "careflow-fonts-gf";
         link.rel = "stylesheet";
         link.href =
-          "https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap";
+          "https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap";
         document.head.appendChild(link);
       }
 
-      // 3. Inject Sleek Minimalist Custom Scrollbar Styles
+      // 3. Inject Sleek Minimalist Custom Scrollbar & Typography Normalization Styles
       const existingScrollbar = document.getElementById("careflow-custom-scrollbar");
       if (!existingScrollbar) {
         const style = document.createElement("style");
         style.id = "careflow-custom-scrollbar";
         style.textContent = `
           /* Global Typography Base */
-          html, body, #root, div, span, p, input, textarea, select, button {
-            font-family: 'General Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          html, body, #root, div, span, p {
+            font-family: 'General Sans', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+          }
+
+          /* React Native Web default typography override (prevents fallback to Segoe UI) */
+          .r-fontFamily-1qd0xha,
+          [dir] .r-fontFamily-1qd0xha,
+          [dir] [class*="r-fontFamily-1qd0xha"] {
+            font-family: 'General Sans', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+          }
+
+          input, textarea, select, button {
+            font-family: 'General Sans', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
           }
 
           /* Global Sleek Minimalist Scrollbar */

@@ -1030,6 +1030,7 @@ const styles = StyleSheet.create({
     paddingVertical: 7,
   },
   navBtnTextSmall: {
+    fontFamily: Theme.fonts.heading,
     fontSize: 12,
   },
 

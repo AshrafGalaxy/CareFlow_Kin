@@ -69,7 +69,7 @@ export const Theme = {
       default: "System",
     }),
     body: Platform.select({
-      web: "'General Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+      web: "'General Sans', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
       default: "System",
     }),
     // Kept as alias to heading (Manrope) for backward compatibility without loading a 3rd font

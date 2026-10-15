@@ -505,6 +505,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   tabLabelSmall: {
+    fontFamily: Theme.fonts.heading,
     fontSize: 10,
   },
 });
