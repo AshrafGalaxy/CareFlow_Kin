@@ -1,7 +1,7 @@
 import React from "react";
 import { Tabs } from "expo-router";
 import { Theme } from "../../constants/theme";
-import { Home, Pill, CheckSquare, Smile, Clock } from "lucide-react-native";
+import { Home, Pill, CheckSquare, Smile, Clock, UserCheck } from "lucide-react-native";
 import { useWindowDimensions, View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useRouter, usePathname } from "expo-router";
 
@@ -15,16 +15,22 @@ export default function ElderLayout() {
   const renderDesktopHeader = () => (
     <View style={styles.desktopNav}>
       <View style={styles.brandGroup}>
-        <Text style={styles.navBrand}>Careflow</Text>
-        <Text style={styles.navBadge}>Elder Portal</Text>
+        <View style={styles.brandLogoBox}>
+          <Text style={styles.brandLogoGlyph}>CF</Text>
+        </View>
+        <View>
+          <Text style={styles.navBrand}>Careflow</Text>
+          <Text style={styles.navSub}>Elder Care Deck</Text>
+        </View>
       </View>
+
       <View style={styles.navLinks}>
         {[
-          { name: "Home", path: "/(elder)" },
+          { name: "Overview", path: "/(elder)" },
           { name: "Medications", path: "/(elder)/medications" },
-          { name: "Checklist", path: "/(elder)/checklist" },
-          { name: "Check-In", path: "/(elder)/checkin" },
-          { name: "Timeline", path: "/(elder)/timeline" },
+          { name: "Daily Checklist", path: "/(elder)/checklist" },
+          { name: "Wellness Sharing", path: "/(elder)/checkin" },
+          { name: "Care Timeline", path: "/(elder)/timeline" },
         ].map((tab) => {
           const isActive = pathname === tab.path || (tab.path === "/(elder)" && pathname === "/(elder)/index");
           return (
@@ -32,6 +38,7 @@ export default function ElderLayout() {
               key={tab.path}
               onPress={() => router.push(tab.path as any)}
               style={[styles.desktopTab, isActive && styles.desktopTabActive]}
+              activeOpacity={0.7}
             >
               <Text style={[styles.desktopTabText, isActive && styles.desktopTabTextActive]}>
                 {tab.name}
@@ -39,6 +46,11 @@ export default function ElderLayout() {
             </TouchableOpacity>
           );
         })}
+      </View>
+
+      <View style={styles.profilePill}>
+        <UserCheck size={18} color={Theme.colors.success} />
+        <Text style={styles.profileText}>Eleanor V. (Active)</Text>
       </View>
     </View>
   );
@@ -53,41 +65,42 @@ export default function ElderLayout() {
           tabBarActiveTintColor: Theme.colors.primary,
           tabBarInactiveTintColor: Theme.colors.textMuted,
           tabBarLabelStyle: styles.tabLabel,
+          tabBarItemStyle: styles.tabItem,
         }}
       >
         <Tabs.Screen
           name="index"
           options={{
             title: "Home",
-            tabBarIcon: ({ color, size }) => <Home color={color} size={size + 2} />,
+            tabBarIcon: ({ color, size }) => <Home color={color} size={24} />,
           }}
         />
         <Tabs.Screen
           name="medications"
           options={{
             title: "Meds",
-            tabBarIcon: ({ color, size }) => <Pill color={color} size={size + 2} />,
+            tabBarIcon: ({ color, size }) => <Pill color={color} size={24} />,
           }}
         />
         <Tabs.Screen
           name="checklist"
           options={{
-            title: "Checklist",
-            tabBarIcon: ({ color, size }) => <CheckSquare color={color} size={size + 2} />,
+            title: "Routine",
+            tabBarIcon: ({ color, size }) => <CheckSquare color={color} size={24} />,
           }}
         />
         <Tabs.Screen
           name="checkin"
           options={{
             title: "Wellness",
-            tabBarIcon: ({ color, size }) => <Smile color={color} size={size + 2} />,
+            tabBarIcon: ({ color, size }) => <Smile color={color} size={24} />,
           }}
         />
         <Tabs.Screen
           name="timeline"
           options={{
             title: "Timeline",
-            tabBarIcon: ({ color, size }) => <Clock color={color} size={size + 2} />,
+            tabBarIcon: ({ color, size }) => <Clock color={color} size={24} />,
           }}
         />
       </Tabs>
@@ -109,41 +122,59 @@ const styles = StyleSheet.create({
     borderBottomColor: Theme.colors.border,
     paddingHorizontal: Theme.spacing.xl,
     paddingVertical: Theme.spacing.md,
+    shadowColor: Theme.colors.deepTwilight,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 3,
   },
   brandGroup: {
     flexDirection: "row",
     alignItems: "center",
     gap: Theme.spacing.sm,
   },
-  navBrand: {
-    fontSize: Theme.typography.subheading,
-    fontWeight: "800",
-    color: Theme.colors.primary,
+  brandLogoBox: {
+    width: 44,
+    height: 44,
+    borderRadius: 14,
+    backgroundColor: Theme.colors.primary,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  navBadge: {
-    fontSize: 14,
+  brandLogoGlyph: {
+    color: "#FFFFFF",
+    fontSize: 20,
+    fontWeight: "900",
+    letterSpacing: -0.5,
+  },
+  navBrand: {
+    fontSize: Theme.typography.subheading - 2,
+    fontWeight: "800",
+    color: Theme.colors.text,
+    letterSpacing: -0.5,
+  },
+  navSub: {
+    fontSize: 12,
     fontWeight: "700",
-    color: Theme.colors.accent,
-    backgroundColor: Theme.colors.accentLight,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 8,
+    color: Theme.colors.brightTealBlue,
+    letterSpacing: 0.5,
   },
   navLinks: {
     flexDirection: "row",
     alignItems: "center",
-    gap: Theme.spacing.sm,
+    gap: 6,
   },
   desktopTab: {
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: Theme.ergonomics.buttonRadius,
+    backgroundColor: "transparent",
   },
   desktopTabActive: {
     backgroundColor: Theme.colors.primaryLight,
   },
   desktopTabText: {
-    fontSize: Theme.typography.body,
+    fontSize: 16,
     fontWeight: "600",
     color: Theme.colors.textMuted,
   },
@@ -151,16 +182,37 @@ const styles = StyleSheet.create({
     color: Theme.colors.primary,
     fontWeight: "800",
   },
+  profilePill: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    backgroundColor: Theme.colors.surfaceLight,
+    borderWidth: 1.5,
+    borderColor: Theme.colors.border,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 20,
+  },
+  profileText: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: Theme.colors.text,
+  },
   mobileTabBar: {
-    minHeight: 64,
+    minHeight: 68,
     paddingBottom: 8,
     paddingTop: 8,
     backgroundColor: Theme.colors.card,
     borderTopWidth: Theme.ergonomics.borderWidth,
     borderTopColor: Theme.colors.border,
+    elevation: 8,
+  },
+  tabItem: {
+    paddingVertical: 2,
   },
   tabLabel: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: "700",
+    marginTop: 2,
   },
 });

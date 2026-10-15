@@ -14,14 +14,41 @@ export const apiClient = axios.create({
   timeout: 10000,
 });
 
+const TOKEN_STORAGE_KEY = "careflow_auth_token";
+
 let authToken: string | null = null;
+
+// Rehydrate token from browser storage on web
+if (typeof window !== "undefined" && window.localStorage) {
+  try {
+    const saved = window.localStorage.getItem(TOKEN_STORAGE_KEY);
+    if (saved) {
+      authToken = saved;
+      apiClient.defaults.headers.common["Authorization"] = `Bearer ${saved}`;
+    }
+  } catch (_) {
+    // Storage inaccessible
+  }
+}
+
+export const getAuthToken = (): string | null => authToken;
 
 export const setAuthToken = (token: string | null) => {
   authToken = token;
   if (token) {
     apiClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    if (typeof window !== "undefined" && window.localStorage) {
+      try {
+        window.localStorage.setItem(TOKEN_STORAGE_KEY, token);
+      } catch (_) {}
+    }
   } else {
     delete apiClient.defaults.headers.common["Authorization"];
+    if (typeof window !== "undefined" && window.localStorage) {
+      try {
+        window.localStorage.removeItem(TOKEN_STORAGE_KEY);
+      } catch (_) {}
+    }
   }
 };
 
@@ -128,6 +155,9 @@ export const api = {
       const res = await apiClient.post<TokenResponse>("/auth/login", { email, password });
       setAuthToken(res.data.access_token);
       return res.data;
+    },
+    demoLogin: async (): Promise<TokenResponse> => {
+      return await api.auth.login("eleanor@careflow.com", "ElderPass123!");
     },
     register: async (payload: {
       email: string;
