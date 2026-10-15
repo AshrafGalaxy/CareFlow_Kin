@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { Theme } from "../../constants/theme";
+import { useResponsive } from "../../hooks/useResponsive";
 import { BigButton } from "../../components/BigButton";
 import { CareFlowLogo } from "../../components/CareFlowLogo";
 import { useAuth } from "../../context/AuthContext";
@@ -18,6 +19,7 @@ import { LogIn, ArrowLeft, KeyRound, Sparkles, UserCheck } from "lucide-react-na
 export default function LoginScreen() {
   const router = useRouter();
   const { login } = useAuth();
+  const { isSmallMobile, isMobile, horizontalPadding } = useResponsive();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -56,10 +58,10 @@ export default function LoginScreen() {
   return (
     <ScrollView
       style={styles.container}
-      contentContainerStyle={styles.scrollContent}
+      contentContainerStyle={[styles.scrollContent, { paddingHorizontal: horizontalPadding }]}
       keyboardShouldPersistTaps="handled"
     >
-      <View style={styles.cardContainer}>
+      <View style={[styles.cardContainer, { padding: isSmallMobile ? 14 : isMobile ? 18 : 28 }]}>
         {/* Top Header Bar */}
         <View style={styles.topBar}>
           <TouchableOpacity
@@ -67,16 +69,16 @@ export default function LoginScreen() {
             onPress={() => router.push("/")}
             accessibilityLabel="Back to Home"
           >
-            <ArrowLeft size={20} color={Theme.colors.primary} />
+            <ArrowLeft size={18} color={Theme.colors.primary} />
             <Text style={styles.backBtnText}>Home</Text>
           </TouchableOpacity>
 
-          <CareFlowLogo size={36} showText={true} />
+          <CareFlowLogo size={isSmallMobile ? 30 : 36} showText={!isSmallMobile} />
         </View>
 
         {/* Heading */}
         <View style={styles.header}>
-          <Text style={styles.title}>Welcome Back</Text>
+          <Text style={[styles.title, isSmallMobile && { fontSize: 22 }]}>Welcome Back</Text>
           <Text style={styles.subtitle}>
             Sign in to access your daily care deck, medication reminders, and wellness updates.
           </Text>
@@ -84,18 +86,19 @@ export default function LoginScreen() {
 
         {/* 1-Tap Quick Demo Fast-Login */}
         <TouchableOpacity
-          style={styles.demoPill}
+          style={[styles.demoPill, isSmallMobile && { padding: 10, gap: 10 }]}
           onPress={fillAndLoginDemo}
           activeOpacity={0.8}
         >
-          <View style={styles.demoIconWrap}>
-            <Sparkles size={18} color="#0077B6" />
+          <View style={[styles.demoIconWrap, isSmallMobile && { width: 32, height: 32, borderRadius: 16 }]}>
+            <Sparkles size={isSmallMobile ? 16 : 18} color="#0077B6" />
           </View>
           <View style={styles.demoTextWrap}>
-            <Text style={styles.demoTitle}>1-Tap Demo Sign In (Eleanor Vance)</Text>
-            <Text style={styles.demoSubtitle}>Instantly unlocks the elder daily care deck</Text>
+            <Text style={[styles.demoTitle, isSmallMobile && { fontSize: 12 }]}>1-Tap Demo Sign In (Eleanor Vance)</Text>
+            <Text style={[styles.demoSubtitle, isSmallMobile && { fontSize: 11 }]}>Instantly unlocks the elder daily care deck</Text>
           </View>
         </TouchableOpacity>
+
 
         {/* Error notification */}
         {errorMsg ? (

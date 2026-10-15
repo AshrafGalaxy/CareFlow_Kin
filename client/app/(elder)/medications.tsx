@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, Alert, TouchableOpacity } from "react-native";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Theme } from "../../constants/theme";
+import { useResponsive } from "../../hooks/useResponsive";
 import { ResponsiveContainer } from "../../components/ResponsiveContainer";
 import { StatusCard } from "../../components/StatusCard";
 import { BigButton } from "../../components/BigButton";
@@ -10,8 +11,10 @@ import { Pill, CheckCircle2, XCircle, Clock, Award, Plus } from "lucide-react-na
 
 export default function MedicationsScreen() {
   const queryClient = useQueryClient();
+  const { isSmallMobile } = useResponsive();
 
   const { data: meds = [], isLoading: medsLoading } = useQuery<Medication[]>({
+
     queryKey: ["medications"],
     queryFn: async () => {
       try {
@@ -108,17 +111,17 @@ export default function MedicationsScreen() {
       >
         <View style={styles.metricsRow}>
           <View style={styles.metricBox}>
-            <Text style={styles.metricVal}>{adherence?.total_taken ?? 19}</Text>
+            <Text style={[styles.metricVal, isSmallMobile && { fontSize: 24 }]}>{adherence?.total_taken ?? 19}</Text>
             <Text style={styles.metricLabel}>Doses Taken</Text>
           </View>
           <View style={styles.metricDivider} />
           <View style={styles.metricBox}>
-            <Text style={styles.metricVal}>{adherence?.total_skipped ?? 1}</Text>
+            <Text style={[styles.metricVal, isSmallMobile && { fontSize: 24 }]}>{adherence?.total_skipped ?? 1}</Text>
             <Text style={styles.metricLabel}>Skipped</Text>
           </View>
           <View style={styles.metricDivider} />
           <View style={styles.metricBox}>
-            <Text style={styles.metricVal}>{adherence?.total_scheduled ?? 20}</Text>
+            <Text style={[styles.metricVal, isSmallMobile && { fontSize: 24 }]}>{adherence?.total_scheduled ?? 20}</Text>
             <Text style={styles.metricLabel}>Scheduled</Text>
           </View>
         </View>
@@ -128,16 +131,17 @@ export default function MedicationsScreen() {
       <Text style={styles.sectionHeading}>Your Prescriptions</Text>
 
       {meds.map((med) => (
-        <View key={med.id} style={styles.medCard}>
+        <View key={med.id} style={[styles.medCard, isSmallMobile && { padding: 12 }]}>
           <View style={styles.medHeader}>
-            <View style={styles.medIconBox}>
-              <Pill size={28} color={Theme.colors.primary} />
+            <View style={[styles.medIconBox, isSmallMobile && { width: 38, height: 38, borderRadius: 19, marginRight: 10 }]}>
+              <Pill size={isSmallMobile ? 22 : 28} color={Theme.colors.primary} />
             </View>
             <View style={styles.medTitleBlock}>
-              <Text style={styles.medName}>{med.name}</Text>
+              <Text style={[styles.medName, isSmallMobile && { fontSize: 17 }]}>{med.name}</Text>
               <Text style={styles.medDosage}>{med.dosage}</Text>
             </View>
           </View>
+
 
           <View style={styles.medDetailsBox}>
             <View style={styles.detailItem}>

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "reac
 import { useRouter } from "expo-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Theme } from "../../constants/theme";
+import { useResponsive } from "../../hooks/useResponsive";
 import { ResponsiveContainer } from "../../components/ResponsiveContainer";
 import { BigButton } from "../../components/BigButton";
 import { api } from "../../services/api";
@@ -13,8 +14,10 @@ type WellnessStatus = "GOOD" | "OKAY" | "NOT_WELL" | "NEEDS_HELP";
 export default function CheckInScreen() {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const { isSmallMobile } = useResponsive();
   const [selectedStatus, setSelectedStatus] = useState<WellnessStatus | null>(null);
   const [notes, setNotes] = useState("");
+
 
   const submitMutation = useMutation({
     mutationFn: () => {
@@ -103,18 +106,26 @@ export default function CheckInScreen() {
               onPress={() => setSelectedStatus(opt.status)}
               style={[
                 styles.optionCard,
+                isSmallMobile && { padding: 12, gap: 10 },
                 { backgroundColor: isSelected ? opt.bg : Theme.colors.card },
                 isSelected && { borderColor: opt.color, borderWidth: 3 },
               ]}
               accessibilityRole="radio"
               accessibilityState={{ selected: isSelected }}
             >
-              <View style={styles.iconBox}>{opt.icon}</View>
+              <View style={[styles.iconBox, isSmallMobile && { width: 44, height: 44, borderRadius: 22 }]}>
+                {opt.icon}
+              </View>
               <View style={styles.textBox}>
-                <Text style={[styles.optTitle, { color: opt.color }]}>{opt.title}</Text>
-                <Text style={styles.optDesc}>{opt.desc}</Text>
+                <Text style={[styles.optTitle, isSmallMobile && { fontSize: 16 }, { color: opt.color }]}>
+                  {opt.title}
+                </Text>
+                <Text style={[styles.optDesc, isSmallMobile && { fontSize: 12, lineHeight: 16 }]}>
+                  {opt.desc}
+                </Text>
               </View>
             </TouchableOpacity>
+
           );
         })}
       </View>

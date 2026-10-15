@@ -2,14 +2,14 @@ import React from "react";
 import { Tabs } from "expo-router";
 import { Theme } from "../../constants/theme";
 import { Home, Pill, CheckSquare, Smile, Clock, LogOut } from "lucide-react-native";
-import { useWindowDimensions, View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useRouter, usePathname } from "expo-router";
 import { CareFlowLogo } from "../../components/CareFlowLogo";
 import { useAuth } from "../../context/AuthContext";
+import { useResponsive } from "../../hooks/useResponsive";
 
 export default function ElderLayout() {
-  const { width } = useWindowDimensions();
-  const isDesktop = width >= Theme.breakpoints.compact;
+  const { isSmallMobile, isMobile, isTablet, isCompactDesktop, isDesktop, width } = useResponsive();
   const router = useRouter();
   const pathname = usePathname();
   const { user, logout } = useAuth();
@@ -25,21 +25,21 @@ export default function ElderLayout() {
       <View style={styles.desktopNav}>
         <View style={styles.brandGroup}>
           <TouchableOpacity onPress={() => router.push("/")} activeOpacity={0.8}>
-            <CareFlowLogo size={36} showText={true} />
+            <CareFlowLogo size={34} showText={!isCompactDesktop} />
           </TouchableOpacity>
           <View style={styles.deckTag}>
             <Text style={styles.deckTagText}>ELDER DECK</Text>
           </View>
         </View>
 
-        <View style={styles.navLinks}>
+        <View style={[styles.navLinks, isCompactDesktop && styles.navLinksCompact]}>
           {[
-            { name: "Overview", path: "/(elder)" },
-            { name: "Medications", path: "/(elder)/medications" },
-            { name: "Daily Routine", path: "/(elder)/checklist" },
-            { name: "Wellness Sharing", path: "/(elder)/checkin" },
-            { name: "Appointments", path: "/(elder)/appointments" },
-            { name: "Care Timeline", path: "/(elder)/timeline" },
+            { name: isCompactDesktop ? "Overview" : "Overview", path: "/(elder)" },
+            { name: isCompactDesktop ? "Meds" : "Medications", path: "/(elder)/medications" },
+            { name: isCompactDesktop ? "Routine" : "Daily Routine", path: "/(elder)/checklist" },
+            { name: isCompactDesktop ? "Wellness" : "Wellness Sharing", path: "/(elder)/checkin" },
+            { name: isCompactDesktop ? "Appts" : "Appointments", path: "/(elder)/appointments" },
+            { name: isCompactDesktop ? "Timeline" : "Care Timeline", path: "/(elder)/timeline" },
           ].map((tab) => {
             const isActive =
               pathname === tab.path ||
@@ -48,10 +48,20 @@ export default function ElderLayout() {
               <TouchableOpacity
                 key={tab.path}
                 onPress={() => router.push(tab.path as any)}
-                style={[styles.desktopTab, isActive && styles.desktopTabActive]}
+                style={[
+                  styles.desktopTab,
+                  isCompactDesktop && styles.desktopTabCompact,
+                  isActive && styles.desktopTabActive,
+                ]}
                 activeOpacity={0.7}
               >
-                <Text style={[styles.desktopTabText, isActive && styles.desktopTabTextActive]}>
+                <Text
+                  style={[
+                    styles.desktopTabText,
+                    isCompactDesktop && styles.desktopTabTextCompact,
+                    isActive && styles.desktopTabTextActive,
+                  ]}
+                >
                   {tab.name}
                 </Text>
               </TouchableOpacity>
@@ -73,7 +83,9 @@ export default function ElderLayout() {
             </View>
             <View>
               <Text style={styles.profileName}>{user?.full_name || "Eleanor Vance"}</Text>
-              <Text style={styles.profileStatus}>Online • Settings</Text>
+              {!isCompactDesktop && (
+                <Text style={styles.profileStatus}>Online • Settings</Text>
+              )}
             </View>
           </TouchableOpacity>
 
@@ -91,14 +103,52 @@ export default function ElderLayout() {
 
   return (
     <View style={styles.container}>
-      {isDesktop && renderDesktopHeader()}
+      {isDesktop ? (
+        renderDesktopHeader()
+      ) : (
+        /* Mobile Top Navigation Bar */
+        <View style={[styles.mobileTopBar, { paddingHorizontal: isSmallMobile ? 12 : 16 }]}>
+          <View style={styles.brandGroup}>
+            <TouchableOpacity onPress={() => router.push("/")} activeOpacity={0.8}>
+              <CareFlowLogo size={28} showText={!isSmallMobile} />
+            </TouchableOpacity>
+            <View style={styles.deckTag}>
+              <Text style={styles.deckTagText}>DECK</Text>
+            </View>
+          </View>
+
+          <View style={styles.mobileActions}>
+            <TouchableOpacity
+              style={styles.mobileProfileBtn}
+              onPress={() => router.push("/(elder)/profile")}
+              accessibilityLabel="Elder Profile & Settings"
+              activeOpacity={0.8}
+            >
+              <View style={styles.avatarCircleSmall}>
+                <Text style={styles.avatarInitialsSmall}>
+                  {user?.full_name ? user.full_name.charAt(0) : "E"}
+                </Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.exitBtnSmall}
+              onPress={handleLogout}
+              accessibilityLabel="Log out"
+            >
+              <LogOut size={15} color={Theme.colors.textMuted} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
+
       <Tabs
         screenOptions={{
           headerShown: false,
           tabBarStyle: isDesktop ? { display: "none" } : styles.mobileTabBar,
           tabBarActiveTintColor: Theme.colors.primary,
           tabBarInactiveTintColor: Theme.colors.textMuted,
-          tabBarLabelStyle: styles.tabLabel,
+          tabBarLabelStyle: [styles.tabLabel, isSmallMobile && styles.tabLabelSmall],
           tabBarItemStyle: styles.tabItem,
         }}
       >
@@ -106,37 +156,38 @@ export default function ElderLayout() {
           name="index"
           options={{
             title: "Home",
-            tabBarIcon: ({ color }) => <Home color={color} size={22} />,
+            tabBarIcon: ({ color }) => <Home color={color} size={isSmallMobile ? 19 : 22} />,
           }}
         />
         <Tabs.Screen
           name="medications"
           options={{
             title: "Meds",
-            tabBarIcon: ({ color }) => <Pill color={color} size={22} />,
+            tabBarIcon: ({ color }) => <Pill color={color} size={isSmallMobile ? 19 : 22} />,
           }}
         />
         <Tabs.Screen
           name="checklist"
           options={{
             title: "Routine",
-            tabBarIcon: ({ color }) => <CheckSquare color={color} size={22} />,
+            tabBarIcon: ({ color }) => <CheckSquare color={color} size={isSmallMobile ? 19 : 22} />,
           }}
         />
         <Tabs.Screen
           name="checkin"
           options={{
             title: "Wellness",
-            tabBarIcon: ({ color }) => <Smile color={color} size={22} />,
+            tabBarIcon: ({ color }) => <Smile color={color} size={isSmallMobile ? 19 : 22} />,
           }}
         />
         <Tabs.Screen
           name="timeline"
           options={{
             title: "Timeline",
-            tabBarIcon: ({ color }) => <Clock color={color} size={22} />,
+            tabBarIcon: ({ color }) => <Clock color={color} size={isSmallMobile ? 19 : 22} />,
           }}
         />
+
         {/* Hidden internal routes from tab bar */}
         <Tabs.Screen
           name="profile"
@@ -220,6 +271,17 @@ const styles = StyleSheet.create({
     color: Theme.colors.primary,
     fontWeight: "800",
   },
+  navLinksCompact: {
+    gap: 3,
+  },
+  desktopTabCompact: {
+    paddingVertical: 6,
+    paddingHorizontal: 8,
+    borderRadius: 8,
+  },
+  desktopTabTextCompact: {
+    fontSize: 12,
+  },
   userActions: {
     flexDirection: "row",
     alignItems: "center",
@@ -272,6 +334,48 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#FFFFFF",
   },
+  mobileTopBar: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 10,
+    backgroundColor: "#FFFFFF",
+    borderBottomWidth: 1,
+    borderBottomColor: Theme.colors.border,
+    ...Theme.shadows.sm,
+  },
+  mobileActions: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  mobileProfileBtn: {
+    padding: 2,
+  },
+  avatarCircleSmall: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: Theme.colors.primary,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  avatarInitialsSmall: {
+    fontFamily: Theme.fonts.heading,
+    fontSize: 12,
+    fontWeight: "800",
+    color: "#FFFFFF",
+  },
+  exitBtnSmall: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: Theme.colors.border,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#FFFFFF",
+  },
   mobileTabBar: {
     minHeight: 64,
     paddingBottom: 6,
@@ -290,4 +394,8 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginTop: 2,
   },
+  tabLabelSmall: {
+    fontSize: 10,
+  },
 });
+

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, ActivityIndicator, Alert, useWindowDimensions, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, ActivityIndicator, Alert, TouchableOpacity } from "react-native";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { Theme } from "../../constants/theme";
+import { useResponsive } from "../../hooks/useResponsive";
 import { ResponsiveContainer } from "../../components/ResponsiveContainer";
 import { HeaderGreeting } from "../../components/HeaderGreeting";
 import { StatusCard } from "../../components/StatusCard";
@@ -27,9 +28,8 @@ import {
 export default function ElderHomeScreen() {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { width } = useWindowDimensions();
-  const isDesktop = width >= Theme.breakpoints.medium;
-  const isTablet = width >= Theme.breakpoints.compact && width < Theme.breakpoints.medium;
+  const { isSmallMobile, isMobile, isTablet, isDesktop } = useResponsive();
+
 
   // Query Elder Home Deck payload from backend API
   const { data, isLoading, refetch } = useQuery<ElderHomeData>({
@@ -179,50 +179,50 @@ export default function ElderHomeScreen() {
       <HeaderGreeting greeting={home.greeting} date={home.date} />
 
       {/* 1. Desktop & Deck Top Summary Metrics Ribbon */}
-      <View style={styles.metricsRibbon}>
-        <View style={[styles.metricCard, { borderLeftColor: Theme.colors.primary }]}>
-          <View style={styles.metricIconWrap}>
-            <TrendingUp size={22} color={Theme.colors.primary} />
+      <View style={[styles.metricsRibbon, isMobile && styles.metricsRibbonMobile]}>
+        <View style={[styles.metricCard, isMobile && styles.metricCardMobile, isSmallMobile && styles.metricCardSmall, { borderLeftColor: Theme.colors.primary }]}>
+          <View style={[styles.metricIconWrap, isSmallMobile && styles.metricIconWrapSmall]}>
+            <TrendingUp size={isSmallMobile ? 18 : 22} color={Theme.colors.primary} />
           </View>
           <View style={styles.metricInfo}>
-            <Text style={styles.metricLabel}>MEDICATION ADHERENCE</Text>
-            <Text style={styles.metricValue}>{Math.round(home.adherence_rate_percentage)}%</Text>
-            <Text style={styles.metricSub}>95% Target Achieved</Text>
+            <Text style={[styles.metricLabel, isSmallMobile && styles.metricLabelSmall]} numberOfLines={1}>ADHERENCE</Text>
+            <Text style={[styles.metricValue, isSmallMobile && styles.metricValueSmall]}>{Math.round(home.adherence_rate_percentage)}%</Text>
+            <Text style={[styles.metricSub, isSmallMobile && styles.metricSubSmall]} numberOfLines={1}>95% Target</Text>
           </View>
         </View>
 
-        <View style={[styles.metricCard, { borderLeftColor: Theme.colors.brightTealBlue }]}>
-          <View style={[styles.metricIconWrap, { backgroundColor: Theme.colors.frostedBlue2 }]}>
-            <CheckSquare size={22} color={Theme.colors.brightTealBlue} />
+        <View style={[styles.metricCard, isMobile && styles.metricCardMobile, isSmallMobile && styles.metricCardSmall, { borderLeftColor: Theme.colors.brightTealBlue }]}>
+          <View style={[styles.metricIconWrap, isSmallMobile && styles.metricIconWrapSmall, { backgroundColor: Theme.colors.frostedBlue2 }]}>
+            <CheckSquare size={isSmallMobile ? 18 : 22} color={Theme.colors.brightTealBlue} />
           </View>
           <View style={styles.metricInfo}>
-            <Text style={styles.metricLabel}>TODAY'S ROUTINE</Text>
-            <Text style={styles.metricValue}>
+            <Text style={[styles.metricLabel, isSmallMobile && styles.metricLabelSmall]} numberOfLines={1}>ROUTINE</Text>
+            <Text style={[styles.metricValue, isSmallMobile && styles.metricValueSmall]}>
               {home.checklist_completed_count} / {home.checklist_total_count}
             </Text>
-            <Text style={styles.metricSub}>{checklistPercent}% Completed</Text>
+            <Text style={[styles.metricSub, isSmallMobile && styles.metricSubSmall]} numberOfLines={1}>{checklistPercent}% Done</Text>
           </View>
         </View>
 
-        <View style={[styles.metricCard, { borderLeftColor: Theme.colors.turquoiseSurf }]}>
-          <View style={[styles.metricIconWrap, { backgroundColor: Theme.colors.lightCyan }]}>
-            <Pill size={22} color={Theme.colors.blueGreen} />
+        <View style={[styles.metricCard, isMobile && styles.metricCardMobile, isSmallMobile && styles.metricCardSmall, { borderLeftColor: Theme.colors.turquoiseSurf }]}>
+          <View style={[styles.metricIconWrap, isSmallMobile && styles.metricIconWrapSmall, { backgroundColor: Theme.colors.lightCyan }]}>
+            <Pill size={isSmallMobile ? 18 : 22} color={Theme.colors.blueGreen} />
           </View>
           <View style={styles.metricInfo}>
-            <Text style={styles.metricLabel}>ACTIVE DOSES</Text>
-            <Text style={styles.metricValue}>{home.next_medications.length}</Text>
-            <Text style={styles.metricSub}>Next due at {home.next_medications[0]?.times_of_day || "Scheduled"}</Text>
+            <Text style={[styles.metricLabel, isSmallMobile && styles.metricLabelSmall]} numberOfLines={1}>DOSES</Text>
+            <Text style={[styles.metricValue, isSmallMobile && styles.metricValueSmall]}>{home.next_medications.length}</Text>
+            <Text style={[styles.metricSub, isSmallMobile && styles.metricSubSmall]} numberOfLines={1}>{home.next_medications[0]?.times_of_day || "Scheduled"}</Text>
           </View>
         </View>
 
-        <View style={[styles.metricCard, { borderLeftColor: Theme.colors.success }]}>
-          <View style={[styles.metricIconWrap, { backgroundColor: Theme.colors.successLight }]}>
-            <Smile size={22} color={Theme.colors.success} />
+        <View style={[styles.metricCard, isMobile && styles.metricCardMobile, isSmallMobile && styles.metricCardSmall, { borderLeftColor: Theme.colors.success }]}>
+          <View style={[styles.metricIconWrap, isSmallMobile && styles.metricIconWrapSmall, { backgroundColor: Theme.colors.successLight }]}>
+            <Smile size={isSmallMobile ? 18 : 22} color={Theme.colors.success} />
           </View>
           <View style={styles.metricInfo}>
-            <Text style={styles.metricLabel}>WELLNESS STATUS</Text>
-            <Text style={styles.metricValue}>{checkinDone ? "Confirmed" : "Ready"}</Text>
-            <Text style={styles.metricSub}>{checkinDone ? "Care Circle Updated" : "5-Sec Check-In"}</Text>
+            <Text style={[styles.metricLabel, isSmallMobile && styles.metricLabelSmall]} numberOfLines={1}>WELLNESS</Text>
+            <Text style={[styles.metricValue, isSmallMobile && styles.metricValueSmall]}>{checkinDone ? "Logged" : "Ready"}</Text>
+            <Text style={[styles.metricSub, isSmallMobile && styles.metricSubSmall]} numberOfLines={1}>{checkinDone ? "Circle Synced" : "5-Sec Check"}</Text>
           </View>
         </View>
       </View>
@@ -305,7 +305,7 @@ export default function ElderHomeScreen() {
                 </View>
               </View>
             ) : (
-              <View style={styles.emotiveRow}>
+              <View style={[styles.emotiveRow, isSmallMobile && styles.emotiveRowGrid]}>
                 {[
                   { label: "Good", status: "GOOD" as const, color: Theme.colors.success, icon: "😊" },
                   { label: "Okay", status: "OKAY" as const, color: Theme.colors.brightTealBlue, icon: "🙂" },
@@ -314,7 +314,7 @@ export default function ElderHomeScreen() {
                 ].map((emo) => (
                   <TouchableOpacity
                     key={emo.status}
-                    style={styles.emotiveBtn}
+                    style={[styles.emotiveBtn, isSmallMobile && styles.emotiveBtnGrid]}
                     onPress={() => checkinMutation.mutate(emo.status)}
                     activeOpacity={0.8}
                   >
@@ -326,6 +326,7 @@ export default function ElderHomeScreen() {
             )}
           </StatusCard>
         </View>
+
 
         {/* Right Deck: Medication Schedule & Appointments */}
         <View style={isDesktop ? styles.deckCol : styles.fullWidth}>
@@ -437,6 +438,9 @@ const styles = StyleSheet.create({
     gap: Theme.spacing.md,
     marginBottom: Theme.spacing.lg,
   },
+  metricsRibbonMobile: {
+    gap: Theme.spacing.sm,
+  },
   metricCard: {
     flex: 1,
     minWidth: 200,
@@ -450,6 +454,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     ...Theme.shadows.sm,
   },
+  metricCardMobile: {
+    minWidth: 0,
+    width: "48%",
+    flex: 0,
+    flexGrow: 1,
+    padding: 12,
+  },
+  metricCardSmall: {
+    padding: 8,
+  },
   metricIconWrap: {
     width: 44,
     height: 44,
@@ -459,6 +473,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginRight: Theme.spacing.md,
     flexShrink: 0,
+  },
+  metricIconWrapSmall: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    marginRight: 6,
   },
   metricInfo: {
     flex: 1,
@@ -470,12 +490,19 @@ const styles = StyleSheet.create({
     color: Theme.colors.textMuted,
     letterSpacing: 0.8,
   },
+  metricLabelSmall: {
+    fontSize: 9,
+    letterSpacing: 0.3,
+  },
   metricValue: {
     fontFamily: Theme.fonts.brand,
     fontSize: Theme.typography.subheading + 2,
     fontWeight: "800",
     color: Theme.colors.text,
     marginTop: 2,
+  },
+  metricValueSmall: {
+    fontSize: 18,
   },
   metricSub: {
     fontFamily: Theme.fonts.body,
@@ -484,6 +511,10 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginTop: 2,
   },
+  metricSubSmall: {
+    fontSize: 10,
+  },
+
 
   // 2. Responsive Deck Grid
   singleColumn: {
@@ -538,6 +569,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 4,
+    flexWrap: "wrap",
+    gap: 4,
   },
   timeTag: {
     backgroundColor: Theme.colors.primaryLight,
@@ -607,6 +640,11 @@ const styles = StyleSheet.create({
     gap: 8,
     marginTop: Theme.spacing.xs,
   },
+  emotiveRowGrid: {
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    gap: 8,
+  },
   emotiveBtn: {
     flex: 1,
     minHeight: 72,
@@ -617,6 +655,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: Theme.spacing.xs,
+  },
+  emotiveBtnGrid: {
+    flex: 0,
+    width: "48%",
+    minHeight: 64,
   },
   emotiveEmoji: {
     fontSize: 26,
@@ -666,7 +709,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: Theme.spacing.xs,
+    flexWrap: "wrap",
+    gap: 6,
   },
+
   medBadgePill: {
     flexDirection: "row",
     alignItems: "center",

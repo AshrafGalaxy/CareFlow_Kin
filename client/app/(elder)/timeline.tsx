@@ -2,11 +2,13 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useQuery } from "@tanstack/react-query";
 import { Theme } from "../../constants/theme";
+import { useResponsive } from "../../hooks/useResponsive";
 import { ResponsiveContainer } from "../../components/ResponsiveContainer";
 import { api, TimelineEvent } from "../../services/api";
 import { Clock, Pill, Smile, CheckSquare, Calendar, ShieldCheck } from "lucide-react-native";
 
 export default function TimelineScreen() {
+  const { isSmallMobile } = useResponsive();
   const { data: events = [] } = useQuery<TimelineEvent[]>({
     queryKey: ["careTimeline"],
     queryFn: async () => {
@@ -18,6 +20,7 @@ export default function TimelineScreen() {
             id: "t-1",
             patient_id: "demo",
             event_type: "MEDICATION",
+
             title: "Lisinopril taken",
             description: "Dosage: 10mg (1 Tablet). Scheduled morning routine.",
             timestamp: new Date().toISOString(),
@@ -92,23 +95,26 @@ export default function TimelineScreen() {
 
           return (
             <View key={ev.id} style={styles.timelineItem}>
-              <View style={styles.indicatorCol}>
-                <View style={styles.iconCircle}>{getEventIcon(ev.event_type)}</View>
+              <View style={[styles.indicatorCol, isSmallMobile && { width: 36, marginRight: 8 }]}>
+                <View style={[styles.iconCircle, isSmallMobile && { width: 34, height: 34, borderRadius: 17 }]}>
+                  {getEventIcon(ev.event_type)}
+                </View>
                 {index < events.length - 1 && <View style={styles.connectorLine} />}
               </View>
 
-              <View style={styles.contentCard}>
-                <View style={styles.timestampRow}>
+              <View style={[styles.contentCard, isSmallMobile && { padding: 12 }]}>
+                <View style={[styles.timestampRow, isSmallMobile && { flexWrap: "wrap", gap: 4 }]}>
                   <Text style={styles.badgeText}>{ev.event_type}</Text>
                   <Text style={styles.timeText}>{`${dayStr} • ${dateStr}`}</Text>
                 </View>
-                <Text style={styles.eventTitle}>{ev.title}</Text>
+                <Text style={[styles.eventTitle, isSmallMobile && { fontSize: 15 }]}>{ev.title}</Text>
                 {ev.description && (
-                  <Text style={styles.eventDesc}>{ev.description}</Text>
+                  <Text style={[styles.eventDesc, isSmallMobile && { fontSize: 12 }]}>{ev.description}</Text>
                 )}
               </View>
             </View>
           );
+
         })}
       </View>
     </ResponsiveContainer>

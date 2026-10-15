@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Theme } from "../../constants/theme";
+import { useResponsive } from "../../hooks/useResponsive";
 import { ResponsiveContainer } from "../../components/ResponsiveContainer";
 import { BigButton } from "../../components/BigButton";
 import { api, ChecklistItem } from "../../services/api";
@@ -9,6 +10,8 @@ import { CheckSquare, CheckCircle2, XCircle, Droplet, Activity, Sun, Moon } from
 
 export default function ChecklistScreen() {
   const queryClient = useQueryClient();
+  const { isSmallMobile } = useResponsive();
+
 
   const { data: items = [] } = useQuery<ChecklistItem[]>({
     queryKey: ["checklistToday"],
@@ -105,11 +108,13 @@ export default function ChecklistScreen() {
           const isSkipped = item.today_status === "SKIPPED";
 
           return (
-            <View key={item.id} style={styles.card}>
+            <View key={item.id} style={[styles.card, isSmallMobile && { padding: 12 }]}>
               <View style={styles.cardHeader}>
-                <View style={styles.iconBox}>{getIcon(item.icon_name)}</View>
+                <View style={[styles.iconBox, isSmallMobile && { width: 38, height: 38, borderRadius: 19, marginRight: 10 }]}>
+                  {getIcon(item.icon_name)}
+                </View>
                 <View style={styles.infoBox}>
-                  <Text style={[styles.itemTitle, isDone && styles.itemDoneTitle]}>
+                  <Text style={[styles.itemTitle, isDone && styles.itemDoneTitle, isSmallMobile && { fontSize: 16 }]}>
                     {item.title}
                   </Text>
                   <Text style={styles.timeBadge}>{item.time_of_day}</Text>
@@ -119,7 +124,8 @@ export default function ChecklistScreen() {
                 </View>
               </View>
 
-              <View style={styles.actionsRow}>
+              <View style={[styles.actionsRow, isSmallMobile && { gap: 8 }]}>
+
                 {isDone ? (
                   <View style={styles.statusPillDone}>
                     <CheckCircle2 size={22} color={Theme.colors.success} />

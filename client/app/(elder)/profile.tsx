@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { Theme } from "../../constants/theme";
+import { useResponsive } from "../../hooks/useResponsive";
 import { ResponsiveContainer } from "../../components/ResponsiveContainer";
 import { BigButton } from "../../components/BigButton";
 import { CareFlowLogo } from "../../components/CareFlowLogo";
@@ -30,12 +31,14 @@ import {
 export default function ProfileScreen() {
   const router = useRouter();
   const { user, logout } = useAuth();
+  const { isSmallMobile } = useResponsive();
 
   // Settings states
   const [morningReminders, setMorningReminders] = useState(true);
   const [medAlerts, setMedAlerts] = useState(true);
   const [circleSync, setCircleSync] = useState(true);
   const [selectedLanguage, setSelectedLanguage] = useState("English (US)");
+
 
   const handleLogout = () => {
     logout();
@@ -53,15 +56,15 @@ export default function ProfileScreen() {
 
       <View style={styles.contentStack}>
         {/* 1. Identity & Role Card */}
-        <View style={styles.profileCard}>
-          <View style={styles.avatarWrap}>
-            <Text style={styles.avatarText}>
+        <View style={[styles.profileCard, isSmallMobile && { padding: 12, gap: 12 }]}>
+          <View style={[styles.avatarWrap, isSmallMobile && { width: 50, height: 50, borderRadius: 25 }]}>
+            <Text style={[styles.avatarText, isSmallMobile && { fontSize: 20 }]}>
               {user?.full_name ? user.full_name.charAt(0) : "E"}
             </Text>
           </View>
 
           <View style={styles.identityBlock}>
-            <Text style={styles.userName}>{user?.full_name || "Eleanor Vance"}</Text>
+            <Text style={[styles.userName, isSmallMobile && { fontSize: 17 }]}>{user?.full_name || "Eleanor Vance"}</Text>
             <Text style={styles.userEmail}>{user?.email || "eleanor@careflow.com"}</Text>
 
             <View style={styles.roleBadgeRow}>
@@ -79,14 +82,14 @@ export default function ProfileScreen() {
         </View>
 
         {/* 2. Emergency & Family Guardian Support */}
-        <View style={styles.sectionCard}>
+        <View style={[styles.sectionCard, isSmallMobile && { padding: 12 }]}>
           <View style={styles.sectionHeader}>
             <Shield size={20} color={Theme.colors.primary} />
             <Text style={styles.sectionTitle}>Designated Family Guardian</Text>
           </View>
 
-          <View style={styles.contactRow}>
-            <View style={styles.contactAvatar}>
+          <View style={[styles.contactRow, isSmallMobile && { padding: 10, gap: 10 }]}>
+            <View style={[styles.contactAvatar, isSmallMobile && { width: 38, height: 38, borderRadius: 19 }]}>
               <Text style={styles.contactInitials}>RV</Text>
             </View>
             <View style={styles.contactInfo}>
@@ -102,6 +105,7 @@ export default function ProfileScreen() {
             </TouchableOpacity>
           </View>
         </View>
+
 
         {/* 3. Notification Preferences */}
         <View style={styles.sectionCard}>

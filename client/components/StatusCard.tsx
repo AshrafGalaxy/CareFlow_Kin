@@ -2,6 +2,8 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Theme } from "../constants/theme";
 
+import { useResponsive } from "../hooks/useResponsive";
+
 interface StatusCardProps {
   title: string;
   subtitle?: string;
@@ -21,6 +23,8 @@ export const StatusCard: React.FC<StatusCardProps> = ({
   badgeVariant = "muted",
   style,
 }) => {
+  const { isSmallMobile, cardPadding } = useResponsive();
+
   const getBadgeColors = () => {
     switch (badgeVariant) {
       case "success":
@@ -37,12 +41,21 @@ export const StatusCard: React.FC<StatusCardProps> = ({
   const badgeColor = getBadgeColors();
 
   return (
-    <View style={[styles.card, style]}>
+    <View style={[styles.card, { padding: cardPadding }, style]}>
       <View style={styles.headerRow}>
         <View style={styles.titleContainer}>
-          {icon && <View style={styles.iconWrapper}>{icon}</View>}
+          {icon && (
+            <View
+              style={[
+                styles.iconWrapper,
+                isSmallMobile && styles.iconWrapperSmall,
+              ]}
+            >
+              {icon}
+            </View>
+          )}
           <View style={styles.textWrapper}>
-            <Text style={styles.title}>{title}</Text>
+            <Text style={[styles.title, isSmallMobile && styles.titleSmall]}>{title}</Text>
             {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
           </View>
         </View>
@@ -50,10 +63,13 @@ export const StatusCard: React.FC<StatusCardProps> = ({
           <View
             style={[
               styles.badge,
+              isSmallMobile && styles.badgeSmall,
               { backgroundColor: badgeColor.bg, borderColor: badgeColor.border },
             ]}
           >
-            <Text style={[styles.badgeText, { color: badgeColor.text }]}>{badge}</Text>
+            <Text style={[styles.badgeText, isSmallMobile && styles.badgeTextSmall, { color: badgeColor.text }]}>
+              {badge}
+            </Text>
           </View>
         )}
       </View>
@@ -68,7 +84,6 @@ const styles = StyleSheet.create({
     borderRadius: Theme.ergonomics.cardRadius,
     borderWidth: 1,
     borderColor: Theme.colors.border,
-    padding: Theme.spacing.lg,
     marginBottom: Theme.spacing.md,
     ...Theme.shadows.sm,
   },
@@ -77,12 +92,13 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     justifyContent: "space-between",
     gap: Theme.spacing.sm,
+    flexWrap: "wrap",
   },
   titleContainer: {
     flexDirection: "row",
     alignItems: "center",
     flex: 1,
-    flexShrink: 1,
+    minWidth: 180,
   },
   iconWrapper: {
     marginRight: Theme.spacing.md,
@@ -94,9 +110,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexShrink: 0,
   },
+  iconWrapperSmall: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    marginRight: Theme.spacing.sm,
+  },
   textWrapper: {
     flex: 1,
-    flexShrink: 1,
     paddingRight: Theme.spacing.xs,
   },
   title: {
@@ -106,12 +127,16 @@ const styles = StyleSheet.create({
     color: Theme.colors.text,
     letterSpacing: -0.3,
   },
+  titleSmall: {
+    fontSize: 17,
+    lineHeight: 22,
+  },
   subtitle: {
     fontFamily: Theme.fonts.body,
     fontSize: Theme.typography.bodySmall,
     color: Theme.colors.textMuted,
     marginTop: 2,
-    lineHeight: 20,
+    lineHeight: 18,
   },
   badge: {
     paddingVertical: 5,
@@ -121,13 +146,21 @@ const styles = StyleSheet.create({
     flexShrink: 0,
     alignSelf: "flex-start",
   },
+  badgeSmall: {
+    paddingVertical: 3,
+    paddingHorizontal: 8,
+  },
   badgeText: {
     fontFamily: Theme.fonts.heading,
     fontSize: 12,
     fontWeight: "700",
     letterSpacing: 0.2,
   },
+  badgeTextSmall: {
+    fontSize: 10,
+  },
   content: {
     marginTop: Theme.spacing.md,
   },
 });
+

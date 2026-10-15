@@ -1,6 +1,7 @@
 import React from "react";
-import { View, StyleSheet, useWindowDimensions, ScrollView, Platform } from "react-native";
+import { View, StyleSheet, ScrollView, Platform } from "react-native";
 import { Theme } from "../constants/theme";
+import { useResponsive } from "../hooks/useResponsive";
 
 interface ResponsiveContainerProps {
   children: React.ReactNode;
@@ -11,14 +12,16 @@ export const ResponsiveContainer: React.FC<ResponsiveContainerProps> = ({
   children,
   scrollable = true,
 }) => {
-  const { width } = useWindowDimensions();
-  const isDesktop = width >= Theme.breakpoints.medium;
+  const { isMobile, isTablet, isDesktop, horizontalPadding, contentMaxWidth } = useResponsive();
 
   const content = (
     <View
       style={[
         styles.inner,
-        isDesktop ? styles.desktopWidth : styles.mobileWidth,
+        {
+          maxWidth: isMobile ? "100%" : contentMaxWidth,
+          paddingHorizontal: isMobile ? 0 : horizontalPadding,
+        },
       ]}
     >
       {children}
@@ -31,7 +34,8 @@ export const ResponsiveContainer: React.FC<ResponsiveContainerProps> = ({
         style={styles.scrollView}
         contentContainerStyle={[
           styles.scrollContent,
-          isDesktop && styles.desktopCenter,
+          { paddingHorizontal: isMobile ? horizontalPadding : 0 },
+          !isMobile && styles.centerContainer,
         ]}
         showsVerticalScrollIndicator={Platform.OS === "web"}
       >
@@ -41,7 +45,13 @@ export const ResponsiveContainer: React.FC<ResponsiveContainerProps> = ({
   }
 
   return (
-    <View style={[styles.staticView, isDesktop && styles.desktopCenter]}>
+    <View
+      style={[
+        styles.staticView,
+        { paddingHorizontal: isMobile ? horizontalPadding : 0 },
+        !isMobile && styles.centerContainer,
+      ]}
+    >
       {content}
     </View>
   );
@@ -54,24 +64,17 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    padding: Theme.spacing.lg,
+    paddingVertical: Theme.spacing.md,
   },
   staticView: {
     flex: 1,
     backgroundColor: Theme.colors.background,
-    padding: Theme.spacing.lg,
+    paddingVertical: Theme.spacing.md,
   },
-  desktopCenter: {
+  centerContainer: {
     alignItems: "center",
   },
   inner: {
     width: "100%",
-  },
-  mobileWidth: {
-    maxWidth: "100%",
-  },
-  desktopWidth: {
-    maxWidth: 1200,
-    paddingHorizontal: Theme.spacing.xl,
   },
 });

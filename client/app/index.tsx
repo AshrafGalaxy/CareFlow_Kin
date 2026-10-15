@@ -5,11 +5,11 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  useWindowDimensions,
   Platform,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { Theme } from "../constants/theme";
+import { useResponsive } from "../hooks/useResponsive";
 import { BigButton } from "../components/BigButton";
 import { CareFlowLogo } from "../components/CareFlowLogo";
 import { api, getAuthToken } from "../services/api";
@@ -30,10 +30,14 @@ import {
 
 export default function LandingPage() {
   const router = useRouter();
-  const { width } = useWindowDimensions();
-  const isDesktop = width >= Theme.breakpoints.compact;
+  const { isSmallMobile, isMobile, isTablet, isDesktop, horizontalPadding } = useResponsive();
 
   const [demoLoading, setDemoLoading] = useState(false);
+
+  const heroTitleFontSize = isSmallMobile ? 24 : isMobile ? 30 : isTablet ? 38 : 48;
+  const heroTitleLineHeight = isSmallMobile ? 32 : isMobile ? 38 : isTablet ? 46 : 58;
+  const heroSubtitleFontSize = isSmallMobile ? 14 : isMobile ? 15 : 17;
+  const heroSubtitleLineHeight = isSmallMobile ? 22 : isMobile ? 24 : 28;
 
   const handleLaunchElderDeck = async () => {
     try {
@@ -57,8 +61,8 @@ export default function LandingPage() {
     >
       {/* 1. Global Navigation Bar */}
       <View style={styles.navBarWrapper}>
-        <View style={styles.navBar}>
-          <CareFlowLogo size={38} showText={true} />
+        <View style={[styles.navBar, { paddingHorizontal: horizontalPadding }]}>
+          <CareFlowLogo size={isSmallMobile ? 32 : 38} showText={!isSmallMobile} />
 
           {isDesktop && (
             <View style={styles.navLinks}>
@@ -71,23 +75,24 @@ export default function LandingPage() {
 
           <View style={styles.navActions}>
             <TouchableOpacity
-              style={styles.navSignInBtn}
+              style={[styles.navSignInBtn, isSmallMobile && styles.navBtnSmall]}
               onPress={() => router.push("/(auth)/login")}
               accessibilityLabel="Sign In"
             >
-              <Text style={styles.navSignInText}>Sign In</Text>
+              <Text style={[styles.navSignInText, isSmallMobile && styles.navBtnTextSmall]}>Sign In</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={styles.navRegisterBtn}
+              style={[styles.navRegisterBtn, isSmallMobile && styles.navBtnSmall]}
               onPress={() => router.push("/(auth)/register")}
               accessibilityLabel="Create Account"
             >
-              <Text style={styles.navRegisterText}>Get Started</Text>
+              <Text style={[styles.navRegisterText, isSmallMobile && styles.navBtnTextSmall]}>Get Started</Text>
             </TouchableOpacity>
           </View>
         </View>
       </View>
+
 
       {/* 2. Hero Section */}
       <View style={styles.heroSection}>
@@ -96,11 +101,11 @@ export default function LandingPage() {
           <Text style={styles.heroBadgeText}>CONNECTED ELDER CARE & WELLNESS DECK</Text>
         </View>
 
-        <Text style={styles.heroTitle}>
+        <Text style={[styles.heroTitle, { fontSize: heroTitleFontSize, lineHeight: heroTitleLineHeight }]}>
           Daily Care, Reimagined with <Text style={styles.heroTitleHighlight}>Dignity</Text> & Simplicity.
         </Text>
 
-        <Text style={styles.heroSubtitle}>
+        <Text style={[styles.heroSubtitle, { fontSize: heroSubtitleFontSize, lineHeight: heroSubtitleLineHeight }]}>
           The serene, unified companion for daily medication tracking, gentle wellness check-ins, and trusted care circles — designed for ease of use without cognitive fatigue.
         </Text>
 
@@ -130,15 +135,15 @@ export default function LandingPage() {
               <View style={styles.teaserAvatar}>
                 <Text style={styles.teaserAvatarText}>EV</Text>
               </View>
-              <View>
+              <View style={styles.profileTextWrap}>
                 <Text style={styles.teaserName}>Eleanor Vance</Text>
-                <Text style={styles.teaserStatus}>Care Deck • Connected to Saint Jude Clinic</Text>
+                <Text style={styles.teaserStatus} numberOfLines={1}>Care Deck • Saint Jude Clinic</Text>
               </View>
             </View>
 
             <View style={styles.teaserAdherencePill}>
-              <Activity size={16} color="#059669" />
-              <Text style={styles.teaserAdherenceText}>100% Adherence This Week</Text>
+              <Activity size={15} color="#059669" />
+              <Text style={styles.teaserAdherenceText}>100% Adherence</Text>
             </View>
           </View>
 
@@ -163,6 +168,7 @@ export default function LandingPage() {
                 <Text style={styles.teaserTaskTime}>06:00 PM</Text>
               </View>
             </View>
+
 
             {/* Right mini preview */}
             <View style={styles.teaserCol}>
@@ -253,10 +259,12 @@ export default function LandingPage() {
       </View>
 
       {/* 6. Call to Action Banner */}
-      <View style={styles.ctaBanner}>
-        <CareFlowLogo size={48} showText={false} withContainer={true} />
-        <Text style={styles.ctaTitle}>Experience the Calmer Daily Care Flow</Text>
-        <Text style={styles.ctaSubtitle}>
+      <View style={[styles.ctaBanner, { padding: isSmallMobile ? 20 : isMobile ? 28 : 44 }]}>
+        <CareFlowLogo size={isSmallMobile ? 38 : 48} showText={false} withContainer={true} />
+        <Text style={[styles.ctaTitle, { fontSize: isSmallMobile ? 22 : isMobile ? 26 : 34 }]}>
+          Experience the Calmer Daily Care Flow
+        </Text>
+        <Text style={[styles.ctaSubtitle, { fontSize: isSmallMobile ? 14 : 16 }]}>
           Start immediately with our live interactive elder session, or create a personalized account for your family.
         </Text>
 
@@ -276,6 +284,7 @@ export default function LandingPage() {
           </TouchableOpacity>
         </View>
       </View>
+
 
       {/* 7. Footer */}
       <View style={styles.footer}>
@@ -356,6 +365,17 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "700",
     color: "#FFFFFF",
+  },
+  navBtnSmall: {
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+  },
+  navBtnTextSmall: {
+    fontSize: 12,
+  },
+  profileTextWrap: {
+    flexShrink: 1,
   },
 
   // 2. Hero Section

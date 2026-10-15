@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Theme } from "../../constants/theme";
+import { useResponsive } from "../../hooks/useResponsive";
 import { ResponsiveContainer } from "../../components/ResponsiveContainer";
 import { BigButton } from "../../components/BigButton";
 import { api, Appointment } from "../../services/api";
@@ -28,7 +29,9 @@ import {
 
 export default function AppointmentsScreen() {
   const queryClient = useQueryClient();
+  const { isSmallMobile } = useResponsive();
   const [modalVisible, setModalVisible] = useState(false);
+
 
   // Form states
   const [title, setTitle] = useState("");
@@ -155,14 +158,14 @@ export default function AppointmentsScreen() {
             });
 
             return (
-              <View key={appt.id} style={styles.apptCard}>
+              <View key={appt.id} style={[styles.apptCard, isSmallMobile && { padding: 12 }]}>
                 <View style={styles.cardHeader}>
-                  <View style={styles.iconBox}>
-                    <Stethoscope size={24} color={Theme.colors.primary} />
+                  <View style={[styles.iconBox, isSmallMobile && { width: 38, height: 38, borderRadius: 19 }]}>
+                    <Stethoscope size={isSmallMobile ? 20 : 24} color={Theme.colors.primary} />
                   </View>
 
                   <View style={styles.titleBlock}>
-                    <Text style={styles.apptTitle}>{appt.title}</Text>
+                    <Text style={[styles.apptTitle, isSmallMobile && { fontSize: 16 }]}>{appt.title}</Text>
                     <Text style={styles.doctorText}>{appt.doctor_name}</Text>
                   </View>
 
@@ -170,6 +173,7 @@ export default function AppointmentsScreen() {
                     <Text style={styles.statusBadgeText}>{appt.status}</Text>
                   </View>
                 </View>
+
 
                 <View style={styles.detailsGrid}>
                   <View style={styles.detailRow}>
@@ -371,6 +375,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
+    flexWrap: "wrap",
   },
   iconBox: {
     width: 48,
@@ -383,7 +388,9 @@ const styles = StyleSheet.create({
   },
   titleBlock: {
     flex: 1,
+    minWidth: 160,
   },
+
   apptTitle: {
     fontFamily: Theme.fonts.heading,
     fontSize: Theme.typography.subheading,

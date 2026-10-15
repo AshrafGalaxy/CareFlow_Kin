@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { Theme } from "../../constants/theme";
+import { useResponsive } from "../../hooks/useResponsive";
 import { BigButton } from "../../components/BigButton";
 import { CareFlowLogo } from "../../components/CareFlowLogo";
 import { useAuth } from "../../context/AuthContext";
@@ -19,6 +20,7 @@ import { UserPlus, ArrowLeft, CheckCircle2, Shield, Heart, Stethoscope } from "l
 export default function RegisterScreen() {
   const router = useRouter();
   const { register } = useAuth();
+  const { isSmallMobile, isMobile, horizontalPadding } = useResponsive();
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -76,10 +78,10 @@ export default function RegisterScreen() {
   return (
     <ScrollView
       style={styles.container}
-      contentContainerStyle={styles.scrollContent}
+      contentContainerStyle={[styles.scrollContent, { paddingHorizontal: horizontalPadding }]}
       keyboardShouldPersistTaps="handled"
     >
-      <View style={styles.cardContainer}>
+      <View style={[styles.cardContainer, { padding: isSmallMobile ? 14 : isMobile ? 18 : 28 }]}>
         {/* Top Header Bar */}
         <View style={styles.topBar}>
           <TouchableOpacity
@@ -87,20 +89,21 @@ export default function RegisterScreen() {
             onPress={() => router.push("/")}
             accessibilityLabel="Back to Home"
           >
-            <ArrowLeft size={20} color={Theme.colors.primary} />
+            <ArrowLeft size={18} color={Theme.colors.primary} />
             <Text style={styles.backBtnText}>Home</Text>
           </TouchableOpacity>
 
-          <CareFlowLogo size={36} showText={true} />
+          <CareFlowLogo size={isSmallMobile ? 30 : 36} showText={!isSmallMobile} />
         </View>
 
         {/* Heading */}
         <View style={styles.header}>
-          <Text style={styles.title}>Create Your Account</Text>
+          <Text style={[styles.title, isSmallMobile && { fontSize: 22 }]}>Create Your Account</Text>
           <Text style={styles.subtitle}>
             Join Careflow to coordinate medication routines, daily wellness, and clinical connectivity.
           </Text>
         </View>
+
 
         {/* Error notification */}
         {errorMsg ? (
@@ -159,18 +162,23 @@ export default function RegisterScreen() {
                 return (
                   <TouchableOpacity
                     key={r.id}
-                    style={[styles.roleCard, isSelected && styles.roleCardActive]}
+                    style={[
+                      styles.roleCard,
+                      isSmallMobile && { padding: 10, gap: 10 },
+                      isSelected && styles.roleCardActive,
+                    ]}
                     onPress={() => setRole(r.id)}
                     activeOpacity={0.8}
                   >
                     <View
                       style={[
                         styles.roleIconWrap,
+                        isSmallMobile && { width: 34, height: 34 },
                         isSelected && { backgroundColor: Theme.colors.primary },
                       ]}
                     >
                       <IconComponent
-                        size={20}
+                        size={isSmallMobile ? 18 : 20}
                         color={isSelected ? "#FFFFFF" : Theme.colors.primary}
                       />
                     </View>
@@ -178,17 +186,19 @@ export default function RegisterScreen() {
                       <Text
                         style={[
                           styles.roleTitle,
+                          isSmallMobile && { fontSize: 13 },
                           isSelected && { color: Theme.colors.primaryDark },
                         ]}
                       >
                         {r.label}
                       </Text>
-                      <Text style={styles.roleDesc}>{r.desc}</Text>
+                      <Text style={[styles.roleDesc, isSmallMobile && { fontSize: 11, lineHeight: 15 }]}>{r.desc}</Text>
                     </View>
                     {isSelected && (
-                      <CheckCircle2 size={20} color={Theme.colors.primary} />
+                      <CheckCircle2 size={isSmallMobile ? 18 : 20} color={Theme.colors.primary} />
                     )}
                   </TouchableOpacity>
+
                 );
               })}
             </View>
