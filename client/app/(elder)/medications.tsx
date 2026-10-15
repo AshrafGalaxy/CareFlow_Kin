@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Alert, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Alert, TouchableOpacity, Platform } from "react-native";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Theme } from "../../constants/theme";
 import { useResponsive } from "../../hooks/useResponsive";
@@ -97,62 +97,79 @@ export default function MedicationsScreen() {
       <View style={styles.header}>
         <Text style={styles.title}>Medication Manager</Text>
         <Text style={styles.subtitle}>
-          Your daily schedule and verified adherence records.
+          Your daily schedule and verified clinical adherence ledger.
         </Text>
       </View>
 
       {/* Adherence Overview Deck */}
       <StatusCard
         title="Adherence Record"
-        subtitle="Last 30 days compliance"
-        icon={<Award size={24} color={Theme.colors.success} />}
-        badge={`${adherence?.adherence_rate_percentage ?? 95}%`}
+        subtitle="Last 30 days compliance target: 95%"
+        icon={<Award size={24} color="#059669" />}
+        badge={`${adherence?.adherence_rate_percentage ?? 95}% Verified`}
         badgeVariant="success"
       >
-        <View style={styles.metricsRow}>
-          <View style={styles.metricBox}>
-            <Text style={[styles.metricVal, isSmallMobile && { fontSize: 24 }]}>{adherence?.total_taken ?? 19}</Text>
-            <Text style={styles.metricLabel}>Doses Taken</Text>
+        <View style={styles.metricsGrid}>
+          <View style={[styles.metricCardMini, { backgroundColor: "#F0FDF4" }]}>
+            <Text style={[styles.metricValMini, { color: "#059669" }]}>
+              {adherence?.total_taken ?? 19}
+            </Text>
+            <Text style={styles.metricLabelMini}>Doses Taken</Text>
           </View>
-          <View style={styles.metricDivider} />
-          <View style={styles.metricBox}>
-            <Text style={[styles.metricVal, isSmallMobile && { fontSize: 24 }]}>{adherence?.total_skipped ?? 1}</Text>
-            <Text style={styles.metricLabel}>Skipped</Text>
+          <View style={[styles.metricCardMini, { backgroundColor: "#FEF2F2" }]}>
+            <Text style={[styles.metricValMini, { color: "#DC2626" }]}>
+              {adherence?.total_skipped ?? 1}
+            </Text>
+            <Text style={styles.metricLabelMini}>Skipped</Text>
           </View>
-          <View style={styles.metricDivider} />
-          <View style={styles.metricBox}>
-            <Text style={[styles.metricVal, isSmallMobile && { fontSize: 24 }]}>{adherence?.total_scheduled ?? 20}</Text>
-            <Text style={styles.metricLabel}>Scheduled</Text>
+          <View style={[styles.metricCardMini, { backgroundColor: "#F0F9FF" }]}>
+            <Text style={[styles.metricValMini, { color: "#0284C7" }]}>
+              {adherence?.total_scheduled ?? 20}
+            </Text>
+            <Text style={styles.metricLabelMini}>Scheduled</Text>
           </View>
         </View>
       </StatusCard>
 
       {/* Prescriptions Stream */}
-      <Text style={styles.sectionHeading}>Your Prescriptions</Text>
+      <View style={styles.sectionHeaderRow}>
+        <Text style={styles.sectionHeading}>Your Prescriptions</Text>
+        <View style={styles.prescriptionsCountBadge}>
+          <Text style={styles.prescriptionsCountText}>{meds.length} Active</Text>
+        </View>
+      </View>
 
       {meds.map((med) => (
-        <View key={med.id} style={[styles.medCard, isSmallMobile && { padding: 12 }]}>
+        <View key={med.id} style={[styles.medCard, isSmallMobile && { padding: 14 }]}>
           <View style={styles.medHeader}>
-            <View style={[styles.medIconBox, isSmallMobile && { width: 38, height: 38, borderRadius: 19, marginRight: 10 }]}>
-              <Pill size={isSmallMobile ? 22 : 28} color={Theme.colors.primary} />
+            <View style={[styles.medIconBox, isSmallMobile && { width: 36, height: 36, borderRadius: 10 }]}>
+              <Pill size={isSmallMobile ? 20 : 22} color="#0284C7" />
             </View>
             <View style={styles.medTitleBlock}>
-              <Text style={[styles.medName, isSmallMobile && { fontSize: 17 }]}>{med.name}</Text>
-              <Text style={styles.medDosage}>{med.dosage}</Text>
+              <Text style={[styles.medName, isSmallMobile && { fontSize: 16 }]}>{med.name}</Text>
+              <View style={styles.dosageBadge}>
+                <Text style={styles.dosageText}>{med.dosage}</Text>
+              </View>
             </View>
           </View>
 
-
           <View style={styles.medDetailsBox}>
-            <View style={styles.detailItem}>
-              <Clock size={18} color={Theme.colors.textMuted} />
-              <Text style={styles.detailText}>Times: {med.times_of_day}</Text>
+            <View style={styles.detailRow}>
+              <View style={styles.chipSchedule}>
+                <Clock size={14} color="#0284C7" />
+                <Text style={styles.chipScheduleText}>{med.times_of_day}</Text>
+              </View>
+              {med.prescribed_by && (
+                <View style={styles.chipPrescriber}>
+                  <Text style={styles.chipPrescriberText}>{med.prescribed_by}</Text>
+                </View>
+              )}
             </View>
+
             {med.instructions && (
-              <Text style={styles.instructionText}>Instructions: {med.instructions}</Text>
-            )}
-            {med.prescribed_by && (
-              <Text style={styles.prescriberText}>Prescriber: {med.prescribed_by}</Text>
+              <View style={styles.instructionBox}>
+                <Text style={styles.instructionText}>{med.instructions}</Text>
+              </View>
             )}
           </View>
 
@@ -161,14 +178,14 @@ export default function MedicationsScreen() {
               title="Taken"
               onPress={() => logMutation.mutate({ id: med.id, status: "TAKEN" })}
               variant="success"
-              icon={<CheckCircle2 size={20} color="#FFF" />}
+              icon={<CheckCircle2 size={18} color="#FFF" />}
               style={styles.actionBtn}
             />
             <BigButton
               title="Skip"
               onPress={() => logMutation.mutate({ id: med.id, status: "SKIPPED", reason: "Patient choice" })}
               variant="outline"
-              icon={<XCircle size={20} color={Theme.colors.primary} />}
+              icon={<XCircle size={18} color="#64748B" />}
               style={styles.actionBtn}
             />
           </View>
@@ -183,121 +200,187 @@ const styles = StyleSheet.create({
     paddingVertical: Theme.spacing.md,
   },
   title: {
-    fontSize: Theme.typography.heading,
-    fontWeight: "800",
-    color: Theme.colors.primary,
+    fontFamily: Theme.fonts.brand,
+    fontSize: 26,
+    fontWeight: "700",
+    color: "#0F172A",
+    letterSpacing: -0.5,
   },
   subtitle: {
-    fontSize: Theme.typography.body,
-    color: Theme.colors.textMuted,
-    marginTop: 2,
-    marginBottom: Theme.spacing.md,
+    fontFamily: Theme.fonts.body,
+    fontSize: 14,
+    color: "#64748B",
+    marginTop: 4,
+    lineHeight: 20,
   },
-  metricsRow: {
+  metricsGrid: {
+    flexDirection: "row",
+    gap: 10,
+    marginTop: 6,
+  },
+  metricCardMini: {
+    flex: 1,
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  metricValMini: {
+    fontFamily: Theme.fonts.brand,
+    fontSize: 24,
+    fontWeight: "700",
+    letterSpacing: -0.3,
+  },
+  metricLabelMini: {
+    fontFamily: Theme.fonts.heading,
+    fontSize: 11,
+    fontWeight: "600",
+    color: "#64748B",
+    marginTop: 2,
+    letterSpacing: 0.3,
+  },
+  sectionHeaderRow: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-around",
-    paddingVertical: Theme.spacing.sm,
-  },
-  metricBox: {
-    alignItems: "center",
-  },
-  metricVal: {
-    fontFamily: Theme.fonts.brand,
-    fontSize: Theme.typography.display,
-    fontWeight: "800",
-    color: Theme.colors.primary,
-  },
-  metricLabel: {
-    fontFamily: Theme.fonts.body,
-    fontSize: Theme.typography.bodySmall,
-    color: Theme.colors.textMuted,
-    marginTop: 2,
-  },
-  metricDivider: {
-    width: 1,
-    height: 40,
-    backgroundColor: Theme.colors.border,
+    justifyContent: "space-between",
+    marginTop: Theme.spacing.lg,
+    marginBottom: Theme.spacing.sm,
   },
   sectionHeading: {
+    fontFamily: Theme.fonts.brand,
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#0F172A",
+    letterSpacing: -0.3,
+  },
+  prescriptionsCountBadge: {
+    backgroundColor: "#F1F5F9",
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 9999,
+  },
+  prescriptionsCountText: {
     fontFamily: Theme.fonts.heading,
-    fontSize: Theme.typography.subheading,
-    fontWeight: "800",
-    color: Theme.colors.text,
-    marginVertical: Theme.spacing.md,
+    fontSize: 11,
+    fontWeight: "600",
+    color: "#475569",
+    letterSpacing: 0.3,
   },
   medCard: {
-    backgroundColor: Theme.colors.card,
-    borderRadius: Theme.ergonomics.cardRadius,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
     borderWidth: 1,
-    borderColor: Theme.colors.border,
+    borderColor: "#E2E8F0",
     padding: Theme.spacing.lg,
     marginBottom: Theme.spacing.md,
-    ...Theme.shadows.sm,
+    ...Platform.select({
+      web: {
+        boxShadow: "0 1px 3px rgba(15, 23, 42, 0.04), 0 2px 8px rgba(15, 23, 42, 0.02)",
+      },
+      default: {
+        ...Theme.shadows.sm,
+      },
+    }),
   },
   medHeader: {
     flexDirection: "row",
     alignItems: "center",
   },
   medIconBox: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: Theme.colors.primaryLight,
+    width: 42,
+    height: 42,
+    borderRadius: 12,
+    backgroundColor: "#F0F9FF",
     alignItems: "center",
     justifyContent: "center",
-    marginRight: Theme.spacing.md,
+    marginRight: 12,
   },
   medTitleBlock: {
     flex: 1,
+    gap: 3,
   },
   medName: {
-    fontFamily: Theme.fonts.heading,
-    fontSize: Theme.typography.subheading,
-    fontWeight: "800",
-    color: Theme.colors.text,
+    fontFamily: Theme.fonts.brand,
+    fontSize: 17,
+    fontWeight: "700",
+    color: "#0F172A",
+    letterSpacing: -0.2,
   },
-  medDosage: {
+  dosageBadge: {
+    alignSelf: "flex-start",
+    backgroundColor: "#EFF6FF",
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 6,
+  },
+  dosageText: {
     fontFamily: Theme.fonts.heading,
-    fontSize: Theme.typography.body,
+    fontSize: 12,
     fontWeight: "600",
-    color: Theme.colors.accent,
-    marginTop: 2,
+    color: "#0284C7",
   },
   medDetailsBox: {
-    marginVertical: Theme.spacing.md,
-    gap: 6,
-  },
-  detailItem: {
-    flexDirection: "row",
-    alignItems: "center",
+    marginVertical: 12,
     gap: 8,
   },
-  detailText: {
+  detailRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "wrap",
+    gap: 8,
+  },
+  chipSchedule: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+    backgroundColor: "#F0F9FF",
+    paddingHorizontal: 9,
+    paddingVertical: 4,
+    borderRadius: 8,
+  },
+  chipScheduleText: {
     fontFamily: Theme.fonts.heading,
-    fontSize: Theme.typography.bodySmall,
-    color: Theme.colors.text,
+    fontSize: 12,
     fontWeight: "600",
+    color: "#0369A1",
+  },
+  chipPrescriber: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+    backgroundColor: "#F8FAFC",
+    paddingHorizontal: 9,
+    paddingVertical: 4,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+  },
+  chipPrescriberText: {
+    fontFamily: Theme.fonts.body,
+    fontSize: 12,
+    color: "#64748B",
+  },
+  instructionBox: {
+    backgroundColor: "#F8FAFC",
+    padding: 10,
+    borderRadius: 8,
+    borderLeftWidth: 3,
+    borderLeftColor: "#94A3B8",
   },
   instructionText: {
     fontFamily: Theme.fonts.body,
-    fontSize: Theme.typography.bodySmall,
-    color: Theme.colors.textMuted,
-    fontStyle: "italic",
-    marginTop: 2,
-  },
-  prescriberText: {
-    fontFamily: Theme.fonts.body,
     fontSize: 13,
-    color: Theme.colors.textMuted,
+    color: "#475569",
+    lineHeight: 18,
   },
   btnRow: {
     flexDirection: "row",
-    gap: Theme.spacing.md,
-    marginTop: Theme.spacing.xs,
+    gap: Theme.spacing.sm,
+    marginTop: 4,
   },
   actionBtn: {
     flex: 1,
-    minHeight: 46,
+    minHeight: 44,
   },
 });

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert, Platform } from "react-native";
 import { useRouter } from "expo-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Theme } from "../../constants/theme";
@@ -7,7 +7,7 @@ import { useResponsive } from "../../hooks/useResponsive";
 import { ResponsiveContainer } from "../../components/ResponsiveContainer";
 import { BigButton } from "../../components/BigButton";
 import { api } from "../../services/api";
-import { Smile, Meh, Frown, AlertTriangle, ArrowLeft } from "lucide-react-native";
+import { Smile, Meh, Frown, AlertTriangle, ArrowLeft, CheckCircle2 } from "lucide-react-native";
 
 type WellnessStatus = "GOOD" | "OKAY" | "NOT_WELL" | "NEEDS_HELP";
 
@@ -17,7 +17,6 @@ export default function CheckInScreen() {
   const { isSmallMobile } = useResponsive();
   const [selectedStatus, setSelectedStatus] = useState<WellnessStatus | null>(null);
   const [notes, setNotes] = useState("");
-
 
   const submitMutation = useMutation({
     mutationFn: () => {
@@ -49,33 +48,33 @@ export default function CheckInScreen() {
       status: "GOOD",
       title: "Feeling Good",
       desc: "Energetic, comfortable, and ready for the day",
-      icon: <Smile size={32} color={Theme.colors.success} />,
-      color: Theme.colors.success,
-      bg: Theme.colors.successLight,
+      icon: <Smile size={26} color="#059669" />,
+      color: "#059669",
+      bg: "#F0FDF4",
     },
     {
       status: "OKAY",
       title: "Doing Okay",
       desc: "Normal day, manageable and steady",
-      icon: <Meh size={32} color={Theme.colors.primary} />,
-      color: Theme.colors.primary,
-      bg: Theme.colors.primaryLight,
+      icon: <Meh size={26} color="#0284C7" />,
+      color: "#0284C7",
+      bg: "#F0F9FF",
     },
     {
       status: "NOT_WELL",
-      title: "Not Well",
-      desc: "Experiencing mild discomfort or fatigue",
-      icon: <Frown size={32} color={Theme.colors.accent} />,
-      color: Theme.colors.accent,
-      bg: Theme.colors.accentLight,
+      title: "Not Feeling Well",
+      desc: "Experiencing mild discomfort, fatigue, or low energy",
+      icon: <Frown size={26} color="#D97706" />,
+      color: "#D97706",
+      bg: "#FEF3C7",
     },
     {
       status: "NEEDS_HELP",
       title: "Needs Assistance",
-      desc: "Discomfort or pain; would like attention from family",
-      icon: <AlertTriangle size={32} color={Theme.colors.urgent} />,
-      color: Theme.colors.urgent,
-      bg: Theme.colors.urgentLight,
+      desc: "Noticeable pain or symptoms; requesting attention from family",
+      icon: <AlertTriangle size={26} color="#DC2626" />,
+      color: "#DC2626",
+      bg: "#FEF2F2",
     },
   ];
 
@@ -87,13 +86,13 @@ export default function CheckInScreen() {
         accessibilityRole="button"
         accessibilityLabel="Go back to Home"
       >
-        <ArrowLeft size={24} color={Theme.colors.primary} />
+        <ArrowLeft size={16} color="#0284C7" />
         <Text style={styles.backText}>Back to Dashboard</Text>
       </TouchableOpacity>
 
       <Text style={styles.screenTitle}>How are you feeling today?</Text>
       <Text style={styles.screenSubtitle}>
-        Select the option that best reflects your current comfort. This keeps your care circle informed.
+        Select the option that best reflects your current comfort. This keeps your care circle calmly reassured.
       </Text>
 
       <View style={styles.optionsList}>
@@ -102,49 +101,50 @@ export default function CheckInScreen() {
           return (
             <TouchableOpacity
               key={opt.status}
-              activeOpacity={0.8}
+              activeOpacity={0.85}
               onPress={() => setSelectedStatus(opt.status)}
               style={[
                 styles.optionCard,
                 isSmallMobile && { padding: 12, gap: 10 },
-                { backgroundColor: isSelected ? opt.bg : Theme.colors.card },
-                isSelected && { borderColor: opt.color, borderWidth: 3 },
+                isSelected && { borderColor: opt.color, backgroundColor: opt.bg },
               ]}
               accessibilityRole="radio"
               accessibilityState={{ selected: isSelected }}
             >
-              <View style={[styles.iconBox, isSmallMobile && { width: 44, height: 44, borderRadius: 22 }]}>
+              <View style={[styles.iconBox, { backgroundColor: opt.bg }]}>
                 {opt.icon}
               </View>
               <View style={styles.textBox}>
-                <Text style={[styles.optTitle, isSmallMobile && { fontSize: 16 }, { color: opt.color }]}>
+                <Text style={[styles.optTitle, isSelected && { color: opt.color }]}>
                   {opt.title}
                 </Text>
-                <Text style={[styles.optDesc, isSmallMobile && { fontSize: 12, lineHeight: 16 }]}>
-                  {opt.desc}
-                </Text>
+                <Text style={styles.optDesc}>{opt.desc}</Text>
               </View>
+              {isSelected && (
+                <View style={styles.checkIndicator}>
+                  <CheckCircle2 size={20} color={opt.color} />
+                </View>
+              )}
             </TouchableOpacity>
-
           );
         })}
       </View>
 
       <View style={styles.notesContainer}>
-        <Text style={styles.notesLabel}>Add a note for your family (Optional):</Text>
+        <Text style={styles.notesLabel}>Add an optional note for your family</Text>
         <TextInput
           style={styles.notesInput}
           value={notes}
           onChangeText={setNotes}
-          placeholder="e.g. Mild knee stiffness after waking up..."
-          placeholderTextColor={Theme.colors.textMuted}
+          placeholder="e.g. Slept well, mild stiffness after waking up..."
+          placeholderTextColor="#94A3B8"
           multiline
           numberOfLines={3}
         />
       </View>
 
       <BigButton
-        title="Submit Wellness Check-In"
+        title="Share Wellness Signal"
         onPress={() => submitMutation.mutate()}
         disabled={!selectedStatus || submitMutation.isPending}
         loading={submitMutation.isPending}
@@ -157,88 +157,111 @@ export default function CheckInScreen() {
 
 const styles = StyleSheet.create({
   backBtn: {
+    alignSelf: "flex-start",
     flexDirection: "row",
     alignItems: "center",
-    gap: Theme.spacing.xs,
-    paddingVertical: Theme.spacing.sm,
+    gap: 6,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    backgroundColor: "#F0F9FF",
     marginBottom: Theme.spacing.md,
   },
   backText: {
     fontFamily: Theme.fonts.heading,
-    fontSize: Theme.typography.body,
-    fontWeight: "700",
-    color: Theme.colors.primary,
+    fontSize: 13,
+    fontWeight: "600",
+    color: "#0284C7",
   },
   screenTitle: {
     fontFamily: Theme.fonts.brand,
-    fontSize: Theme.typography.heading,
-    fontWeight: "800",
-    color: Theme.colors.primaryDark,
+    fontSize: 26,
+    fontWeight: "700",
+    color: "#0F172A",
     letterSpacing: -0.5,
   },
   screenSubtitle: {
     fontFamily: Theme.fonts.body,
-    fontSize: Theme.typography.body,
-    color: Theme.colors.textMuted,
-    marginTop: Theme.spacing.xs,
+    fontSize: 14,
+    color: "#64748B",
+    marginTop: 4,
     marginBottom: Theme.spacing.lg,
-    lineHeight: 24,
+    lineHeight: 20,
   },
   optionsList: {
-    gap: Theme.spacing.md,
+    gap: 12,
   },
   optionCard: {
     flexDirection: "row",
     alignItems: "center",
     borderWidth: 1.5,
-    borderColor: Theme.colors.border,
-    borderRadius: Theme.ergonomics.cardRadius,
-    padding: Theme.spacing.lg,
-    minHeight: 76,
-    ...Theme.shadows.sm,
+    borderColor: "#E2E8F0",
+    borderRadius: 16,
+    backgroundColor: "#FFFFFF",
+    padding: Theme.spacing.md,
+    minHeight: 74,
+    ...Platform.select({
+      web: {
+        boxShadow: "0 1px 3px rgba(15, 23, 42, 0.04), 0 2px 8px rgba(15, 23, 42, 0.02)",
+        transition: "all 0.15s ease",
+      },
+      default: {
+        ...Theme.shadows.sm,
+      },
+    }),
   },
   iconBox: {
-    marginRight: Theme.spacing.md,
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 12,
   },
   textBox: {
     flex: 1,
   },
   optTitle: {
-    fontFamily: Theme.fonts.heading,
-    fontSize: Theme.typography.subheading,
-    fontWeight: "800",
+    fontFamily: Theme.fonts.brand,
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#0F172A",
+    letterSpacing: -0.2,
   },
   optDesc: {
     fontFamily: Theme.fonts.body,
-    fontSize: Theme.typography.bodySmall,
-    color: Theme.colors.textMuted,
+    fontSize: 13,
+    color: "#64748B",
     marginTop: 2,
-    lineHeight: 20,
+    lineHeight: 18,
+  },
+  checkIndicator: {
+    marginLeft: 8,
   },
   notesContainer: {
-    marginTop: Theme.spacing.xl,
+    marginTop: Theme.spacing.lg,
   },
   notesLabel: {
     fontFamily: Theme.fonts.heading,
-    fontSize: Theme.typography.body,
-    fontWeight: "700",
-    color: Theme.colors.text,
-    marginBottom: Theme.spacing.xs,
+    fontSize: 13,
+    fontWeight: "600",
+    color: "#0F172A",
+    marginBottom: 6,
   },
   notesInput: {
-    backgroundColor: Theme.colors.card,
-    borderWidth: 1,
-    borderColor: Theme.colors.border,
-    borderRadius: 14,
+    backgroundColor: "#FAFCFE",
+    borderWidth: 1.5,
+    borderColor: "#E2E8F0",
+    borderRadius: 12,
     padding: Theme.spacing.md,
     fontFamily: Theme.fonts.body,
-    fontSize: Theme.typography.body,
-    color: Theme.colors.text,
-    minHeight: 80,
+    fontSize: 14,
+    color: "#0F172A",
+    minHeight: 84,
     textAlignVertical: "top",
   },
   submitBtn: {
-    marginTop: Theme.spacing.xl,
+    marginTop: Theme.spacing.lg,
     marginBottom: Theme.spacing.xxl,
   },
 });

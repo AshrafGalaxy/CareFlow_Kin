@@ -8,6 +8,7 @@ import {
   TextInput,
   Modal,
   Alert,
+  Platform,
 } from "react-native";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Theme } from "../../constants/theme";
@@ -158,10 +159,10 @@ export default function AppointmentsScreen() {
             });
 
             return (
-              <View key={appt.id} style={[styles.apptCard, isSmallMobile && { padding: 12 }]}>
+              <View key={appt.id} style={[styles.apptCard, isSmallMobile && { padding: 14 }]}>
                 <View style={styles.cardHeader}>
-                  <View style={[styles.iconBox, isSmallMobile && { width: 38, height: 38, borderRadius: 19 }]}>
-                    <Stethoscope size={isSmallMobile ? 20 : 24} color={Theme.colors.primary} />
+                  <View style={[styles.iconBox, isSmallMobile && { width: 36, height: 36, borderRadius: 10 }]}>
+                    <Stethoscope size={isSmallMobile ? 18 : 20} color="#0D9488" />
                   </View>
 
                   <View style={styles.titleBlock}>
@@ -307,42 +308,50 @@ const styles = StyleSheet.create({
   },
   screenTitle: {
     fontFamily: Theme.fonts.brand,
-    fontSize: Theme.typography.heading,
-    fontWeight: "800",
-    color: Theme.colors.primaryDark,
+    fontSize: 26,
+    fontWeight: "700",
+    color: "#0F172A",
     letterSpacing: -0.5,
   },
   screenSubtitle: {
     fontFamily: Theme.fonts.body,
-    fontSize: Theme.typography.body,
-    color: Theme.colors.textMuted,
+    fontSize: 14,
+    color: "#64748B",
     marginTop: 4,
+    lineHeight: 20,
   },
   addBtn: {
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
-    backgroundColor: Theme.colors.primary,
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderRadius: 12,
-    ...Theme.shadows.sm,
+    backgroundColor: "#0284C7",
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 10,
+    ...Platform.select({
+      web: {
+        boxShadow: "0 1px 2px rgba(2, 132, 199, 0.2)",
+      },
+      default: {
+        ...Theme.shadows.sm,
+      },
+    }),
   },
   addBtnText: {
     fontFamily: Theme.fonts.heading,
-    fontSize: 14,
-    fontWeight: "700",
+    fontSize: 13,
+    fontWeight: "600",
     color: "#FFFFFF",
   },
   listContainer: {
-    gap: Theme.spacing.md,
+    gap: 12,
     paddingBottom: Theme.spacing.xxl,
   },
   emptyCard: {
-    backgroundColor: Theme.colors.card,
-    borderRadius: Theme.ergonomics.cardRadius,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
     borderWidth: 1,
-    borderColor: Theme.colors.border,
+    borderColor: "#E2E8F0",
     padding: Theme.spacing.xxl,
     alignItems: "center",
     textAlign: "center",
@@ -350,26 +359,33 @@ const styles = StyleSheet.create({
     ...Theme.shadows.sm,
   },
   emptyTitle: {
-    fontFamily: Theme.fonts.heading,
-    fontSize: 18,
-    fontWeight: "800",
-    color: Theme.colors.text,
+    fontFamily: Theme.fonts.brand,
+    fontSize: 17,
+    fontWeight: "700",
+    color: "#0F172A",
   },
   emptyDesc: {
     fontFamily: Theme.fonts.body,
     fontSize: 14,
-    color: Theme.colors.textMuted,
+    color: "#64748B",
     maxWidth: 420,
     textAlign: "center",
-    lineHeight: 22,
+    lineHeight: 20,
   },
   apptCard: {
-    backgroundColor: Theme.colors.card,
-    borderRadius: Theme.ergonomics.cardRadius,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
     borderWidth: 1,
-    borderColor: Theme.colors.border,
+    borderColor: "#E2E8F0",
     padding: Theme.spacing.lg,
-    ...Theme.shadows.sm,
+    ...Platform.select({
+      web: {
+        boxShadow: "0 1px 3px rgba(15, 23, 42, 0.04), 0 2px 8px rgba(15, 23, 42, 0.02)",
+      },
+      default: {
+        ...Theme.shadows.sm,
+      },
+    }),
   },
   cardHeader: {
     flexDirection: "row",
@@ -378,10 +394,10 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
   },
   iconBox: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: Theme.colors.primaryLight,
+    width: 42,
+    height: 42,
+    borderRadius: 12,
+    backgroundColor: "#F0FDFA",
     alignItems: "center",
     justifyContent: "center",
     flexShrink: 0,
@@ -390,41 +406,39 @@ const styles = StyleSheet.create({
     flex: 1,
     minWidth: 160,
   },
-
   apptTitle: {
-    fontFamily: Theme.fonts.heading,
-    fontSize: Theme.typography.subheading,
-    fontWeight: "800",
-    color: Theme.colors.text,
+    fontFamily: Theme.fonts.brand,
+    fontSize: 17,
+    fontWeight: "700",
+    color: "#0F172A",
+    letterSpacing: -0.2,
   },
   doctorText: {
-    fontFamily: Theme.fonts.body,
-    fontSize: 14,
+    fontFamily: Theme.fonts.heading,
+    fontSize: 13,
     fontWeight: "600",
-    color: Theme.colors.accent,
+    color: "#0284C7",
     marginTop: 2,
   },
   statusBadge: {
-    backgroundColor: "#EFF6FF",
-    borderWidth: 1,
-    borderColor: "#BFDBFE",
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 8,
+    backgroundColor: "#F0FDF4",
+    paddingHorizontal: 9,
+    paddingVertical: 3,
+    borderRadius: 9999,
     alignSelf: "flex-start",
   },
   statusBadgeText: {
     fontFamily: Theme.fonts.heading,
     fontSize: 11,
     fontWeight: "700",
-    color: "#1D4ED8",
-    letterSpacing: 0.5,
+    color: "#059669",
+    letterSpacing: 0.3,
   },
   detailsGrid: {
     marginTop: Theme.spacing.md,
     paddingTop: Theme.spacing.sm,
     borderTopWidth: 1,
-    borderTopColor: Theme.colors.borderSubtle,
+    borderTopColor: "#F1F5F9",
     gap: 8,
   },
   detailRow: {

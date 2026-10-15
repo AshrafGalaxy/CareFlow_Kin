@@ -45,6 +45,13 @@ export default function RootLayout() {
         const style = document.createElement("style");
         style.id = "careflow-custom-scrollbar";
         style.textContent = `
+          /* Global Typography Base */
+          html, body, #root, div, span, p, input, textarea, select, button {
+            font-family: 'General Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+          }
+
           /* Global Sleek Minimalist Scrollbar */
           ::-webkit-scrollbar {
             width: 7px;

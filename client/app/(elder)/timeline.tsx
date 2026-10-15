@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Platform } from "react-native";
 import { useQuery } from "@tanstack/react-query";
 import { Theme } from "../../constants/theme";
 import { useResponsive } from "../../hooks/useResponsive";
@@ -58,18 +58,18 @@ export default function TimelineScreen() {
     },
   });
 
-  const getEventIcon = (type: string) => {
+  const getEventData = (type: string) => {
     switch (type) {
       case "MEDICATION":
-        return <Pill size={22} color={Theme.colors.primary} />;
+        return { icon: <Pill size={18} color="#0284C7" />, bg: "#F0F9FF", textColor: "#0284C7" };
       case "CHECKIN":
-        return <Smile size={22} color={Theme.colors.success} />;
+        return { icon: <Smile size={18} color="#059669" />, bg: "#ECFDF5", textColor: "#059669" };
       case "CHECKLIST":
-        return <CheckSquare size={22} color={Theme.colors.accent} />;
+        return { icon: <CheckSquare size={18} color="#4F46E5" />, bg: "#EEF2FF", textColor: "#4F46E5" };
       case "APPOINTMENT":
-        return <Calendar size={22} color={Theme.colors.primary} />;
+        return { icon: <Calendar size={18} color="#0D9488" />, bg: "#F0FDFA", textColor: "#0D9488" };
       default:
-        return <Clock size={22} color={Theme.colors.textMuted} />;
+        return { icon: <Clock size={18} color="#64748B" />, bg: "#F8FAFC", textColor: "#64748B" };
     }
   };
 
@@ -78,7 +78,7 @@ export default function TimelineScreen() {
       <View style={styles.header}>
         <Text style={styles.title}>Care Timeline</Text>
         <Text style={styles.subtitle}>
-          Your unified history of completed routines, medications, and wellness records.
+          Your unified history of completed routines, medications, and clinical logs.
         </Text>
       </View>
 
@@ -92,19 +92,22 @@ export default function TimelineScreen() {
             month: "short",
             day: "numeric",
           });
+          const { icon, bg, textColor } = getEventData(ev.event_type);
 
           return (
             <View key={ev.id} style={styles.timelineItem}>
-              <View style={[styles.indicatorCol, isSmallMobile && { width: 36, marginRight: 8 }]}>
-                <View style={[styles.iconCircle, isSmallMobile && { width: 34, height: 34, borderRadius: 17 }]}>
-                  {getEventIcon(ev.event_type)}
+              <View style={[styles.indicatorCol, isSmallMobile && { width: 34, marginRight: 10 }]}>
+                <View style={[styles.iconSquircle, { backgroundColor: bg }, isSmallMobile && { width: 32, height: 32, borderRadius: 8 }]}>
+                  {icon}
                 </View>
                 {index < events.length - 1 && <View style={styles.connectorLine} />}
               </View>
 
               <View style={[styles.contentCard, isSmallMobile && { padding: 12 }]}>
-                <View style={[styles.timestampRow, isSmallMobile && { flexWrap: "wrap", gap: 4 }]}>
-                  <Text style={styles.badgeText}>{ev.event_type}</Text>
+                <View style={styles.timestampRow}>
+                  <View style={[styles.badgePill, { backgroundColor: bg }]}>
+                    <Text style={[styles.badgeText, { color: textColor }]}>{ev.event_type}</Text>
+                  </View>
                   <Text style={styles.timeText}>{`${dayStr} • ${dateStr}`}</Text>
                 </View>
                 <Text style={[styles.eventTitle, isSmallMobile && { fontSize: 15 }]}>{ev.title}</Text>
@@ -114,7 +117,6 @@ export default function TimelineScreen() {
               </View>
             </View>
           );
-
         })}
       </View>
     </ResponsiveContainer>
@@ -126,83 +128,97 @@ const styles = StyleSheet.create({
     paddingVertical: Theme.spacing.md,
   },
   title: {
-    fontSize: Theme.typography.heading,
-    fontWeight: "800",
-    color: Theme.colors.primary,
+    fontFamily: Theme.fonts.brand,
+    fontSize: 26,
+    fontWeight: "700",
+    color: "#0F172A",
+    letterSpacing: -0.5,
   },
   subtitle: {
-    fontSize: Theme.typography.body,
-    color: Theme.colors.textMuted,
-    marginTop: 2,
+    fontFamily: Theme.fonts.body,
+    fontSize: 14,
+    color: "#64748B",
+    marginTop: 4,
     marginBottom: Theme.spacing.lg,
+    lineHeight: 20,
   },
   timelineList: {
     paddingBottom: Theme.spacing.xxl,
   },
   timelineItem: {
     flexDirection: "row",
-    marginBottom: Theme.spacing.md,
+    marginBottom: 12,
   },
   indicatorCol: {
     alignItems: "center",
-    width: 48,
-    marginRight: Theme.spacing.md,
-  },
-  iconCircle: {
     width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: Theme.colors.card,
-    borderWidth: 2,
-    borderColor: Theme.colors.border,
+    marginRight: 12,
+  },
+  iconSquircle: {
+    width: 38,
+    height: 38,
+    borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
   },
   connectorLine: {
     width: 2,
     flex: 1,
-    backgroundColor: Theme.colors.border,
-    marginTop: 4,
+    backgroundColor: "#E2E8F0",
+    marginTop: 6,
   },
   contentCard: {
     flex: 1,
-    backgroundColor: Theme.colors.card,
+    backgroundColor: "#FFFFFF",
     borderWidth: 1,
-    borderColor: Theme.colors.border,
-    borderRadius: 14,
+    borderColor: "#E2E8F0",
+    borderRadius: 16,
     padding: Theme.spacing.md,
-    ...Theme.shadows.sm,
+    ...Platform.select({
+      web: {
+        boxShadow: "0 1px 3px rgba(15, 23, 42, 0.04), 0 2px 8px rgba(15, 23, 42, 0.02)",
+      },
+      default: {
+        ...Theme.shadows.sm,
+      },
+    }),
   },
   timestampRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 4,
+    marginBottom: 6,
+    gap: 8,
+  },
+  badgePill: {
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 6,
   },
   badgeText: {
     fontFamily: Theme.fonts.heading,
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: "700",
-    color: Theme.colors.accent,
     textTransform: "uppercase",
     letterSpacing: 0.5,
   },
   timeText: {
     fontFamily: Theme.fonts.body,
-    fontSize: 11,
-    color: Theme.colors.textMuted,
+    fontSize: 12,
+    color: "#64748B",
   },
   eventTitle: {
-    fontFamily: Theme.fonts.heading,
-    fontSize: Theme.typography.body,
-    fontWeight: "800",
-    color: Theme.colors.text,
+    fontFamily: Theme.fonts.brand,
+    fontSize: 15,
+    fontWeight: "700",
+    color: "#0F172A",
+    letterSpacing: -0.2,
   },
   eventDesc: {
     fontFamily: Theme.fonts.body,
-    fontSize: Theme.typography.bodySmall,
-    color: Theme.colors.textMuted,
+    fontSize: 13,
+    color: "#64748B",
     marginTop: 4,
-    lineHeight: 20,
+    lineHeight: 18,
   },
 });

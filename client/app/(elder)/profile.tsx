@@ -7,6 +7,7 @@ import {
   ScrollView,
   Switch,
   Alert,
+  Platform,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { Theme } from "../../constants/theme";
@@ -56,8 +57,8 @@ export default function ProfileScreen() {
 
       <View style={styles.contentStack}>
         {/* 1. Identity & Role Card */}
-        <View style={[styles.profileCard, isSmallMobile && { padding: 12, gap: 12 }]}>
-          <View style={[styles.avatarWrap, isSmallMobile && { width: 50, height: 50, borderRadius: 25 }]}>
+        <View style={[styles.profileCard, isSmallMobile && { padding: 14, gap: 12 }]}>
+          <View style={[styles.avatarWrap, isSmallMobile && { width: 48, height: 48, borderRadius: 12 }]}>
             <Text style={[styles.avatarText, isSmallMobile && { fontSize: 20 }]}>
               {user?.full_name ? user.full_name.charAt(0) : "E"}
             </Text>
@@ -69,8 +70,8 @@ export default function ProfileScreen() {
 
             <View style={styles.roleBadgeRow}>
               <View style={styles.roleBadge}>
-                <Heart size={14} color="#0077B6" />
-                <Text style={styles.roleBadgeText}>ELDER COMPANION</Text>
+                <Heart size={13} color="#0284C7" />
+                <Text style={styles.roleBadgeText}>Elder Companion</Text>
               </View>
 
               <View style={styles.activePill}>
@@ -82,14 +83,16 @@ export default function ProfileScreen() {
         </View>
 
         {/* 2. Emergency & Family Guardian Support */}
-        <View style={[styles.sectionCard, isSmallMobile && { padding: 12 }]}>
+        <View style={[styles.sectionCard, isSmallMobile && { padding: 14 }]}>
           <View style={styles.sectionHeader}>
-            <Shield size={20} color={Theme.colors.primary} />
+            <View style={styles.sectionIconSquircle}>
+              <Shield size={18} color="#0284C7" />
+            </View>
             <Text style={styles.sectionTitle}>Designated Family Guardian</Text>
           </View>
 
           <View style={[styles.contactRow, isSmallMobile && { padding: 10, gap: 10 }]}>
-            <View style={[styles.contactAvatar, isSmallMobile && { width: 38, height: 38, borderRadius: 19 }]}>
+            <View style={[styles.contactAvatar, isSmallMobile && { width: 36, height: 36, borderRadius: 10 }]}>
               <Text style={styles.contactInitials}>RV</Text>
             </View>
             <View style={styles.contactInfo}>
@@ -207,63 +210,72 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   header: {
     paddingVertical: Theme.spacing.md,
-    marginBottom: Theme.spacing.md,
+    marginBottom: Theme.spacing.xs,
   },
   screenTitle: {
     fontFamily: Theme.fonts.brand,
-    fontSize: Theme.typography.heading,
-    fontWeight: "800",
-    color: Theme.colors.primaryDark,
+    fontSize: 26,
+    fontWeight: "700",
+    color: "#0F172A",
     letterSpacing: -0.5,
   },
   screenSubtitle: {
     fontFamily: Theme.fonts.body,
-    fontSize: Theme.typography.body,
-    color: Theme.colors.textMuted,
+    fontSize: 14,
+    color: "#64748B",
     marginTop: 4,
+    lineHeight: 20,
   },
   contentStack: {
-    gap: Theme.spacing.md,
+    gap: 12,
     paddingBottom: Theme.spacing.xxl,
   },
   profileCard: {
     flexDirection: "row",
     alignItems: "center",
     gap: 16,
-    backgroundColor: Theme.colors.card,
-    borderRadius: Theme.ergonomics.cardRadius,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
     borderWidth: 1,
-    borderColor: Theme.colors.border,
-    padding: Theme.spacing.xl,
-    ...Theme.shadows.sm,
+    borderColor: "#E2E8F0",
+    padding: Theme.spacing.lg,
+    ...Platform.select({
+      web: {
+        boxShadow: "0 1px 3px rgba(15, 23, 42, 0.04), 0 2px 8px rgba(15, 23, 42, 0.02)",
+      },
+      default: {
+        ...Theme.shadows.sm,
+      },
+    }),
   },
   avatarWrap: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    backgroundColor: Theme.colors.primary,
+    width: 58,
+    height: 58,
+    borderRadius: 16,
+    backgroundColor: "#0284C7",
     alignItems: "center",
     justifyContent: "center",
   },
   avatarText: {
-    fontFamily: Theme.fonts.heading,
-    fontSize: 26,
-    fontWeight: "800",
+    fontFamily: Theme.fonts.brand,
+    fontSize: 24,
+    fontWeight: "700",
     color: "#FFFFFF",
   },
   identityBlock: {
     flex: 1,
   },
   userName: {
-    fontFamily: Theme.fonts.heading,
-    fontSize: 20,
-    fontWeight: "800",
-    color: Theme.colors.text,
+    fontFamily: Theme.fonts.brand,
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#0F172A",
+    letterSpacing: -0.2,
   },
   userEmail: {
     fontFamily: Theme.fonts.body,
-    fontSize: 14,
-    color: Theme.colors.textMuted,
+    fontSize: 13,
+    color: "#64748B",
     marginTop: 2,
   },
   roleBadgeRow: {
@@ -276,29 +288,27 @@ const styles = StyleSheet.create({
   roleBadge: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 6,
-    backgroundColor: Theme.colors.primaryLight,
-    paddingVertical: 4,
-    paddingHorizontal: 10,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "rgba(0, 119, 182, 0.2)",
+    gap: 5,
+    backgroundColor: "#F0F9FF",
+    paddingVertical: 3,
+    paddingHorizontal: 9,
+    borderRadius: 6,
   },
   roleBadgeText: {
     fontFamily: Theme.fonts.heading,
     fontSize: 11,
-    fontWeight: "800",
-    color: Theme.colors.accent,
-    letterSpacing: 0.5,
+    fontWeight: "600",
+    color: "#0284C7",
+    letterSpacing: 0.2,
   },
   activePill: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 6,
+    gap: 5,
     backgroundColor: "#ECFDF5",
-    paddingVertical: 4,
+    paddingVertical: 3,
     paddingHorizontal: 8,
-    borderRadius: 8,
+    borderRadius: 6,
   },
   activeDot: {
     width: 6,
@@ -307,18 +317,25 @@ const styles = StyleSheet.create({
     backgroundColor: "#059669",
   },
   activeText: {
-    fontFamily: Theme.fonts.body,
+    fontFamily: Theme.fonts.heading,
     fontSize: 11,
-    fontWeight: "700",
+    fontWeight: "600",
     color: "#059669",
   },
   sectionCard: {
-    backgroundColor: Theme.colors.card,
-    borderRadius: Theme.ergonomics.cardRadius,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
     borderWidth: 1,
-    borderColor: Theme.colors.border,
+    borderColor: "#E2E8F0",
     padding: Theme.spacing.lg,
-    ...Theme.shadows.sm,
+    ...Platform.select({
+      web: {
+        boxShadow: "0 1px 3px rgba(15, 23, 42, 0.04), 0 2px 8px rgba(15, 23, 42, 0.02)",
+      },
+      default: {
+        ...Theme.shadows.sm,
+      },
+    }),
   },
   sectionHeader: {
     flexDirection: "row",
@@ -326,11 +343,20 @@ const styles = StyleSheet.create({
     gap: 10,
     marginBottom: Theme.spacing.md,
   },
+  sectionIconSquircle: {
+    width: 34,
+    height: 34,
+    borderRadius: 9,
+    backgroundColor: "#F0F9FF",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   sectionTitle: {
-    fontFamily: Theme.fonts.heading,
+    fontFamily: Theme.fonts.brand,
     fontSize: 16,
-    fontWeight: "800",
-    color: Theme.colors.text,
+    fontWeight: "700",
+    color: "#0F172A",
+    letterSpacing: -0.2,
   },
   contactRow: {
     flexDirection: "row",
@@ -339,49 +365,50 @@ const styles = StyleSheet.create({
     padding: Theme.spacing.md,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: Theme.colors.borderSubtle,
+    borderColor: "#E2E8F0",
     gap: 12,
   },
   contactAvatar: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: "#E0F2FE",
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+    backgroundColor: "#F0F9FF",
     alignItems: "center",
     justifyContent: "center",
   },
   contactInitials: {
-    fontFamily: Theme.fonts.heading,
+    fontFamily: Theme.fonts.brand,
     fontSize: 14,
-    fontWeight: "800",
+    fontWeight: "700",
     color: "#0284C7",
   },
   contactInfo: {
     flex: 1,
   },
   contactName: {
-    fontFamily: Theme.fonts.heading,
+    fontFamily: Theme.fonts.brand,
     fontSize: 15,
     fontWeight: "700",
-    color: Theme.colors.text,
+    color: "#0F172A",
   },
   contactRelation: {
     fontFamily: Theme.fonts.body,
     fontSize: 12,
-    color: Theme.colors.textMuted,
+    color: "#64748B",
     marginTop: 2,
   },
   contactPhone: {
     fontFamily: Theme.fonts.heading,
     fontSize: 12,
-    color: Theme.colors.accent,
+    fontWeight: "600",
+    color: "#0284C7",
     marginTop: 2,
   },
   contactCallBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "#DCFCE7",
+    width: 38,
+    height: 38,
+    borderRadius: 10,
+    backgroundColor: "#ECFDF5",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -391,7 +418,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: Theme.colors.borderSubtle,
+    borderBottomColor: "#F1F5F9",
   },
   toggleLabelWrap: {
     flex: 1,
@@ -400,13 +427,13 @@ const styles = StyleSheet.create({
   toggleTitle: {
     fontFamily: Theme.fonts.heading,
     fontSize: 14,
-    fontWeight: "700",
-    color: Theme.colors.text,
+    fontWeight: "600",
+    color: "#0F172A",
   },
   toggleSubtitle: {
     fontFamily: Theme.fonts.body,
     fontSize: 12,
-    color: Theme.colors.textMuted,
+    color: "#64748B",
     marginTop: 2,
   },
   langList: {
@@ -419,39 +446,39 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 10,
     borderWidth: 1.5,
-    borderColor: Theme.colors.border,
-    backgroundColor: "#F8FAFC",
+    borderColor: "#E2E8F0",
+    backgroundColor: "#FAFCFE",
   },
   langOptionActive: {
-    borderColor: Theme.colors.primary,
-    backgroundColor: Theme.colors.primaryLight,
+    borderColor: "#0284C7",
+    backgroundColor: "#F0F9FF",
   },
   langText: {
     fontFamily: Theme.fonts.body,
     fontSize: 14,
-    fontWeight: "600",
-    color: Theme.colors.text,
+    fontWeight: "500",
+    color: "#334155",
   },
   langTextActive: {
     fontFamily: Theme.fonts.heading,
-    fontWeight: "800",
-    color: Theme.colors.primaryDark,
+    fontWeight: "700",
+    color: "#0284C7",
   },
   langCheck: {
     width: 22,
     height: 22,
     borderRadius: 11,
-    backgroundColor: Theme.colors.primary,
+    backgroundColor: "#0284C7",
     alignItems: "center",
     justifyContent: "center",
   },
   langCheckText: {
     color: "#FFFFFF",
     fontSize: 12,
-    fontWeight: "800",
+    fontWeight: "700",
   },
   actionCard: {
-    marginTop: Theme.spacing.xs,
+    marginTop: 4,
   },
   logoutBtn: {
     borderColor: "#FECACA",
