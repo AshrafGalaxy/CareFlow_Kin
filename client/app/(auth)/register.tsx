@@ -34,19 +34,22 @@ export default function RegisterScreen() {
     {
       id: "ELDER",
       label: "Elder Companion",
+      shortLabel: "Elder",
       desc: "Daily routine, medications, and wellness check-in deck",
       icon: Heart,
     },
     {
       id: "FAMILY_GUARDIAN",
       label: "Family Guardian",
+      shortLabel: "Family",
       desc: "Care circle monitoring, adherence alerts, and peace-of-mind",
       icon: Shield,
     },
     {
       id: "DOCTOR",
       label: "Doctor / Clinician",
-      desc: "Clinical appointments, medication prescriptions, and timelines",
+      shortLabel: "Doctor",
+      desc: "Clinical consults, medication prescriptions, and timelines",
       icon: Stethoscope,
     },
   ];
@@ -125,30 +128,33 @@ export default function RegisterScreen() {
 
         {/* Form Fields */}
         <View style={styles.form}>
-          <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Full Name</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="e.g. Eleanor Vance"
-              placeholderTextColor={Theme.colors.textLight}
-              value={fullName}
-              onChangeText={setFullName}
-              autoCapitalize="words"
-            />
-          </View>
+          {/* Two-column layout on Desktop/Tablet for Name & Email */}
+          <View style={[styles.inputRow, !isMobile && styles.inputRowDesktop]}>
+            <View style={[styles.inputGroup, !isMobile && styles.inputCol]}>
+              <Text style={styles.inputLabel}>Full Name</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="e.g. Eleanor Vance"
+                placeholderTextColor={Theme.colors.textLight}
+                value={fullName}
+                onChangeText={setFullName}
+                autoCapitalize="words"
+              />
+            </View>
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Email Address</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="eleanor@careflow.com"
-              placeholderTextColor={Theme.colors.textLight}
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
+            <View style={[styles.inputGroup, !isMobile && styles.inputCol]}>
+              <Text style={styles.inputLabel}>Email Address</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="eleanor@careflow.com"
+                placeholderTextColor={Theme.colors.textLight}
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
+            </View>
           </View>
 
           <View style={styles.inputGroup}>
@@ -163,10 +169,10 @@ export default function RegisterScreen() {
             />
           </View>
 
-          {/* Role Selection */}
+          {/* Horizontal 3-Way Role Selection */}
           <View style={styles.roleGroup}>
             <Text style={styles.inputLabel}>Select Your Primary Role</Text>
-            <View style={styles.roleList}>
+            <View style={styles.roleGrid}>
               {roles.map((r) => {
                 const IconComponent = r.icon;
                 const isSelected = role === r.id;
@@ -174,45 +180,33 @@ export default function RegisterScreen() {
                   <TouchableOpacity
                     key={r.id}
                     style={[
-                      styles.roleCard,
-                      isSmallMobile && { padding: 10, gap: 10 },
-                      isSelected && styles.roleCardActive,
+                      styles.rolePill,
+                      isSelected && styles.rolePillActive,
                     ]}
                     onPress={() => setRole(r.id)}
                     activeOpacity={0.8}
+                    accessibilityRole="button"
+                    accessibilityState={{ selected: isSelected }}
                   >
-                    <View
+                    <IconComponent
+                      size={15}
+                      color={isSelected ? "#FFFFFF" : Theme.colors.primary}
+                    />
+                    <Text
                       style={[
-                        styles.roleIconWrap,
-                        isSmallMobile && { width: 34, height: 34 },
-                        isSelected && { backgroundColor: Theme.colors.primary },
+                        styles.rolePillText,
+                        isSelected && styles.rolePillTextActive,
                       ]}
                     >
-                      <IconComponent
-                        size={isSmallMobile ? 18 : 20}
-                        color={isSelected ? "#FFFFFF" : Theme.colors.primary}
-                      />
-                    </View>
-                    <View style={styles.roleTextWrap}>
-                      <Text
-                        style={[
-                          styles.roleTitle,
-                          isSmallMobile && { fontSize: 13 },
-                          isSelected && { color: Theme.colors.primaryDark },
-                        ]}
-                      >
-                        {r.label}
-                      </Text>
-                      <Text style={[styles.roleDesc, isSmallMobile && { fontSize: 11, lineHeight: 15 }]}>{r.desc}</Text>
-                    </View>
-                    {isSelected && (
-                      <CheckCircle2 size={isSmallMobile ? 18 : 20} color={Theme.colors.primary} />
-                    )}
+                      {r.shortLabel}
+                    </Text>
                   </TouchableOpacity>
-
                 );
               })}
             </View>
+            <Text style={styles.roleDescText}>
+              {roles.find((r) => r.id === role)?.desc}
+            </Text>
           </View>
 
           {/* Submit Action */}
@@ -221,7 +215,7 @@ export default function RegisterScreen() {
             onPress={handleRegister}
             disabled={loading}
             style={styles.submitBtn}
-            icon={<UserPlus size={20} color="#FFFFFF" />}
+            icon={<UserPlus size={18} color="#FFFFFF" />}
           />
         </View>
 
@@ -243,27 +237,28 @@ const styles = StyleSheet.create({
     backgroundColor: Theme.colors.background,
   },
   scrollContent: {
-    paddingVertical: Theme.spacing.xl,
+    flexGrow: 1,
+    paddingVertical: Theme.spacing.md,
     paddingHorizontal: Theme.spacing.md,
     alignItems: "center",
     justifyContent: "center",
   },
   cardContainer: {
     width: "100%",
-    maxWidth: 580,
+    maxWidth: 540,
     backgroundColor: Theme.colors.card,
     borderRadius: Theme.ergonomics.cardRadius + 4,
     borderWidth: 1,
     borderColor: Theme.colors.border,
-    padding: Theme.spacing.xl,
+    padding: Theme.spacing.lg,
     ...Theme.shadows.lg,
   },
   topBar: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: Theme.spacing.lg,
-    paddingBottom: Theme.spacing.md,
+    marginBottom: Theme.spacing.sm,
+    paddingBottom: Theme.spacing.sm,
     borderBottomWidth: 1,
     borderBottomColor: Theme.colors.borderSubtle,
   },
@@ -271,33 +266,33 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
-    paddingVertical: 6,
-    paddingHorizontal: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 9,
     borderRadius: 8,
     backgroundColor: Theme.colors.primaryLight,
   },
   backBtnText: {
     fontFamily: Theme.fonts.heading,
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "600",
     color: Theme.colors.primary,
   },
   header: {
-    marginBottom: Theme.spacing.lg,
+    marginBottom: Theme.spacing.sm,
   },
   title: {
     fontFamily: Theme.fonts.brand,
-    fontSize: Theme.typography.heading,
+    fontSize: 22,
     fontWeight: "700",
     color: Theme.colors.text,
     letterSpacing: -0.4,
   },
   subtitle: {
     fontFamily: Theme.fonts.body,
-    fontSize: Theme.typography.body,
+    fontSize: 13,
     color: Theme.colors.textMuted,
-    marginTop: 6,
-    lineHeight: 22,
+    marginTop: 4,
+    lineHeight: 18,
   },
   errorBox: {
     backgroundColor: Theme.colors.urgentLight,
@@ -305,7 +300,7 @@ const styles = StyleSheet.create({
     borderColor: Theme.colors.urgent,
     borderRadius: 10,
     padding: Theme.spacing.sm,
-    marginBottom: Theme.spacing.md,
+    marginBottom: Theme.spacing.sm,
   },
   errorText: {
     fontFamily: Theme.fonts.body,
@@ -314,101 +309,112 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   form: {
-    gap: Theme.spacing.md,
+    gap: 10,
+  },
+  inputRow: {
+    gap: 10,
+  },
+  inputRowDesktop: {
+    flexDirection: "row",
+  },
+  inputCol: {
+    flex: 1,
   },
   inputGroup: {
-    gap: 6,
+    gap: 4,
   },
   inputLabel: {
+    fontFamily: Theme.fonts.heading,
+    fontSize: 12,
+    fontWeight: "600",
+    color: Theme.colors.text,
+    letterSpacing: 0.1,
+  },
+  input: {
+    minHeight: 46,
+    borderRadius: 10,
+    borderWidth: 1.5,
+    borderColor: Theme.colors.border,
+    backgroundColor: "#FAFCFE",
+    paddingHorizontal: 14,
+    fontFamily: Theme.fonts.body,
+    fontSize: 14,
+    color: Theme.colors.text,
+  },
+  roleGroup: {
+    gap: 6,
+    marginTop: 2,
+  },
+  roleGrid: {
+    flexDirection: "row",
+    gap: 8,
+  },
+  rolePill: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
+    minHeight: 44,
+    borderRadius: 10,
+    borderWidth: 1.5,
+    borderColor: Theme.colors.border,
+    backgroundColor: "#FAFCFE",
+    paddingHorizontal: 6,
+    ...Platform.select({
+      web: { cursor: "pointer" },
+    }),
+  },
+  rolePillActive: {
+    borderColor: Theme.colors.primary,
+    backgroundColor: Theme.colors.primary,
+  },
+  rolePillText: {
     fontFamily: Theme.fonts.heading,
     fontSize: 13,
     fontWeight: "600",
     color: Theme.colors.text,
-    letterSpacing: 0.2,
   },
-  input: {
-    minHeight: 50,
-    borderRadius: 12,
-    borderWidth: 1.5,
-    borderColor: Theme.colors.border,
-    backgroundColor: "#FAFCFE",
-    paddingHorizontal: Theme.spacing.md,
+  rolePillTextActive: {
+    color: "#FFFFFF",
+    fontWeight: "700",
+  },
+  roleDescText: {
     fontFamily: Theme.fonts.body,
-    fontSize: 15,
-    color: Theme.colors.text,
-  },
-  roleGroup: {
-    marginTop: Theme.spacing.xs,
-    gap: 8,
-  },
-  roleList: {
-    gap: 8,
-  },
-  roleCard: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 12,
-    borderRadius: 12,
-    borderWidth: 1.5,
-    borderColor: Theme.colors.border,
-    backgroundColor: "#FAFCFE",
-    gap: 12,
-  },
-  roleCardActive: {
-    borderColor: Theme.colors.primary,
-    backgroundColor: Theme.colors.primaryLight,
-  },
-  roleIconWrap: {
-    width: 38,
-    height: 38,
-    borderRadius: 10,
-    backgroundColor: Theme.colors.primaryLight,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  roleTextWrap: {
-    flex: 1,
-  },
-  roleTitle: {
-    fontFamily: Theme.fonts.heading,
-    fontSize: 14,
-    fontWeight: "600",
-    color: Theme.colors.text,
-  },
-  roleDesc: {
-    fontFamily: Theme.fonts.body,
-    fontSize: 12,
+    fontSize: 11,
     color: Theme.colors.textMuted,
+    textAlign: "center",
     marginTop: 2,
+    lineHeight: 16,
   },
   submitBtn: {
-    marginTop: Theme.spacing.md,
+    marginTop: 4,
   },
   footerRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     gap: 8,
-    marginTop: Theme.spacing.xl,
-    paddingTop: Theme.spacing.md,
+    marginTop: Theme.spacing.md,
+    paddingTop: Theme.spacing.sm,
     borderTopWidth: 1,
     borderTopColor: Theme.colors.borderSubtle,
   },
   footerPrompt: {
     fontFamily: Theme.fonts.body,
-    fontSize: 14,
+    fontSize: 13,
     color: Theme.colors.textMuted,
   },
   signInLink: {
     fontFamily: Theme.fonts.heading,
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "600",
     color: Theme.colors.primary,
   },
   dividerRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginVertical: Theme.spacing.md,
+    marginVertical: 10,
   },
   dividerLine: {
     flex: 1,
@@ -418,7 +424,7 @@ const styles = StyleSheet.create({
   dividerText: {
     marginHorizontal: 12,
     fontFamily: Theme.fonts.body,
-    fontSize: 13,
+    fontSize: 12,
     color: Theme.colors.textMuted,
   },
 });

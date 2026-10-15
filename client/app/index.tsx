@@ -110,34 +110,16 @@ export default function LandingPage() {
           {isDesktop && (
             <View style={styles.navLinks}>
               <TouchableOpacity
-                onPress={() => scrollToSection("why-careflow")}
-                accessibilityRole="link"
-              >
-                <Text style={styles.navLinkItem}>Why Careflow</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
                 onPress={() => scrollToSection("features")}
                 accessibilityRole="link"
               >
-                <Text style={styles.navLinkItem}>Capabilities</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => scrollToSection("both-sides")}
-                accessibilityRole="link"
-              >
-                <Text style={styles.navLinkItem}>Both Sides of Care</Text>
+                <Text style={styles.navLinkItem}>Features</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => scrollToSection("day-in-life")}
                 accessibilityRole="link"
               >
-                <Text style={styles.navLinkItem}>A Day in the Life</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => scrollToSection("dignity-manifesto")}
-                accessibilityRole="link"
-              >
-                <Text style={styles.navLinkItem}>Dignity Standard</Text>
+                <Text style={styles.navLinkItem}>How It Works</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => scrollToSection("faq")}
