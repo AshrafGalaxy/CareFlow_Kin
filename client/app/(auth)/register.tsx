@@ -20,7 +20,7 @@ import { UserPlus, ArrowLeft, CheckCircle2, Shield, Heart, Stethoscope } from "l
 
 export default function RegisterScreen() {
   const router = useRouter();
-  const { register } = useAuth();
+  const { register, user, token, isLoading } = useAuth();
   const { isSmallMobile, isMobile, horizontalPadding } = useResponsive();
 
   const [fullName, setFullName] = useState("");
@@ -29,6 +29,12 @@ export default function RegisterScreen() {
   const [role, setRole] = useState("ELDER");
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+
+  React.useEffect(() => {
+    if (!isLoading && token && user) {
+      router.replace("/(elder)");
+    }
+  }, [isLoading, token, user, router]);
 
   const roles = [
     {

@@ -19,13 +19,19 @@ import { LogIn, ArrowLeft } from "lucide-react-native";
 
 export default function LoginScreen() {
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, user, token, isLoading } = useAuth();
   const { isSmallMobile, isMobile, horizontalPadding } = useResponsive();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+
+  React.useEffect(() => {
+    if (!isLoading && token && user) {
+      router.replace("/(elder)");
+    }
+  }, [isLoading, token, user, router]);
 
   const handleLogin = async (overrideEmail?: string, overridePass?: string) => {
     setErrorMsg("");

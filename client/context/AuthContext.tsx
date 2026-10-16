@@ -24,10 +24,18 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const queryClient = useQueryClient();
+  const initialToken = getAuthToken();
+  const initialUser = getSavedUser();
+  const hasFullSession = Boolean(initialToken && initialUser);
+
   // Synchronously initialize auth state from storage to prevent cold-start reload dropouts
-  const [token, setToken] = useState<string | null>(() => getAuthToken());
-  const [user, setUser] = useState<UserProfile | null>(() => getSavedUser());
-  const [isLoading, setIsLoading] = useState<boolean>(() => !getAuthToken());
+  const [token, setToken] = useState<string | null>(() => initialToken);
+  const [user, setUser] = useState<UserProfile | null>(() => initialUser);
+  // If there's a token but user profile isn't yet cached, remain loading until validateSession completes
+  const [isLoading, setIsLoading] = useState<boolean>(() => {
+    if (!initialToken) return false;
+    return !hasFullSession;
+  });
 
   useEffect(() => {
     let isMounted = true;
@@ -48,6 +56,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const profile = await api.auth.getMe();
         if (isMounted) {
           setUser(profile);
+          setSavedUser(profile);
           setToken(activeToken);
         }
       } catch (err: any) {
@@ -64,6 +73,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           // If network error, offline mode, or server timeout:
           // Preserve cached session credentials so the user is not kicked out
           console.warn("Backend connectivity issue during session verification. Preserving cached credentials.");
+          const cached = getSavedUser();
+          if (cached && isMounted) {
+            setUser(cached);
+            setToken(activeToken);
+          }
         }
       } finally {
         if (isMounted) {
@@ -85,6 +99,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setToken(data.access_token);
       const profile = await api.auth.getMe();
       setUser(profile);
+      setSavedUser(profile);
     } finally {
       setIsLoading(false);
     }
@@ -102,6 +117,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setToken(data.access_token);
       const profile = await api.auth.getMe();
       setUser(profile);
+      setSavedUser(profile);
     } finally {
       setIsLoading(false);
     }

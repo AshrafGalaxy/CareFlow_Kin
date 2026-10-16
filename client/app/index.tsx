@@ -44,12 +44,20 @@ import {
   Check,
   HeartHandshake,
 } from "lucide-react-native";
+import { useAuth } from "../context/AuthContext";
 
 export default function LandingPage() {
   const router = useRouter();
+  const { user, token, isLoading } = useAuth();
   const { isSmallMobile, isMobile, isTablet, isDesktop, horizontalPadding } = useResponsive();
   const scrollRef = useRef<ScrollView>(null);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
+
+  React.useEffect(() => {
+    if (!isLoading && token && user) {
+      router.replace("/(elder)");
+    }
+  }, [isLoading, token, user, router]);
 
   const heroTitleFontSize = isSmallMobile ? 26 : isMobile ? 32 : isTablet ? 42 : 52;
   const heroTitleLineHeight = isSmallMobile ? 34 : isMobile ? 40 : isTablet ? 50 : 62;

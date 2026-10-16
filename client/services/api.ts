@@ -49,7 +49,14 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-export const getAuthToken = (): string | null => authToken;
+export const getAuthToken = (): string | null => {
+  if (!authToken && typeof window !== "undefined" && window.localStorage) {
+    try {
+      authToken = window.localStorage.getItem(TOKEN_STORAGE_KEY);
+    } catch (_) {}
+  }
+  return authToken;
+};
 
 export const setAuthToken = (token: string | null) => {
   authToken = token;
@@ -64,7 +71,17 @@ export const setAuthToken = (token: string | null) => {
   }
 };
 
-export const getSavedUser = (): UserProfile | null => cachedUser;
+export const getSavedUser = (): UserProfile | null => {
+  if (!cachedUser && typeof window !== "undefined" && window.localStorage) {
+    try {
+      const savedUserJson = window.localStorage.getItem(USER_STORAGE_KEY);
+      if (savedUserJson) {
+        cachedUser = JSON.parse(savedUserJson);
+      }
+    } catch (_) {}
+  }
+  return cachedUser;
+};
 
 export const setSavedUser = (user: UserProfile | null) => {
   cachedUser = user;
@@ -98,7 +115,7 @@ export interface TokenResponse {
   access_token: string;
   refresh_token: string;
   token_type: string;
-  role: string;
+  role: "ELDER" | "FAMILY_GUARDIAN" | "LOCAL_CARE_PARTNER" | "DOCTOR" | "PROVIDER_ADMIN";
   user_id: string;
   full_name: string;
 }
@@ -186,6 +203,13 @@ export const api = {
     login: async (email: string, password: string): Promise<TokenResponse> => {
       const res = await apiClient.post<TokenResponse>("/auth/login", { email, password });
       setAuthToken(res.data.access_token);
+      setSavedUser({
+        id: res.data.user_id,
+        email: email,
+        full_name: res.data.full_name,
+        role: res.data.role,
+        is_active: true,
+      });
       return res.data;
     },
     demoLogin: async (): Promise<TokenResponse> => {
@@ -200,6 +224,13 @@ export const api = {
     }): Promise<TokenResponse> => {
       const res = await apiClient.post<TokenResponse>("/auth/register", payload);
       setAuthToken(res.data.access_token);
+      setSavedUser({
+        id: res.data.user_id,
+        email: payload.email,
+        full_name: res.data.full_name,
+        role: res.data.role,
+        is_active: true,
+      });
       return res.data;
     },
     googleAuth: async (payload: {
@@ -210,6 +241,13 @@ export const api = {
     }): Promise<TokenResponse> => {
       const res = await apiClient.post<TokenResponse>("/auth/google", payload);
       setAuthToken(res.data.access_token);
+      setSavedUser({
+        id: res.data.user_id,
+        email: payload.email,
+        full_name: res.data.full_name,
+        role: res.data.role,
+        is_active: true,
+      });
       return res.data;
     },
     getMe: async (): Promise<UserProfile> => {
