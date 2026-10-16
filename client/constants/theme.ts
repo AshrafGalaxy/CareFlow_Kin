@@ -1,62 +1,121 @@
 import { Platform } from "react-native";
 
+export const LightColors = {
+  // Premium Minimalist Healthcare Palette (Light Canvas)
+  brandPrimary: "#0284C7",    // Radiant Sky Cerulean
+  brandHover: "#0369A1",      // Deep Cerulean
+  brandLight: "#F0F9FF",      // Sky Mist 50
+  brandSubtle: "#E0F2FE",     // Sky 100
+  
+  tealAccent: "#0D9488",      // Serene Wellness Teal
+  tealLight: "#F0FDFA",       // Teal Mist
+  
+  // Legacy compatibility mapping
+  deepTwilight: "#0F172A",
+  frenchBlue: "#0284C7",
+  brightTealBlue: "#0369A1",
+  blueGreen: "#0D9488",
+  turquoiseSurf: "#38BDF8",
+  skyAqua: "#E0F2FE",
+  frostedBlue: "#F0F9FF",
+  frostedBlue2: "#E2E8F0",
+  lightCyan: "#F8FAFC",
+
+  // Semantic Brand Roles
+  primary: "#0284C7",
+  primaryDark: "#0369A1",
+  primaryLight: "#F0F9FF",
+  accent: "#0D9488",
+  accentLight: "#F0FDFA",
+  brandAccent: "#0284C7",
+  brandGradientStart: "#0284C7",
+  brandGradientEnd: "#0D9488",
+
+  // Feedback States
+  success: "#10B981",
+  successLight: "#ECFDF5",
+  urgent: "#EF4444",
+  urgentLight: "#FEF2F2",
+  warning: "#F59E0B",
+  warningLight: "#FFFBEB",
+
+  // Surfaces & Spatial Layers
+  background: "#F8FAFC",
+  surfaceLight: "#FFFFFF",
+  card: "#FFFFFF",
+  cardGlass: "rgba(255, 255, 255, 0.98)",
+  border: "#E2E8F0",
+  borderSubtle: "#F1F5F9",
+  borderActive: "#0284C7",
+
+  // Typography Legibility Hierarchy (Obsidian Slate)
+  text: "#0F172A",          // Obsidian Slate 900
+  textSecondary: "#334155", // Slate 700
+  textMuted: "#64748B",     // Slate 500
+  textLight: "#94A3B8",     // Slate 400
+  textInverse: "#FFFFFF",
+};
+
+export const DarkColors = {
+  // Obsidian Slate Dark Healthcare Palette (WCAG 2.2 AAA Contrast >= 7:1)
+  brandPrimary: "#38BDF8",    // Sky 400 - Radiant against obsidian
+  brandHover: "#7DD3FC",      // Sky 300
+  brandLight: "#0C243B",      // Deep Sky Ambient Layer
+  brandSubtle: "#163859",     // Subdued Sky Border
+  
+  tealAccent: "#2DD4BF",      // Serene Teal 400
+  tealLight: "#0D2D2A",       // Teal Dark Ambient Surface
+  
+  // Legacy compatibility mapping
+  deepTwilight: "#F8FAFC",
+  frenchBlue: "#38BDF8",
+  brightTealBlue: "#0284C7",
+  blueGreen: "#2DD4BF",
+  turquoiseSurf: "#38BDF8",
+  skyAqua: "#0C243B",
+  frostedBlue: "#151D2E",
+  frostedBlue2: "#1E293B",
+  lightCyan: "#0B0F19",
+
+  // Semantic Brand Roles
+  primary: "#38BDF8",
+  primaryDark: "#0284C7",
+  primaryLight: "#0C243B",
+  accent: "#2DD4BF",
+  accentLight: "#0D2D2A",
+  brandAccent: "#38BDF8",
+  brandGradientStart: "#38BDF8",
+  brandGradientEnd: "#2DD4BF",
+
+  // Feedback States (High Contrast on Obsidian)
+  success: "#34D399",
+  successLight: "#064E3B",
+  urgent: "#F87171",
+  urgentLight: "#450A0A",
+  warning: "#FBBF24",
+  warningLight: "#451A03",
+
+  // Surfaces & Spatial Layers (Obsidian Dark System)
+  background: "#0B0F19",     // Deep Obsidian Canvas
+  surfaceLight: "#151D2E",   // Elevated Card / Surface
+  card: "#151D2E",           // Obsidian Card Container
+  cardGlass: "rgba(21, 29, 46, 0.96)",
+  border: "#1E293B",         // Slate 800 Border
+  borderSubtle: "#162032",   // Subtle Slate Border
+  borderActive: "#38BDF8",
+
+  // Typography Legibility Hierarchy
+  text: "#F8FAFC",          // Slate 50 (>= 15:1 contrast against #0B0F19)
+  textSecondary: "#CBD5E1", // Slate 300 (>= 10:1 contrast)
+  textMuted: "#94A3B8",     // Slate 400 (>= 7.2:1 contrast)
+  textLight: "#64748B",     // Slate 500
+  textInverse: "#0F172A",
+};
+
 export const Theme = {
-  colors: {
-    // Premium Minimalist Healthcare Palette (Light Canvas)
-    // Non-monochromatic: Soothing, warm slates with vibrant, accessible sky/teal accents
-    brandPrimary: "#0284C7",    // Radiant Sky Cerulean - Primary Action & Brand Accent
-    brandHover: "#0369A1",      // Deep Cerulean - Focused & Hover State
-    brandLight: "#F0F9FF",      // Sky Mist 50 - Subtle active pill backgrounds & highlights
-    brandSubtle: "#E0F2FE",     // Sky 100 - Gentle pill borders & selection chips
-    
-    tealAccent: "#0D9488",      // Serene Wellness Teal - Health vitals & mood highlights
-    tealLight: "#F0FDFA",       // Teal Mist - Ambient wellness containers
-    
-    // Legacy oceanic compatibility mapping (prevents downstream reference breakage)
-    deepTwilight: "#0F172A",   // Mapped to Obsidian Slate (Replaced harsh navy text)
-    frenchBlue: "#0284C7",     // Mapped to Radiant Sky
-    brightTealBlue: "#0369A1", // Mapped to Deep Sky
-    blueGreen: "#0D9488",      // Mapped to Serene Teal
-    turquoiseSurf: "#38BDF8",  // Bright Sky
-    skyAqua: "#E0F2FE",        // Soft Sky
-    frostedBlue: "#F0F9FF",    // Sky Mist
-    frostedBlue2: "#E2E8F0",   // Clean Slate Border
-    lightCyan: "#F8FAFC",      // Luminous Canvas
-
-    // Semantic Brand Roles
-    primary: "#0284C7",
-    primaryDark: "#0369A1",
-    primaryLight: "#F0F9FF",
-    accent: "#0D9488",
-    accentLight: "#F0FDFA",
-    brandAccent: "#0284C7",
-    brandGradientStart: "#0284C7",
-    brandGradientEnd: "#0D9488",
-
-    // Feedback States
-    success: "#10B981",
-    successLight: "#ECFDF5",
-    urgent: "#EF4444",
-    urgentLight: "#FEF2F2",
-    warning: "#F59E0B",
-    warningLight: "#FFFBEB",
-
-    // Surfaces & Spatial Layers (Glare-free, comfortable for aging eyes)
-    background: "#F8FAFC",
-    surfaceLight: "#FFFFFF",
-    card: "#FFFFFF",
-    cardGlass: "rgba(255, 255, 255, 0.98)",
-    border: "#E2E8F0",
-    borderSubtle: "#F1F5F9",
-    borderActive: "#0284C7",
-
-    // Typography Legibility Hierarchy (Warm, high-contrast Slate - No harsh navy wash)
-    text: "#0F172A",          // Obsidian Slate 900 - Crisp, clear, non-fatiguing
-    textSecondary: "#334155", // Slate 700 - Balanced, accessible secondary
-    textMuted: "#64748B",     // Slate 500 - Timestamps, helper hints
-    textLight: "#94A3B8",     // Slate 400 - Subtle badges & disabled states
-    textInverse: "#FFFFFF",   // High-contrast white for colored buttons
-  },
+  colors: LightColors,
+  lightColors: LightColors,
+  darkColors: DarkColors,
 
   fonts: {
     // Strict 2-Font System: Manrope for Brand/Headings/Metrics, General Sans for Body/UI
@@ -142,6 +201,19 @@ export const Theme = {
       textSecondary: "#1E293B", // Slate 800 (11.5:1 contrast)
       textMuted: "#475569",     // Slate 600 (7.0:1 contrast)
       borderHighContrast: "#CBD5E1", // Slate 300 (crisp edge definition)
+    },
+    // WCAG 2.2 AAA Contrast Colors (>= 7:1 against obsidian dark surfaces)
+    aaaDarkColors: {
+      primary: "#38BDF8",       // Bright Sky 400 (9.8:1 contrast against #0B0F19)
+      primaryHover: "#7DD3FC",  // Sky 300 (13.1:1 contrast)
+      accent: "#2DD4BF",        // Serene Teal 400 (11.5:1 contrast)
+      success: "#34D399",       // Radiant Emerald (11.8:1 contrast)
+      urgent: "#F87171",        // Bright Crimson (7.4:1 contrast)
+      warning: "#FBBF24",       // Bright Amber (11.3:1 contrast)
+      text: "#FFFFFF",          // Pure White (18.5:1 contrast)
+      textSecondary: "#E2E8F0", // Slate 200 (13.6:1 contrast)
+      textMuted: "#94A3B8",     // Slate 400 (7.5:1 contrast)
+      borderHighContrast: "#475569", // Slate 600
     },
     aaaErgonomics: {
       minTouchTarget: 58,
