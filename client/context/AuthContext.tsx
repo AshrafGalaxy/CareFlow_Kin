@@ -1,6 +1,14 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { api, setAuthToken, getAuthToken, UserProfile } from "../services/api";
+import {
+  api,
+  setAuthToken,
+  getAuthToken,
+  getSavedUser,
+  setSavedUser,
+  clearAuthSession,
+  UserProfile,
+} from "../services/api";
 
 interface AuthContextType {
   user: UserProfile | null;
@@ -16,34 +24,58 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const queryClient = useQueryClient();
-  const [user, setUser] = useState<UserProfile | null>(null);
-  const [token, setToken] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  // Synchronously initialize auth state from storage to prevent cold-start reload dropouts
+  const [token, setToken] = useState<string | null>(() => getAuthToken());
+  const [user, setUser] = useState<UserProfile | null>(() => getSavedUser());
+  const [isLoading, setIsLoading] = useState<boolean>(() => !getAuthToken());
 
   useEffect(() => {
-    // Initial authenticated session validation
-    const initAuth = async () => {
-      try {
-        const existingToken = getAuthToken();
-        if (existingToken) {
-          setToken(existingToken);
-          // Verify with backend that token is still valid
-          const profile = await api.auth.getMe();
-          setUser(profile);
-        } else {
-          setUser(null);
+    let isMounted = true;
+
+    // Background session verification and profile synchronization
+    const validateSession = async () => {
+      const activeToken = getAuthToken();
+      if (!activeToken) {
+        if (isMounted) {
           setToken(null);
+          setUser(null);
+          setIsLoading(false);
         }
-      } catch (e) {
-        // Token was invalid, expired, or backend rejected it (401)
-        setAuthToken(null);
-        setToken(null);
-        setUser(null);
+        return;
+      }
+
+      try {
+        const profile = await api.auth.getMe();
+        if (isMounted) {
+          setUser(profile);
+          setToken(activeToken);
+        }
+      } catch (err: any) {
+        // Standard OAuth/JWT error discrimination:
+        // Only terminate session if server explicitly returns HTTP 401 Unauthorized or 403 Forbidden
+        const status = err?.response?.status;
+        if (status === 401 || status === 403) {
+          if (isMounted) {
+            clearAuthSession();
+            setToken(null);
+            setUser(null);
+          }
+        } else {
+          // If network error, offline mode, or server timeout:
+          // Preserve cached session credentials so the user is not kicked out
+          console.warn("Backend connectivity issue during session verification. Preserving cached credentials.");
+        }
       } finally {
-        setIsLoading(false);
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     };
-    initAuth();
+
+    validateSession();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -78,35 +110,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signInWithGoogle = async () => {
     setIsLoading(true);
     try {
-      // First attempt authentic demo session with backend
-      try {
-        const data = await api.auth.demoLogin();
-        setToken(data.access_token);
-        const profile = await api.auth.getMe();
-        setUser({
-          ...profile,
-          full_name: profile.full_name || "Eleanor Vance (Google)",
-        });
-      } catch (_backendErr) {
-        // Fallback sandboxed session for client-side evaluation without active backend
-        const mockProfile: UserProfile = {
-          id: "google-user-eleanor-vance",
-          email: "eleanor.vance@gmail.com",
-          full_name: "Eleanor Vance (Google)",
-          role: "ELDER",
-          is_active: true,
-        };
-        setToken("mock-google-bearer-token");
-        setAuthToken("mock-google-bearer-token");
-        setUser(mockProfile);
-      }
+      const data = await api.auth.googleAuth({
+        email: "eleanor@careflow.com",
+        full_name: "Eleanor Vance",
+        role: "ELDER",
+        google_id: "google-demo-eleanor",
+      });
+      setToken(data.access_token);
+      const profile = await api.auth.getMe();
+      setUser(profile);
     } finally {
       setIsLoading(false);
     }
   };
 
   const logout = () => {
-    setAuthToken(null);
+    clearAuthSession();
     setToken(null);
     setUser(null);
     queryClient.clear();

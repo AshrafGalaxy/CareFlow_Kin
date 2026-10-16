@@ -15,41 +15,73 @@ export const apiClient = axios.create({
 });
 
 const TOKEN_STORAGE_KEY = "careflow_auth_token";
+const USER_STORAGE_KEY = "careflow_user_profile";
 
 let authToken: string | null = null;
+let cachedUser: UserProfile | null = null;
 
-// Rehydrate token from browser storage on web
+// Synchronously rehydrate session from browser storage on web
 if (typeof window !== "undefined" && window.localStorage) {
   try {
-    const saved = window.localStorage.getItem(TOKEN_STORAGE_KEY);
-    if (saved) {
-      authToken = saved;
-      apiClient.defaults.headers.common["Authorization"] = `Bearer ${saved}`;
+    const savedToken = window.localStorage.getItem(TOKEN_STORAGE_KEY);
+    if (savedToken) {
+      authToken = savedToken;
+    }
+    const savedUserJson = window.localStorage.getItem(USER_STORAGE_KEY);
+    if (savedUserJson) {
+      cachedUser = JSON.parse(savedUserJson);
     }
   } catch (_) {
     // Storage inaccessible
   }
 }
 
+// Robust Axios Request Interceptor guarantees dynamic Bearer token attachment on all requests
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = getAuthToken();
+    if (token) {
+      config.headers = config.headers || {};
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 export const getAuthToken = (): string | null => authToken;
 
 export const setAuthToken = (token: string | null) => {
   authToken = token;
-  if (token) {
-    apiClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    if (typeof window !== "undefined" && window.localStorage) {
-      try {
+  if (typeof window !== "undefined" && window.localStorage) {
+    try {
+      if (token) {
         window.localStorage.setItem(TOKEN_STORAGE_KEY, token);
-      } catch (_) {}
-    }
-  } else {
-    delete apiClient.defaults.headers.common["Authorization"];
-    if (typeof window !== "undefined" && window.localStorage) {
-      try {
+      } else {
         window.localStorage.removeItem(TOKEN_STORAGE_KEY);
-      } catch (_) {}
-    }
+      }
+    } catch (_) {}
   }
+};
+
+export const getSavedUser = (): UserProfile | null => cachedUser;
+
+export const setSavedUser = (user: UserProfile | null) => {
+  cachedUser = user;
+  if (typeof window !== "undefined" && window.localStorage) {
+    try {
+      if (user) {
+        window.localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
+      } else {
+        window.localStorage.removeItem(USER_STORAGE_KEY);
+      }
+    } catch (_) {}
+  }
+};
+
+export const clearAuthSession = () => {
+  setAuthToken(null);
+  setSavedUser(null);
 };
 
 // Strongly Typed API Contracts matching Backend Pydantic Schemas
@@ -170,8 +202,19 @@ export const api = {
       setAuthToken(res.data.access_token);
       return res.data;
     },
+    googleAuth: async (payload: {
+      email: string;
+      full_name: string;
+      role?: string;
+      google_id?: string;
+    }): Promise<TokenResponse> => {
+      const res = await apiClient.post<TokenResponse>("/auth/google", payload);
+      setAuthToken(res.data.access_token);
+      return res.data;
+    },
     getMe: async (): Promise<UserProfile> => {
       const res = await apiClient.get<UserProfile>("/auth/me");
+      setSavedUser(res.data);
       return res.data;
     },
   },
