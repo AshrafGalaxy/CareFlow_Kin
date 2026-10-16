@@ -1,12 +1,12 @@
 #!/bin/sh
-# Git commit-msg hook to enforce subject <= 70 characters and conventional commit format
+# Git commit-msg hook: Enforce subject <= 70 chars, conventional format, and prohibited terms
 
 COMMIT_MSG_FILE=$1
 FIRST_LINE=$(head -n 1 "$COMMIT_MSG_FILE")
 LENGTH=${#FIRST_LINE}
-
 MAX_LENGTH=70
 
+# 1. Subject length check
 if [ "$LENGTH" -gt "$MAX_LENGTH" ]; then
     echo "================================================================="
     echo "COMMIT REJECTED: Subject line exceeds limit ($LENGTH / $MAX_LENGTH characters)"
@@ -16,7 +16,7 @@ if [ "$LENGTH" -gt "$MAX_LENGTH" ]; then
     exit 1
 fi
 
-# Check conventional commit prefix
+# 2. Check conventional commit prefix
 case "$FIRST_LINE" in
     feat\(*\):*|fix\(*\):*|refactor\(*\):*|test\(*\):*|docs\(*\):*|chore\(*\):*|perf\(*\):*)
         ;;
@@ -30,5 +30,25 @@ case "$FIRST_LINE" in
         exit 1
         ;;
 esac
+
+# 3. Prohibition of colloquial 'landing page' terminology
+if grep -i -q "landing page" "$COMMIT_MSG_FILE"; then
+    echo "================================================================="
+    echo "COMMIT REJECTED: Use of colloquial phrase 'landing page' is prohibited."
+    echo "Please use canonical architectural descriptors instead (e.g., 'public index',"
+    echo "'public portal', 'entry view', 'product showcase')."
+    echo "================================================================="
+    exit 1
+fi
+
+# 4. Exclusion of raw filenames or extensions in commit header
+if echo "$FIRST_LINE" | grep -E -q '\.(md|tsx|ts|py|json|yaml|yml)\b'; then
+    echo "================================================================="
+    echo "COMMIT REJECTED: Raw filenames or file extensions in commit header."
+    echo "Header: $FIRST_LINE"
+    echo "Use canonical architectural/subsystem scopes instead (e.g. docs(protocols), feat(client))."
+    echo "================================================================="
+    exit 1
+fi
 
 exit 0

@@ -1,0 +1,63 @@
+#!/bin/sh
+# Git pre-commit hook: Secret scanning, forbidden files check, and syntax verification
+
+set -e
+
+echo "[githooks] Running pre-commit validation..."
+
+# 1. Check for forbidden files being staged
+FORBIDDEN_FILES=$(git diff --cached --name-only | grep -E '(\.env($|\..*)|\.pyc$|__pycache__|node_modules|\.DS_Store|Thumbs\.db)' || true)
+
+if [ -n "$FORBIDDEN_FILES" ]; then
+    echo "================================================================="
+    echo "COMMIT REJECTED: Forbidden file(s) staged for commit:"
+    echo "$FORBIDDEN_FILES"
+    echo "Remove them from staging via 'git reset HEAD <file>'"
+    echo "================================================================="
+    exit 1
+fi
+
+# 2. Secret and credential scanner in staged diffs
+STAGED_NON_HOOKS=$(git diff --cached --name-only | grep -v '^\.githooks/' || true)
+if [ -n "$STAGED_NON_HOOKS" ]; then
+    STAGED_SECRETS=$(git diff --cached -S"BEGIN RSA PRIVATE KEY" -S"BEGIN PRIVATE KEY" -S"BEGIN OPENSSH PRIVATE KEY" --name-only -- $STAGED_NON_HOOKS || true)
+    if [ -n "$STAGED_SECRETS" ]; then
+        echo "================================================================="
+        echo "COMMIT REJECTED: Potential private key detected in staged files:"
+        echo "$STAGED_SECRETS"
+        echo "================================================================="
+        exit 1
+    fi
+fi
+
+# 3. Python syntax validation for staged backend files
+PYTHON_STAGED=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.py$' || true)
+if [ -n "$PYTHON_STAGED" ]; then
+    echo "[githooks] Verifying Python syntax on staged files..."
+    for file in $PYTHON_STAGED; do
+        if [ -f "$file" ]; then
+            python -m py_compile "$file" 2>&1 || {
+                echo "================================================================="
+                echo "COMMIT REJECTED: Python syntax error in $file"
+                echo "================================================================="
+                exit 1
+            }
+        fi
+    done
+fi
+
+# 4. TypeScript validation if client files are staged
+CLIENT_STAGED=$(git diff --cached --name-only --diff-filter=ACM | grep -E '^client/' || true)
+if [ -n "$CLIENT_STAGED" ]; then
+    echo "[githooks] Verifying client TypeScript compilation..."
+    (cd client && npm run typecheck > /dev/null 2>&1) || {
+        echo "================================================================="
+        echo "COMMIT REJECTED: TypeScript compilation error in client."
+        echo "Run 'npm run typecheck' in client/ to diagnose."
+        echo "================================================================="
+        exit 1
+    }
+fi
+
+echo "[githooks] Pre-commit checks passed successfully."
+exit 0

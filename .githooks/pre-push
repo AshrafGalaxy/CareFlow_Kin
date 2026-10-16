@@ -1,18 +1,19 @@
 #!/bin/sh
-# Git pre-push hook to verify all outgoing commits adhere to subject <= 70 chars
+# Git pre-push hook: Verify outgoing commits and execute automated test suites
 
 REMOTE="$1"
 URL="$2"
 MAX_LENGTH=70
 
+echo "[githooks] Running pre-push verification..."
+
+# 1. Inspect outgoing commits in the push range
 while read local_ref local_oid remote_ref remote_oid; do
     if [ "$local_oid" = "0000000000000000000000000000000000000000" ]; then
-        # Branch deletion, skip
         continue
     fi
 
     if [ "$remote_oid" = "0000000000000000000000000000000000000000" ]; then
-        # New branch on remote, check commits relative to origin/main or last 10
         RANGE="$local_oid"
     else
         RANGE="$remote_oid..$local_oid"
@@ -25,11 +26,48 @@ while read local_ref local_oid remote_ref remote_oid; do
             echo "================================================================="
             echo "PUSH ABORTED: Commit $commit subject exceeds limit ($len / $MAX_LENGTH chars)"
             echo "Subject: $subject"
-            echo "Please amend or rebase your commits before pushing."
+            echo "Please shorten or rebase commits before pushing."
+            echo "================================================================="
+            exit 1
+        fi
+
+        # Check for forbidden 'landing page' in outgoing commits
+        if git log -1 --format="%B" "$commit" | grep -i -q "landing page"; then
+            echo "================================================================="
+            echo "PUSH ABORTED: Commit $commit contains forbidden 'landing page' term."
+            echo "Please rebase to use canonical architectural terminology."
             echo "================================================================="
             exit 1
         fi
     done
 done
 
+# 2. Automated Test Suite Gates
+echo "[githooks] Executing client TypeScript typecheck..."
+(cd client && npm run typecheck > /dev/null 2>&1) || {
+    echo "================================================================="
+    echo "PUSH ABORTED: Client TypeScript compilation check failed."
+    echo "Run 'npm run typecheck' in client/ to resolve errors before pushing."
+    echo "================================================================="
+    exit 1
+}
+
+echo "[githooks] Executing backend test suite..."
+if [ -f "backend/.venv/Scripts/pytest.exe" ]; then
+    PYTEST_BIN="backend/.venv/Scripts/pytest.exe"
+elif [ -f "backend/.venv/bin/pytest" ]; then
+    PYTEST_BIN="backend/.venv/bin/pytest"
+else
+    PYTEST_BIN="pytest"
+fi
+
+($PYTEST_BIN backend/tests/ -q > /dev/null 2>&1) || {
+    echo "================================================================="
+    echo "PUSH ABORTED: Backend test suite failed."
+    echo "Run pytest in backend/ to resolve failing tests before pushing."
+    echo "================================================================="
+    exit 1
+}
+
+echo "[githooks] All pre-push checks and test suites passed successfully."
 exit 0

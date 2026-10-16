@@ -33,6 +33,10 @@
 - **Simplicity and Understandability**:
   - Always write simple, clear, and easily understandable commit messages.
   - Avoid overly dense, convoluted, or unnatural jargon. State what changed in direct, plain English.
+- **Deterministic Git Hook Enforcement**:
+  - `pre-commit`: Scans staged diffs for leaked secrets, blocks forbidden files (`.env*`, `*.pyc`), and validates TypeScript/Python syntax.
+  - `commit-msg`: Enforces hard limit of 70 characters on line 1, conventional prefix, and blocks prohibited terms (`landing page`, raw filenames).
+  - `pre-push`: Verifies all outgoing commits and executes automated client and backend test suites prior to remote transmission.
 
 ## 3. Engineering Tenets
 - **Git Hygiene and .gitignore Integrity**: Rigorously maintain `.gitignore`. Never allow untracked files, virtual environments, build outputs, or environment files into version control.
