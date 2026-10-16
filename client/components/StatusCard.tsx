@@ -1,9 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Theme } from "../constants/theme";
-
 import { useResponsive } from "../hooks/useResponsive";
-
 import { useAccessibility } from "../context/AccessibilityContext";
 
 interface StatusCardProps {
@@ -26,19 +24,31 @@ export const StatusCard: React.FC<StatusCardProps> = ({
   style,
 }) => {
   const { isSmallMobile, cardPadding } = useResponsive();
-  const { isAAAMode, highContrastBorders, fontMultiplier } = useAccessibility();
+  const { isAAAMode, isDark, colors, aaaColors, highContrastBorders, fontMultiplier } = useAccessibility();
 
   const getBadgeColors = () => {
+    if (isDark) {
+      switch (badgeVariant) {
+        case "success":
+          return { bg: "#064E3B", text: "#34D399", border: "#059669" };
+        case "accent":
+          return { bg: "#0C243B", text: "#38BDF8", border: "#0284C7" };
+        case "primary":
+          return { bg: "#0C243B", text: "#38BDF8", border: "#0284C7" };
+        default:
+          return { bg: "#1F2937", text: "#94A3B8", border: "#374151" };
+      }
+    }
     if (isAAAMode) {
       switch (badgeVariant) {
         case "success":
-          return { bg: "#F0FDF4", text: Theme.accessibility.aaaColors.success, border: "#BBF7D0" };
+          return { bg: "#F0FDF4", text: aaaColors.success, border: "#BBF7D0" };
         case "accent":
-          return { bg: "#F0F9FF", text: Theme.accessibility.aaaColors.primary, border: "#BAE6FD" };
+          return { bg: "#F0F9FF", text: aaaColors.primary, border: "#BAE6FD" };
         case "primary":
-          return { bg: "#F0F9FF", text: Theme.accessibility.aaaColors.primary, border: "#BAE6FD" };
+          return { bg: "#F0F9FF", text: aaaColors.primary, border: "#BAE6FD" };
         default:
-          return { bg: "#F1F5F9", text: Theme.accessibility.aaaColors.textMuted, border: "#CBD5E1" };
+          return { bg: "#F1F5F9", text: aaaColors.textMuted, border: "#CBD5E1" };
       }
     }
     switch (badgeVariant) {
@@ -47,9 +57,9 @@ export const StatusCard: React.FC<StatusCardProps> = ({
       case "accent":
         return { bg: "#EFF6FF", text: "#0284C7", border: "#BAE6FD" };
       case "primary":
-        return { bg: Theme.colors.primaryLight, text: Theme.colors.primary, border: Theme.colors.borderActive };
+        return { bg: colors.primaryLight, text: colors.primary, border: colors.borderActive };
       default:
-        return { bg: "#F1F5F9", text: Theme.colors.textMuted, border: "#E2E8F0" };
+        return { bg: "#F1F5F9", text: colors.textMuted, border: "#E2E8F0" };
     }
   };
 
@@ -61,10 +71,14 @@ export const StatusCard: React.FC<StatusCardProps> = ({
     <View
       style={[
         styles.card,
-        { padding: cardPadding },
+        {
+          backgroundColor: colors.card,
+          borderColor: colors.border,
+          padding: cardPadding,
+        },
         highContrastBorders && {
           borderWidth: 1.5,
-          borderColor: Theme.accessibility.aaaColors.borderHighContrast,
+          borderColor: aaaColors.borderHighContrast,
         },
         style,
       ]}
@@ -75,6 +89,7 @@ export const StatusCard: React.FC<StatusCardProps> = ({
             <View
               style={[
                 styles.iconWrapper,
+                { backgroundColor: isDark ? "#0C243B" : colors.primaryLight },
                 isSmallMobile && styles.iconWrapperSmall,
               ]}
             >
@@ -85,6 +100,7 @@ export const StatusCard: React.FC<StatusCardProps> = ({
             <Text
               style={[
                 styles.title,
+                { color: colors.text },
                 isSmallMobile && styles.titleSmall,
                 { fontSize: dynamicTitleSize, lineHeight: Math.round(dynamicTitleSize * 1.3) },
               ]}
@@ -95,6 +111,7 @@ export const StatusCard: React.FC<StatusCardProps> = ({
               <Text
                 style={[
                   styles.subtitle,
+                  { color: colors.textMuted },
                   { fontSize: dynamicSubtitleSize, lineHeight: Math.round(dynamicSubtitleSize * 1.4) },
                 ]}
               >
@@ -130,10 +147,8 @@ export const StatusCard: React.FC<StatusCardProps> = ({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: Theme.colors.card,
     borderRadius: Theme.ergonomics.cardRadius,
     borderWidth: 1,
-    borderColor: Theme.colors.border,
     marginBottom: Theme.spacing.md,
     ...Theme.shadows.sm,
   },
@@ -155,7 +170,6 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: Theme.colors.primaryLight,
     alignItems: "center",
     justifyContent: "center",
     flexShrink: 0,
@@ -174,7 +188,6 @@ const styles = StyleSheet.create({
     fontFamily: Theme.fonts.brand,
     fontSize: Theme.typography.subheading,
     fontWeight: "700",
-    color: Theme.colors.text,
     letterSpacing: -0.3,
   },
   titleSmall: {
@@ -185,7 +198,6 @@ const styles = StyleSheet.create({
   subtitle: {
     fontFamily: Theme.fonts.body,
     fontSize: Theme.typography.bodySmall,
-    color: Theme.colors.textMuted,
     marginTop: 2,
     lineHeight: 18,
   },
@@ -215,4 +227,3 @@ const styles = StyleSheet.create({
     marginTop: Theme.spacing.md,
   },
 });
-

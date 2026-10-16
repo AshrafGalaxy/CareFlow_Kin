@@ -32,9 +32,19 @@ import { useAccessibility } from "../../context/AccessibilityContext";
 export default function AppointmentsScreen() {
   const queryClient = useQueryClient();
   const { isSmallMobile } = useResponsive();
-  const { fontMultiplier, isAAAMode, minTouchTarget, aaaColors, highContrastBorders } = useAccessibility();
+  const {
+    fontMultiplier,
+    isAAAMode,
+    minTouchTarget,
+    aaaColors,
+    highContrastBorders,
+    colors,
+    isDark,
+  } = useAccessibility();
   const [modalVisible, setModalVisible] = useState(false);
-  const cardBorderStyle = highContrastBorders ? { borderWidth: 1.5, borderColor: "#CBD5E1" } : {};
+  const cardBorderStyle = highContrastBorders
+    ? { borderWidth: 1.5, borderColor: isDark ? "#475569" : "#CBD5E1" }
+    : { borderColor: colors.border };
 
 
   // Form states
@@ -123,28 +133,28 @@ export default function AppointmentsScreen() {
     <ResponsiveContainer>
       <View style={styles.headerRow}>
         <View style={styles.titleWrap}>
-          <Text style={[styles.screenTitle, { fontSize: Math.round(26 * fontMultiplier) }]}>Clinical Appointments</Text>
-          <Text style={[styles.screenSubtitle, { fontSize: Math.round(15 * fontMultiplier) }]}>
+          <Text style={[styles.screenTitle, { color: colors.text, fontSize: Math.round(26 * fontMultiplier) }]}>Clinical Appointments</Text>
+          <Text style={[styles.screenSubtitle, { color: colors.textMuted, fontSize: Math.round(15 * fontMultiplier) }]}>
             Scheduled visits, specialist follow-ups, and clinical consultations.
           </Text>
         </View>
 
         <TouchableOpacity
-          style={[styles.addBtn, { minHeight: Math.max(48, minTouchTarget) }]}
+          style={[styles.addBtn, { backgroundColor: colors.primary, minHeight: Math.max(48, minTouchTarget) }]}
           onPress={() => setModalVisible(true)}
           activeOpacity={0.8}
         >
-          <Plus size={18} color="#FFFFFF" />
-          <Text style={[styles.addBtnText, { fontSize: Math.round(14 * fontMultiplier) }]}>New Visit</Text>
+          <Plus size={18} color={isDark ? "#0F172A" : "#FFFFFF"} />
+          <Text style={[styles.addBtnText, { color: isDark ? "#0F172A" : "#FFFFFF", fontSize: Math.round(14 * fontMultiplier) }]}>New Visit</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.listContainer}>
         {appts.length === 0 ? (
-          <View style={[styles.emptyCard, cardBorderStyle]}>
-            <Calendar size={40} color={Theme.colors.accent} />
-            <Text style={[styles.emptyTitle, { fontSize: Math.round(18 * fontMultiplier) }]}>No Upcoming Appointments</Text>
-            <Text style={[styles.emptyDesc, { fontSize: Math.round(14 * fontMultiplier) }]}>
+          <View style={[styles.emptyCard, { backgroundColor: colors.card, borderColor: colors.border }, cardBorderStyle]}>
+            <Calendar size={40} color={colors.accent} />
+            <Text style={[styles.emptyTitle, { color: colors.text, fontSize: Math.round(18 * fontMultiplier) }]}>No Upcoming Appointments</Text>
+            <Text style={[styles.emptyDesc, { color: colors.textMuted, fontSize: Math.round(14 * fontMultiplier) }]}>
               You have no clinical visits scheduled right now. Use the button above to add one.
             </Text>
           </View>
@@ -162,15 +172,15 @@ export default function AppointmentsScreen() {
             });
 
             return (
-              <View key={appt.id} style={[styles.apptCard, isSmallMobile && { padding: 14 }, cardBorderStyle]}>
+              <View key={appt.id} style={[styles.apptCard, { backgroundColor: colors.card, borderColor: colors.border }, isSmallMobile && { padding: 14 }, cardBorderStyle]}>
                 <View style={styles.cardHeader}>
-                  <View style={[styles.iconBox, isSmallMobile && { width: 36, height: 36, borderRadius: 10 }]}>
-                    <Stethoscope size={isSmallMobile ? 18 : 20} color="#0D9488" />
+                  <View style={[styles.iconBox, { backgroundColor: isDark ? "#0D2D2A" : "#F0FDFA" }, isSmallMobile && { width: 36, height: 36, borderRadius: 10 }]}>
+                    <Stethoscope size={isSmallMobile ? 18 : 20} color={colors.accent} />
                   </View>
 
                   <View style={styles.titleBlock}>
-                    <Text style={[styles.apptTitle, { fontSize: Math.round((isSmallMobile ? 16 : 18) * fontMultiplier) }]}>{appt.title}</Text>
-                    <Text style={[styles.doctorText, { fontSize: Math.round(15 * fontMultiplier) }]}>{appt.doctor_name}</Text>
+                    <Text style={[styles.apptTitle, { color: colors.text, fontSize: Math.round((isSmallMobile ? 16 : 18) * fontMultiplier) }]}>{appt.title}</Text>
+                    <Text style={[styles.doctorText, { color: colors.primary, fontSize: Math.round(15 * fontMultiplier) }]}>{appt.doctor_name}</Text>
                   </View>
 
                   <View style={styles.statusBadge}>
@@ -216,11 +226,11 @@ export default function AppointmentsScreen() {
         onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
+          <View style={[styles.modalContent, { backgroundColor: isDark ? "#111827" : "#FFFFFF", borderColor: colors.border }]}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Schedule Clinical Visit</Text>
+              <Text style={[styles.modalTitle, { color: colors.text }]}>Schedule Clinical Visit</Text>
               <TouchableOpacity onPress={() => setModalVisible(false)}>
-                <X size={20} color={Theme.colors.textMuted} />
+                <X size={20} color={colors.textMuted} />
               </TouchableOpacity>
             </View>
 

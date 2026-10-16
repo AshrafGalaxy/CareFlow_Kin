@@ -12,7 +12,14 @@ import { useAccessibility } from "../../context/AccessibilityContext";
 export default function ChecklistScreen() {
   const queryClient = useQueryClient();
   const { isSmallMobile } = useResponsive();
-  const { isAAAMode, fontMultiplier, highContrastBorders, minTouchTarget } = useAccessibility();
+  const {
+    isAAAMode,
+    fontMultiplier,
+    highContrastBorders,
+    minTouchTarget,
+    colors,
+    isDark,
+  } = useAccessibility();
 
   const { data: items = [] } = useQuery<ChecklistItem[]>({
     queryKey: ["checklistToday"],
@@ -100,10 +107,10 @@ export default function ChecklistScreen() {
   return (
     <ResponsiveContainer>
       <View style={styles.header}>
-        <Text style={[styles.title, { fontSize: Math.round(26 * fontMultiplier) }]}>
+        <Text style={[styles.title, { color: colors.text, fontSize: Math.round(26 * fontMultiplier) }]}>
           Daily Routine Checklist
         </Text>
-        <Text style={[styles.subtitle, { fontSize: Math.round(14 * fontMultiplier) }]}>
+        <Text style={[styles.subtitle, { color: colors.textMuted, fontSize: Math.round(14 * fontMultiplier) }]}>
           Step-by-step calm activities to keep you feeling energized and balanced.
         </Text>
       </View>
@@ -112,28 +119,29 @@ export default function ChecklistScreen() {
       <View
         style={[
           styles.progressDeck,
+          { backgroundColor: colors.card, borderColor: colors.border },
           highContrastBorders && {
             borderWidth: 1.5,
-            borderColor: Theme.accessibility.aaaColors.borderHighContrast,
+            borderColor: isDark ? "#475569" : Theme.accessibility.aaaColors.borderHighContrast,
           },
         ]}
       >
         <View style={styles.progressDeckHeader}>
           <View style={styles.progressDeckInfo}>
-            <Text style={[styles.progressDeckTitle, { fontSize: Math.round(15 * fontMultiplier) }]}>
+            <Text style={[styles.progressDeckTitle, { color: colors.text, fontSize: Math.round(15 * fontMultiplier) }]}>
               Today's Routine Completion
             </Text>
-            <Text style={[styles.progressDeckSubtitle, { fontSize: Math.round(13 * fontMultiplier) }]}>
+            <Text style={[styles.progressDeckSubtitle, { color: colors.textMuted, fontSize: Math.round(13 * fontMultiplier) }]}>
               {completedCount} of {items.length} daily wellness tasks finished
             </Text>
           </View>
-          <View style={styles.progressPercentBadge}>
-            <Text style={styles.progressPercentText}>{progressPercent}%</Text>
+          <View style={[styles.progressPercentBadge, { backgroundColor: isDark ? "#0C243B" : "#F0F9FF" }]}>
+            <Text style={[styles.progressPercentText, { color: colors.primary }]}>{progressPercent}%</Text>
           </View>
         </View>
 
-        <View style={styles.progressTrack}>
-          <View style={[styles.progressFill, { width: `${progressPercent}%` }]} />
+        <View style={[styles.progressTrack, { backgroundColor: isDark ? "#1E293B" : "#F1F5F9" }]}>
+          <View style={[styles.progressFill, { backgroundColor: colors.primary, width: `${progressPercent}%` }]} />
         </View>
       </View>
 
@@ -149,15 +157,16 @@ export default function ChecklistScreen() {
               key={item.id}
               style={[
                 styles.card,
+                { backgroundColor: colors.card, borderColor: colors.border },
                 isSmallMobile && { padding: 14 },
                 highContrastBorders && {
                   borderWidth: 1.5,
-                  borderColor: Theme.accessibility.aaaColors.borderHighContrast,
+                  borderColor: isDark ? "#475569" : Theme.accessibility.aaaColors.borderHighContrast,
                 },
               ]}
             >
               <View style={styles.cardHeader}>
-                <View style={[styles.iconBox, { backgroundColor: bg }, isSmallMobile && { width: 36, height: 36, borderRadius: 10 }]}>
+                <View style={[styles.iconBox, { backgroundColor: isDark ? "#1E293B" : bg }, isSmallMobile && { width: 36, height: 36, borderRadius: 10 }]}>
                   {icon}
                 </View>
                 <View style={styles.infoBox}>
@@ -165,19 +174,20 @@ export default function ChecklistScreen() {
                     <Text
                       style={[
                         styles.itemTitle,
+                        { color: colors.text },
                         isDone && styles.itemDoneTitle,
                         { fontSize: dynamicItemTitleSize, lineHeight: Math.round(dynamicItemTitleSize * 1.35) },
                       ]}
                     >
                       {item.title}
                     </Text>
-                    <View style={styles.timeTag}>
-                      <Text style={styles.timeTagText}>{item.time_of_day}</Text>
+                    <View style={[styles.timeTag, { backgroundColor: isDark ? "#1E293B" : "#F1F5F9" }]}>
+                      <Text style={[styles.timeTagText, { color: colors.textMuted }]}>{item.time_of_day}</Text>
                     </View>
                   </View>
 
                   {item.description && (
-                    <Text style={[styles.itemDesc, { fontSize: Math.round(13 * fontMultiplier) }]}>
+                    <Text style={[styles.itemDesc, { color: colors.textMuted, fontSize: Math.round(13 * fontMultiplier) }]}>
                       {item.description}
                     </Text>
                   )}

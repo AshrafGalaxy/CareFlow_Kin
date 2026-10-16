@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { Theme } from "../constants/theme";
 import { Heart } from "lucide-react-native";
 import { useResponsive } from "../hooks/useResponsive";
+import { useAccessibility } from "../context/AccessibilityContext";
 
 interface HeaderGreetingProps {
   greeting: string;
@@ -11,17 +12,29 @@ interface HeaderGreetingProps {
 
 export const HeaderGreeting: React.FC<HeaderGreetingProps> = ({ greeting, date }) => {
   const { isSmallMobile, isMobile } = useResponsive();
+  const { colors, isDark } = useAccessibility();
 
   const greetingFontSize = isSmallMobile ? 21 : isMobile ? 24 : 30;
 
   return (
     <View style={styles.container}>
       <View style={styles.textColumn}>
-        <Text style={styles.dateText}>{date}</Text>
-        <Text style={[styles.greetingText, { fontSize: greetingFontSize }]}>{greeting}</Text>
+        <Text style={[styles.dateText, { color: colors.accent }]}>{date}</Text>
+        <Text style={[styles.greetingText, { fontSize: greetingFontSize, color: colors.text }]}>
+          {greeting}
+        </Text>
       </View>
-      <View style={[styles.badgeContainer, isSmallMobile && styles.badgeContainerSmall]}>
-        <Heart size={isSmallMobile ? 20 : 24} color={Theme.colors.primary} />
+      <View
+        style={[
+          styles.badgeContainer,
+          {
+            backgroundColor: isDark ? "#0C243B" : colors.primaryLight,
+            borderColor: colors.border,
+          },
+          isSmallMobile && styles.badgeContainerSmall,
+        ]}
+      >
+        <Heart size={isSmallMobile ? 20 : 24} color={colors.primary} />
       </View>
     </View>
   );
@@ -43,14 +56,12 @@ const styles = StyleSheet.create({
     fontFamily: Theme.fonts.heading,
     fontSize: 12,
     fontWeight: "600",
-    color: Theme.colors.accent,
     textTransform: "uppercase",
     letterSpacing: 0.8,
   },
   greetingText: {
     fontFamily: Theme.fonts.brand,
     fontWeight: "700",
-    color: Theme.colors.text,
     marginTop: 2,
     letterSpacing: -0.4,
   },
@@ -58,11 +69,9 @@ const styles = StyleSheet.create({
     width: 46,
     height: 46,
     borderRadius: 23,
-    backgroundColor: Theme.colors.primaryLight,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
-    borderColor: Theme.colors.border,
     ...Theme.shadows.sm,
     flexShrink: 0,
   },
@@ -72,4 +81,3 @@ const styles = StyleSheet.create({
     borderRadius: 19,
   },
 });
-

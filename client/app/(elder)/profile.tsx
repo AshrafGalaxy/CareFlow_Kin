@@ -28,21 +28,31 @@ import {
   Heart,
   ChevronRight,
   Sparkles,
+  Check,
 } from "lucide-react-native";
 
 export default function ProfileScreen() {
   const router = useRouter();
   const { user, logout } = useAuth();
   const { isSmallMobile } = useResponsive();
-  const { fontMultiplier, isAAAMode, minTouchTarget, aaaColors, highContrastBorders } = useAccessibility();
-  const cardBorderStyle = highContrastBorders ? { borderWidth: 1.5, borderColor: "#CBD5E1" } : {};
+  const {
+    fontMultiplier,
+    isAAAMode,
+    minTouchTarget,
+    aaaColors,
+    highContrastBorders,
+    colors,
+    isDark,
+  } = useAccessibility();
+  const cardBorderStyle = highContrastBorders
+    ? { borderWidth: 1.5, borderColor: isDark ? "#475569" : "#CBD5E1" }
+    : { borderColor: colors.border };
 
   // Settings states
   const [morningReminders, setMorningReminders] = useState(true);
   const [medAlerts, setMedAlerts] = useState(true);
   const [circleSync, setCircleSync] = useState(true);
   const [selectedLanguage, setSelectedLanguage] = useState("English (US)");
-
 
   const handleLogout = () => {
     logout();
@@ -52,56 +62,56 @@ export default function ProfileScreen() {
   return (
     <ResponsiveContainer>
       <View style={styles.header}>
-        <Text style={[styles.screenTitle, { fontSize: Math.round(26 * fontMultiplier) }]}>Elder Profile & Settings</Text>
-        <Text style={[styles.screenSubtitle, { fontSize: Math.round(15 * fontMultiplier) }]}>
+        <Text style={[styles.screenTitle, { color: colors.text, fontSize: Math.round(26 * fontMultiplier) }]}>Elder Profile & Settings</Text>
+        <Text style={[styles.screenSubtitle, { color: colors.textMuted, fontSize: Math.round(15 * fontMultiplier) }]}>
           Manage care preferences, guardian contacts, and notification alerts.
         </Text>
       </View>
 
       <View style={styles.contentStack}>
         {/* 1. Identity & Role Card */}
-        <View style={[styles.profileCard, isSmallMobile && { padding: 14, gap: 12 }, cardBorderStyle]}>
-          <View style={[styles.avatarWrap, isSmallMobile && { width: 48, height: 48, borderRadius: 12 }]}>
-            <Text style={[styles.avatarText, isSmallMobile && { fontSize: 20 }]}>
+        <View style={[styles.profileCard, { backgroundColor: colors.card, borderColor: colors.border }, isSmallMobile && { padding: 14, gap: 12 }, cardBorderStyle]}>
+          <View style={[styles.avatarWrap, { backgroundColor: isDark ? "#0C243B" : "#F0F9FF" }, isSmallMobile && { width: 48, height: 48, borderRadius: 12 }]}>
+            <Text style={[styles.avatarText, { color: colors.primary }, isSmallMobile && { fontSize: 20 }]}>
               {user?.full_name ? user.full_name.charAt(0) : "E"}
             </Text>
           </View>
 
           <View style={styles.identityBlock}>
-            <Text style={[styles.userName, { fontSize: Math.round((isSmallMobile ? 17 : 20) * fontMultiplier) }]}>{user?.full_name || "Eleanor Vance"}</Text>
-            <Text style={[styles.userEmail, { fontSize: Math.round(14 * fontMultiplier) }]}>{user?.email || "eleanor@careflow.com"}</Text>
+            <Text style={[styles.userName, { color: colors.text, fontSize: Math.round((isSmallMobile ? 17 : 20) * fontMultiplier) }]}>{user?.full_name || "Eleanor Vance"}</Text>
+            <Text style={[styles.userEmail, { color: colors.textMuted, fontSize: Math.round(14 * fontMultiplier) }]}>{user?.email || "eleanor@careflow.com"}</Text>
 
             <View style={styles.roleBadgeRow}>
-              <View style={styles.roleBadge}>
-                <Heart size={13} color="#0284C7" />
-                <Text style={[styles.roleBadgeText, { fontSize: Math.round(12 * fontMultiplier) }]}>Elder Companion</Text>
+              <View style={[styles.roleBadge, { backgroundColor: isDark ? "#0C243B" : "#F0F9FF", borderColor: colors.border }]}>
+                <Heart size={13} color={colors.primary} />
+                <Text style={[styles.roleBadgeText, { color: colors.primary, fontSize: Math.round(12 * fontMultiplier) }]}>Elder Companion</Text>
               </View>
 
-              <View style={styles.activePill}>
-                <View style={styles.activeDot} />
-                <Text style={[styles.activeText, { fontSize: Math.round(12 * fontMultiplier) }]}>Active Member</Text>
+              <View style={[styles.activePill, { backgroundColor: isDark ? "#064E3B" : "#ECFDF5", borderColor: isDark ? "#059669" : "#A7F3D0" }]}>
+                <View style={[styles.activeDot, { backgroundColor: colors.success }]} />
+                <Text style={[styles.activeText, { color: isDark ? "#34D399" : "#047857", fontSize: Math.round(12 * fontMultiplier) }]}>Active Member</Text>
               </View>
             </View>
           </View>
         </View>
 
         {/* 2. Emergency & Family Guardian Support */}
-        <View style={[styles.sectionCard, isSmallMobile && { padding: 14 }, cardBorderStyle]}>
+        <View style={[styles.sectionCard, { backgroundColor: colors.card, borderColor: colors.border }, isSmallMobile && { padding: 14 }, cardBorderStyle]}>
           <View style={styles.sectionHeader}>
-            <View style={styles.sectionIconSquircle}>
-              <Shield size={18} color="#0284C7" />
+            <View style={[styles.sectionIconSquircle, { backgroundColor: isDark ? "#0C243B" : "#F0F9FF" }]}>
+              <Shield size={18} color={colors.primary} />
             </View>
-            <Text style={[styles.sectionTitle, { fontSize: Math.round(16 * fontMultiplier) }]}>Designated Family Guardian</Text>
+            <Text style={[styles.sectionTitle, { color: colors.text, fontSize: Math.round(16 * fontMultiplier) }]}>Designated Family Guardian</Text>
           </View>
 
-          <View style={[styles.contactRow, isSmallMobile && { padding: 10, gap: 10 }]}>
-            <View style={[styles.contactAvatar, isSmallMobile && { width: 36, height: 36, borderRadius: 10 }]}>
-              <Text style={styles.contactInitials}>RV</Text>
+          <View style={[styles.contactRow, { backgroundColor: isDark ? "#1E293B" : "#F8FAFC", borderColor: colors.border }, isSmallMobile && { padding: 10, gap: 10 }]}>
+            <View style={[styles.contactAvatar, { backgroundColor: isDark ? "#0C243B" : "#F0F9FF" }, isSmallMobile && { width: 36, height: 36, borderRadius: 10 }]}>
+              <Text style={[styles.contactInitials, { color: colors.primary }]}>RV</Text>
             </View>
             <View style={styles.contactInfo}>
-              <Text style={[styles.contactName, { fontSize: Math.round(16 * fontMultiplier) }]}>Robert Vance</Text>
-              <Text style={[styles.contactRelation, { fontSize: Math.round(13 * fontMultiplier) }]}>Son • Primary Emergency Contact</Text>
-              <Text style={[styles.contactPhone, { fontSize: Math.round(14 * fontMultiplier) }]}>+1 (555) 382-9014</Text>
+              <Text style={[styles.contactName, { color: colors.text, fontSize: Math.round(16 * fontMultiplier) }]}>Robert Vance</Text>
+              <Text style={[styles.contactRelation, { color: colors.textMuted, fontSize: Math.round(13 * fontMultiplier) }]}>Son • Primary Emergency Contact</Text>
+              <Text style={[styles.contactPhone, { color: colors.primary, fontSize: Math.round(14 * fontMultiplier) }]}>+1 (555) 382-9014</Text>
             </View>
             <TouchableOpacity
               style={[styles.contactCallBtn, { minHeight: Math.max(48, minTouchTarget), minWidth: Math.max(48, minTouchTarget) }]}
@@ -114,57 +124,57 @@ export default function ProfileScreen() {
 
 
         {/* 3. Notification Preferences */}
-        <View style={[styles.sectionCard, cardBorderStyle]}>
+        <View style={[styles.sectionCard, { backgroundColor: colors.card, borderColor: colors.border }, cardBorderStyle]}>
           <View style={styles.sectionHeader}>
-            <Bell size={20} color={Theme.colors.primary} />
-            <Text style={[styles.sectionTitle, { fontSize: Math.round(16 * fontMultiplier) }]}>Daily Notifications & Alerts</Text>
+            <Bell size={20} color={colors.primary} />
+            <Text style={[styles.sectionTitle, { color: colors.text, fontSize: Math.round(16 * fontMultiplier) }]}>Daily Notifications & Alerts</Text>
           </View>
 
-          <View style={styles.toggleRow}>
+          <View style={[styles.toggleRow, { borderBottomColor: isDark ? "#1E293B" : "#F1F5F9" }]}>
             <View style={styles.toggleLabelWrap}>
-              <Text style={styles.toggleTitle}>Morning Routine Prompts</Text>
-              <Text style={styles.toggleSubtitle}>Gentle notification for breakfast and hydration</Text>
+              <Text style={[styles.toggleTitle, { color: colors.text }]}>Morning Routine Prompts</Text>
+              <Text style={[styles.toggleSubtitle, { color: colors.textMuted }]}>Gentle notification for breakfast and hydration</Text>
             </View>
             <Switch
               value={morningReminders}
               onValueChange={setMorningReminders}
-              trackColor={{ false: "#E2E8F0", true: Theme.colors.primaryLight }}
-              thumbColor={morningReminders ? Theme.colors.primary : "#94A3B8"}
+              trackColor={{ false: isDark ? "#374151" : "#E2E8F0", true: isDark ? "#0C243B" : colors.primaryLight }}
+              thumbColor={morningReminders ? colors.primary : "#94A3B8"}
             />
           </View>
 
-          <View style={styles.toggleRow}>
+          <View style={[styles.toggleRow, { borderBottomColor: isDark ? "#1E293B" : "#F1F5F9" }]}>
             <View style={styles.toggleLabelWrap}>
-              <Text style={styles.toggleTitle}>Medication Reminders</Text>
-              <Text style={styles.toggleSubtitle}>Sound alert when prescription dose is due</Text>
+              <Text style={[styles.toggleTitle, { color: colors.text }]}>Medication Reminders</Text>
+              <Text style={[styles.toggleSubtitle, { color: colors.textMuted }]}>Sound alert when prescription dose is due</Text>
             </View>
             <Switch
               value={medAlerts}
               onValueChange={setMedAlerts}
-              trackColor={{ false: "#E2E8F0", true: Theme.colors.primaryLight }}
-              thumbColor={medAlerts ? Theme.colors.primary : "#94A3B8"}
+              trackColor={{ false: isDark ? "#374151" : "#E2E8F0", true: isDark ? "#0C243B" : colors.primaryLight }}
+              thumbColor={medAlerts ? colors.primary : "#94A3B8"}
             />
           </View>
 
-          <View style={styles.toggleRow}>
+          <View style={[styles.toggleRow, { borderBottomColor: "transparent" }]}>
             <View style={styles.toggleLabelWrap}>
-              <Text style={styles.toggleTitle}>Care Circle Wellness Sync</Text>
-              <Text style={styles.toggleSubtitle}>Notify family guardians when check-in is logged</Text>
+              <Text style={[styles.toggleTitle, { color: colors.text }]}>Care Circle Wellness Sync</Text>
+              <Text style={[styles.toggleSubtitle, { color: colors.textMuted }]}>Notify family guardians when check-in is logged</Text>
             </View>
             <Switch
               value={circleSync}
               onValueChange={setCircleSync}
-              trackColor={{ false: "#E2E8F0", true: Theme.colors.primaryLight }}
-              thumbColor={circleSync ? Theme.colors.primary : "#94A3B8"}
+              trackColor={{ false: isDark ? "#374151" : "#E2E8F0", true: isDark ? "#0C243B" : colors.primaryLight }}
+              thumbColor={circleSync ? colors.primary : "#94A3B8"}
             />
           </View>
         </View>
 
         {/* 4. Language & Display */}
-        <View style={styles.sectionCard}>
+        <View style={[styles.sectionCard, { backgroundColor: colors.card, borderColor: colors.border }, cardBorderStyle]}>
           <View style={styles.sectionHeader}>
-            <Globe size={20} color={Theme.colors.primary} />
-            <Text style={styles.sectionTitle}>Language & Region</Text>
+            <Globe size={20} color={colors.primary} />
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>Language & Region</Text>
           </View>
 
           <View style={styles.langList}>
@@ -173,21 +183,35 @@ export default function ProfileScreen() {
                 key={lang}
                 style={[
                   styles.langOption,
-                  selectedLanguage === lang && styles.langOptionActive,
+                  {
+                    backgroundColor: isDark ? "#1E293B" : "#FAFCFE",
+                    borderColor: colors.border,
+                  },
+                  selectedLanguage === lang && [
+                    styles.langOptionActive,
+                    {
+                      borderColor: colors.primary,
+                      backgroundColor: isDark ? "#0C243B" : "#F0F9FF",
+                    },
+                  ],
                 ]}
                 onPress={() => setSelectedLanguage(lang)}
               >
                 <Text
                   style={[
                     styles.langText,
-                    selectedLanguage === lang && styles.langTextActive,
+                    { color: colors.textSecondary },
+                    selectedLanguage === lang && [
+                      styles.langTextActive,
+                      { color: colors.primary },
+                    ],
                   ]}
                 >
                   {lang}
                 </Text>
                 {selectedLanguage === lang && (
-                  <View style={styles.langCheck}>
-                    <Text style={styles.langCheckText}>✓</Text>
+                  <View style={[styles.langCheck, { backgroundColor: colors.primary }]}>
+                    <Check size={13} color={isDark ? "#0F172A" : "#FFFFFF"} strokeWidth={3} />
                   </View>
                 )}
               </TouchableOpacity>

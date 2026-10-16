@@ -22,44 +22,44 @@ export const BigButton: React.FC<BigButtonProps> = ({
   disabled = false,
   style,
 }) => {
-  const { isAAAMode, minTouchTarget, fontMultiplier } = useAccessibility();
+  const { isAAAMode, isDark, colors, aaaColors, minTouchTarget, fontMultiplier } = useAccessibility();
 
   const getBackgroundColor = () => {
-    if (disabled) return "#E2E8F0";
+    if (disabled) return isDark ? "#1F2937" : "#E2E8F0";
     if (isAAAMode) {
       switch (variant) {
         case "primary":
-          return Theme.accessibility.aaaColors.primary;
+          return aaaColors.primary;
         case "accent":
-          return Theme.accessibility.aaaColors.accent;
+          return aaaColors.accent;
         case "success":
-          return Theme.accessibility.aaaColors.success;
+          return aaaColors.success;
         case "outline":
-          return "#FFFFFF";
+          return isDark ? "#1E293B" : "#FFFFFF";
         default:
-          return Theme.accessibility.aaaColors.primary;
+          return aaaColors.primary;
       }
     }
     switch (variant) {
       case "primary":
-        return Theme.colors.primary;
+        return colors.primary;
       case "accent":
-        return Theme.colors.accent;
+        return colors.accent;
       case "success":
-        return Theme.colors.success;
+        return colors.success;
       case "outline":
-        return "#FFFFFF";
+        return isDark ? "#1E293B" : "#FFFFFF";
       default:
-        return Theme.colors.primary;
+        return colors.primary;
     }
   };
 
   const getTextColor = () => {
-    if (disabled) return "#94A3B8";
+    if (disabled) return isDark ? "#64748B" : "#94A3B8";
     if (variant === "outline") {
-      return isAAAMode ? Theme.accessibility.aaaColors.primary : Theme.colors.primary;
+      return isAAAMode ? aaaColors.primary : colors.primary;
     }
-    return "#FFFFFF";
+    return isDark && variant === "primary" ? "#0F172A" : "#FFFFFF";
   };
 
   const isOutline = variant === "outline";
@@ -77,7 +77,7 @@ export const BigButton: React.FC<BigButtonProps> = ({
           minHeight: activeMinHeight,
           backgroundColor: getBackgroundColor(),
           borderColor: isOutline
-            ? (isAAAMode ? Theme.accessibility.aaaColors.primary : Theme.colors.primary)
+            ? (isAAAMode ? aaaColors.primary : colors.primary)
             : "transparent",
           borderWidth: isOutline ? (isAAAMode ? 2 : 1.5) : 0,
           borderRadius: isAAAMode ? 14 : Theme.ergonomics.buttonRadius,

@@ -2,6 +2,7 @@ import React from "react";
 import { View, StyleSheet, ScrollView, Platform } from "react-native";
 import { Theme } from "../constants/theme";
 import { useResponsive } from "../hooks/useResponsive";
+import { useAccessibility } from "../context/AccessibilityContext";
 
 interface ResponsiveContainerProps {
   children: React.ReactNode;
@@ -13,6 +14,7 @@ export const ResponsiveContainer: React.FC<ResponsiveContainerProps> = ({
   scrollable = true,
 }) => {
   const { isMobile, isTablet, isDesktop, horizontalPadding, contentMaxWidth } = useResponsive();
+  const { colors } = useAccessibility();
 
   const content = (
     <View
@@ -31,7 +33,7 @@ export const ResponsiveContainer: React.FC<ResponsiveContainerProps> = ({
   if (scrollable) {
     return (
       <ScrollView
-        style={styles.scrollView}
+        style={[styles.scrollView, { backgroundColor: colors.background }]}
         contentContainerStyle={[
           styles.scrollContent,
           { paddingHorizontal: isMobile ? horizontalPadding : 0 },
@@ -48,7 +50,10 @@ export const ResponsiveContainer: React.FC<ResponsiveContainerProps> = ({
     <View
       style={[
         styles.staticView,
-        { paddingHorizontal: isMobile ? horizontalPadding : 0 },
+        {
+          backgroundColor: colors.background,
+          paddingHorizontal: isMobile ? horizontalPadding : 0,
+        },
         !isMobile && styles.centerContainer,
       ]}
     >
