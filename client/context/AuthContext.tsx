@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { api, setAuthToken, UserProfile } from "../services/api";
+import { useQueryClient } from "@tanstack/react-query";
+import { api, setAuthToken, getAuthToken, UserProfile } from "../services/api";
 
 interface AuthContextType {
   user: UserProfile | null;
@@ -14,17 +15,31 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const queryClient = useQueryClient();
   const [user, setUser] = useState<UserProfile | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Initial bootstrap check
+    // Initial authenticated session validation
     const initAuth = async () => {
       try {
-        // If demo/dev credentials exist or local session
-        setIsLoading(false);
+        const existingToken = getAuthToken();
+        if (existingToken) {
+          setToken(existingToken);
+          // Verify with backend that token is still valid
+          const profile = await api.auth.getMe();
+          setUser(profile);
+        } else {
+          setUser(null);
+          setToken(null);
+        }
       } catch (e) {
+        // Token was invalid, expired, or backend rejected it (401)
+        setAuthToken(null);
+        setToken(null);
+        setUser(null);
+      } finally {
         setIsLoading(false);
       }
     };
@@ -94,6 +109,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setAuthToken(null);
     setToken(null);
     setUser(null);
+    queryClient.clear();
   };
 
   return (

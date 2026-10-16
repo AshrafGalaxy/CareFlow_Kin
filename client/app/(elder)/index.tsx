@@ -37,12 +37,6 @@ export default function ElderHomeScreen() {
   const { data, isLoading, refetch } = useQuery<ElderHomeData>({
     queryKey: ["elderHome"],
     queryFn: async () => {
-      // Auto-bootstrap demo session if no token is present
-      if (!getAuthToken()) {
-        try {
-          await api.auth.demoLogin();
-        } catch (_) {}
-      }
       try {
         return await api.elder.getHomeDeck();
       } catch (e) {

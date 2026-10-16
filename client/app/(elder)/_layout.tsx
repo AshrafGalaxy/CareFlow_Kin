@@ -23,12 +23,32 @@ function ElderLayoutContent() {
   const { isSmallMobile, isMobile, isTablet, isDesktop } = useResponsive();
   const router = useRouter();
   const pathname = usePathname();
-  const { user, logout } = useAuth();
+  const { user, token, isLoading, logout } = useAuth();
+
+  React.useEffect(() => {
+    if (!isLoading && (!token || !user)) {
+      router.replace("/(auth)/login");
+    }
+  }, [isLoading, token, user, router]);
 
   const handleLogout = () => {
     logout();
-    router.replace("/");
+    router.replace("/(auth)/login");
   };
+
+  if (isLoading) {
+    return (
+      <View style={[styles.container, { alignItems: "center", justifyContent: "center" }]}>
+        <Text style={{ fontFamily: Theme.fonts.heading, fontSize: 16, color: Theme.colors.textMuted }}>
+          Verifying security credentials...
+        </Text>
+      </View>
+    );
+  }
+
+  if (!token || !user) {
+    return null;
+  }
 
   const navItems = [
     { name: "Overview", path: "/(elder)", icon: Home },
