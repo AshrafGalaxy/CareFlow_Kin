@@ -13,7 +13,13 @@ import { useAccessibility } from "../../context/AccessibilityContext";
 export default function MedicationsScreen() {
   const queryClient = useQueryClient();
   const { isSmallMobile } = useResponsive();
-  const { isAAAMode, fontMultiplier, highContrastBorders } = useAccessibility();
+  const {
+    isAAAMode,
+    fontMultiplier,
+    highContrastBorders,
+    colors,
+    isDark,
+  } = useAccessibility();
 
   const { data: meds = [], isLoading: medsLoading } = useQuery<Medication[]>({
     queryKey: ["medications"],
@@ -96,10 +102,10 @@ export default function MedicationsScreen() {
   return (
     <ResponsiveContainer>
       <View style={styles.header}>
-        <Text style={[styles.title, { fontSize: Math.round(26 * fontMultiplier) }]}>
+        <Text style={[styles.title, { color: colors.text, fontSize: Math.round(26 * fontMultiplier) }]}>
           Medication Manager
         </Text>
-        <Text style={[styles.subtitle, { fontSize: Math.round(14 * fontMultiplier) }]}>
+        <Text style={[styles.subtitle, { color: colors.textMuted, fontSize: Math.round(14 * fontMultiplier) }]}>
           Your daily schedule and verified clinical adherence ledger.
         </Text>
       </View>
@@ -113,34 +119,34 @@ export default function MedicationsScreen() {
         badgeVariant="success"
       >
         <View style={styles.metricsGrid}>
-          <View style={[styles.metricCardMini, { backgroundColor: "#F0FDF4" }]}>
-            <Text style={[styles.metricValMini, { color: "#047857", fontSize: Math.round(24 * fontMultiplier) }]}>
+          <View style={[styles.metricCardMini, { backgroundColor: isDark ? "#064E3B" : "#F0FDF4" }]}>
+            <Text style={[styles.metricValMini, { color: isDark ? "#34D399" : "#047857", fontSize: Math.round(24 * fontMultiplier) }]}>
               {adherence?.total_taken ?? 19}
             </Text>
-            <Text style={styles.metricLabelMini}>Doses Taken</Text>
+            <Text style={[styles.metricLabelMini, { color: colors.textMuted }]}>Doses Taken</Text>
           </View>
-          <View style={[styles.metricCardMini, { backgroundColor: "#FEF2F2" }]}>
-            <Text style={[styles.metricValMini, { color: "#B91C1C", fontSize: Math.round(24 * fontMultiplier) }]}>
+          <View style={[styles.metricCardMini, { backgroundColor: isDark ? "#450A0A" : "#FEF2F2" }]}>
+            <Text style={[styles.metricValMini, { color: isDark ? "#F87171" : "#B91C1C", fontSize: Math.round(24 * fontMultiplier) }]}>
               {adherence?.total_skipped ?? 1}
             </Text>
-            <Text style={styles.metricLabelMini}>Skipped</Text>
+            <Text style={[styles.metricLabelMini, { color: colors.textMuted }]}>Skipped</Text>
           </View>
-          <View style={[styles.metricCardMini, { backgroundColor: "#F0F9FF" }]}>
-            <Text style={[styles.metricValMini, { color: "#0369A1", fontSize: Math.round(24 * fontMultiplier) }]}>
+          <View style={[styles.metricCardMini, { backgroundColor: isDark ? "#27272A" : "#F0F9FF" }]}>
+            <Text style={[styles.metricValMini, { color: isDark ? "#38BDF8" : "#0369A1", fontSize: Math.round(24 * fontMultiplier) }]}>
               {adherence?.total_scheduled ?? 20}
             </Text>
-            <Text style={styles.metricLabelMini}>Scheduled</Text>
+            <Text style={[styles.metricLabelMini, { color: colors.textMuted }]}>Scheduled</Text>
           </View>
         </View>
       </StatusCard>
 
       {/* Prescriptions Stream */}
       <View style={styles.sectionHeaderRow}>
-        <Text style={[styles.sectionHeading, { fontSize: Math.round(18 * fontMultiplier) }]}>
+        <Text style={[styles.sectionHeading, { color: colors.text, fontSize: Math.round(18 * fontMultiplier) }]}>
           Your Prescriptions
         </Text>
-        <View style={styles.prescriptionsCountBadge}>
-          <Text style={styles.prescriptionsCountText}>{meds.length} Active</Text>
+        <View style={[styles.prescriptionsCountBadge, { backgroundColor: isDark ? "#27272A" : "#F0F9FF" }]}>
+          <Text style={[styles.prescriptionsCountText, { color: isDark ? "#38BDF8" : "#0284C7" }]}>{meds.length} Active</Text>
         </View>
       </View>
 
@@ -152,48 +158,52 @@ export default function MedicationsScreen() {
             key={med.id}
             style={[
               styles.medCard,
+              {
+                backgroundColor: colors.card,
+                borderColor: isDark ? "#27272A" : Theme.colors.border,
+              },
               isSmallMobile && { padding: 14 },
               highContrastBorders && {
                 borderWidth: 1.5,
-                borderColor: Theme.accessibility.aaaColors.borderHighContrast,
+                borderColor: isDark ? "#52525B" : Theme.accessibility.aaaColors.borderHighContrast,
               },
             ]}
           >
             <View style={styles.medHeader}>
-              <View style={[styles.medIconBox, isSmallMobile && { width: 36, height: 36, borderRadius: 10 }]}>
-                <Pill size={isSmallMobile ? 20 : 22} color="#0369A1" />
+              <View style={[styles.medIconBox, { backgroundColor: isDark ? "#18181B" : "#F0F9FF" }, isSmallMobile && { width: 36, height: 36, borderRadius: 10 }]}>
+                <Pill size={isSmallMobile ? 20 : 22} color={isDark ? "#38BDF8" : "#0369A1"} />
               </View>
               <View style={styles.medTitleBlock}>
                 <Text
                   style={[
                     styles.medName,
-                    { fontSize: dynamicMedNameSize, lineHeight: Math.round(dynamicMedNameSize * 1.3) },
+                    { color: colors.text, fontSize: dynamicMedNameSize, lineHeight: Math.round(dynamicMedNameSize * 1.3) },
                   ]}
                 >
                   {med.name}
                 </Text>
-                <View style={styles.dosageBadge}>
-                  <Text style={styles.dosageText}>{med.dosage}</Text>
+                <View style={[styles.dosageBadge, { backgroundColor: isDark ? "#27272A" : "#F1F5F9" }]}>
+                  <Text style={[styles.dosageText, { color: colors.textMuted }]}>{med.dosage}</Text>
                 </View>
               </View>
             </View>
 
             <View style={styles.medDetailsBox}>
               <View style={styles.detailRow}>
-                <View style={styles.chipSchedule}>
-                  <Clock size={14} color="#0369A1" />
-                  <Text style={styles.chipScheduleText}>{med.times_of_day}</Text>
+                <View style={[styles.chipSchedule, { backgroundColor: isDark ? "#27272A" : "#F0F9FF" }]}>
+                  <Clock size={14} color={isDark ? "#38BDF8" : "#0369A1"} />
+                  <Text style={[styles.chipScheduleText, { color: isDark ? "#38BDF8" : "#0369A1" }]}>{med.times_of_day}</Text>
                 </View>
                 {med.prescribed_by && (
-                  <View style={styles.chipPrescriber}>
-                    <Text style={styles.chipPrescriberText}>{med.prescribed_by}</Text>
+                  <View style={[styles.chipPrescriber, { backgroundColor: isDark ? "#27272A" : "#F8FAFC" }]}>
+                    <Text style={[styles.chipPrescriberText, { color: colors.textMuted }]}>{med.prescribed_by}</Text>
                   </View>
                 )}
               </View>
 
               {med.instructions && (
-                <View style={styles.instructionBox}>
-                  <Text style={[styles.instructionText, { fontSize: Math.round(13 * fontMultiplier) }]}>
+                <View style={[styles.instructionBox, { backgroundColor: isDark ? "#18181B" : "#FFFFFF", borderColor: isDark ? "#27272A" : "#E2E8F0" }]}>
+                  <Text style={[styles.instructionText, { color: colors.textMuted, fontSize: Math.round(13 * fontMultiplier) }]}>
                     {med.instructions}
                   </Text>
                 </View>

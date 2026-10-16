@@ -122,7 +122,7 @@ export default function ChecklistScreen() {
           { backgroundColor: colors.card, borderColor: colors.border },
           highContrastBorders && {
             borderWidth: 1.5,
-            borderColor: isDark ? "#475569" : Theme.accessibility.aaaColors.borderHighContrast,
+            borderColor: isDark ? "#52525B" : Theme.accessibility.aaaColors.borderHighContrast,
           },
         ]}
       >
@@ -135,12 +135,12 @@ export default function ChecklistScreen() {
               {completedCount} of {items.length} daily wellness tasks finished
             </Text>
           </View>
-          <View style={[styles.progressPercentBadge, { backgroundColor: isDark ? "#0C243B" : "#F0F9FF" }]}>
+          <View style={[styles.progressPercentBadge, { backgroundColor: isDark ? "#18181B" : "#F0F9FF" }]}>
             <Text style={[styles.progressPercentText, { color: colors.primary }]}>{progressPercent}%</Text>
           </View>
         </View>
 
-        <View style={[styles.progressTrack, { backgroundColor: isDark ? "#1E293B" : "#F1F5F9" }]}>
+        <View style={[styles.progressTrack, { backgroundColor: isDark ? "#27272A" : "#F1F5F9" }]}>
           <View style={[styles.progressFill, { backgroundColor: colors.primary, width: `${progressPercent}%` }]} />
         </View>
       </View>
@@ -161,12 +161,12 @@ export default function ChecklistScreen() {
                 isSmallMobile && { padding: 14 },
                 highContrastBorders && {
                   borderWidth: 1.5,
-                  borderColor: isDark ? "#475569" : Theme.accessibility.aaaColors.borderHighContrast,
+                  borderColor: isDark ? "#52525B" : Theme.accessibility.aaaColors.borderHighContrast,
                 },
               ]}
             >
               <View style={styles.cardHeader}>
-                <View style={[styles.iconBox, { backgroundColor: isDark ? "#1E293B" : bg }, isSmallMobile && { width: 36, height: 36, borderRadius: 10 }]}>
+                <View style={[styles.iconBox, { backgroundColor: isDark ? "#18181B" : bg }, isSmallMobile && { width: 36, height: 36, borderRadius: 10 }]}>
                   {icon}
                 </View>
                 <View style={styles.infoBox}>
@@ -181,7 +181,7 @@ export default function ChecklistScreen() {
                     >
                       {item.title}
                     </Text>
-                    <View style={[styles.timeTag, { backgroundColor: isDark ? "#1E293B" : "#F1F5F9" }]}>
+                    <View style={[styles.timeTag, { backgroundColor: isDark ? "#27272A" : "#F1F5F9" }]}>
                       <Text style={[styles.timeTagText, { color: colors.textMuted }]}>{item.time_of_day}</Text>
                     </View>
                   </View>

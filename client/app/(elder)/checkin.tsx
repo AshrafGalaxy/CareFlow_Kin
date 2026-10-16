@@ -16,7 +16,15 @@ export default function CheckInScreen() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { isSmallMobile } = useResponsive();
-  const { fontMultiplier, isAAAMode, minTouchTarget, aaaColors, highContrastBorders } = useAccessibility();
+  const {
+    fontMultiplier,
+    isAAAMode,
+    minTouchTarget,
+    aaaColors,
+    highContrastBorders,
+    colors,
+    isDark,
+  } = useAccessibility();
   const [selectedStatus, setSelectedStatus] = useState<WellnessStatus | null>(null);
   const [notes, setNotes] = useState("");
 
@@ -92,8 +100,8 @@ export default function CheckInScreen() {
         <Text style={[styles.backText, { fontSize: Math.round(14 * fontMultiplier) }]}>Back to Dashboard</Text>
       </TouchableOpacity>
 
-      <Text style={[styles.screenTitle, { fontSize: Math.round(28 * fontMultiplier) }]}>How are you feeling today?</Text>
-      <Text style={[styles.screenSubtitle, { fontSize: Math.round(16 * fontMultiplier) }]}>
+      <Text style={[styles.screenTitle, { color: colors.text, fontSize: Math.round(28 * fontMultiplier) }]}>How are you feeling today?</Text>
+      <Text style={[styles.screenSubtitle, { color: colors.textMuted, fontSize: Math.round(16 * fontMultiplier) }]}>
         Select the option that best reflects your current comfort. This keeps your care circle calmly reassured.
       </Text>
 
@@ -101,8 +109,8 @@ export default function CheckInScreen() {
         {options.map((opt) => {
           const isSelected = selectedStatus === opt.status;
           const cardBorderStyle = isSelected
-            ? { borderColor: opt.color, borderWidth: 2, backgroundColor: opt.bg }
-            : (highContrastBorders ? { borderWidth: 1.5, borderColor: "#CBD5E1" } : {});
+            ? { borderColor: opt.color, borderWidth: 2, backgroundColor: isDark ? "#18181B" : opt.bg }
+            : (highContrastBorders ? { borderWidth: 1.5, borderColor: isDark ? "#52525B" : "#CBD5E1" } : {});
 
           return (
             <TouchableOpacity
@@ -111,6 +119,10 @@ export default function CheckInScreen() {
               onPress={() => setSelectedStatus(opt.status)}
               style={[
                 styles.optionCard,
+                {
+                  backgroundColor: isSelected ? (isDark ? "#18181B" : opt.bg) : colors.card,
+                  borderColor: isSelected ? opt.color : isDark ? "#27272A" : Theme.colors.border,
+                },
                 { minHeight: Math.max(76, minTouchTarget) },
                 isSmallMobile && { padding: 12, gap: 10 },
                 cardBorderStyle,
@@ -118,14 +130,14 @@ export default function CheckInScreen() {
               accessibilityRole="radio"
               accessibilityState={{ selected: isSelected }}
             >
-              <View style={[styles.iconBox, { backgroundColor: opt.bg }]}>
+              <View style={[styles.iconBox, { backgroundColor: isDark ? "#27272A" : opt.bg }]}>
                 {opt.icon}
               </View>
               <View style={styles.textBox}>
-                <Text style={[styles.optTitle, { fontSize: Math.round(18 * fontMultiplier) }, isSelected && { color: opt.color }]}>
+                <Text style={[styles.optTitle, { color: isSelected ? opt.color : colors.text, fontSize: Math.round(18 * fontMultiplier) }]}>
                   {opt.title}
                 </Text>
-                <Text style={[styles.optDesc, { fontSize: Math.round(14 * fontMultiplier) }]}>{opt.desc}</Text>
+                <Text style={[styles.optDesc, { color: colors.textMuted, fontSize: Math.round(14 * fontMultiplier) }]}>{opt.desc}</Text>
               </View>
               {isSelected && (
                 <View style={styles.checkIndicator}>
@@ -138,13 +150,20 @@ export default function CheckInScreen() {
       </View>
 
       <View style={styles.notesContainer}>
-        <Text style={styles.notesLabel}>Add an optional note for your family</Text>
+        <Text style={[styles.notesLabel, { color: colors.text }]}>Add an optional note for your family</Text>
         <TextInput
-          style={styles.notesInput}
+          style={[
+            styles.notesInput,
+            {
+              backgroundColor: colors.card,
+              borderColor: isDark ? "#27272A" : Theme.colors.border,
+              color: colors.text,
+            },
+          ]}
           value={notes}
           onChangeText={setNotes}
           placeholder="e.g. Slept well, mild stiffness after waking up..."
-          placeholderTextColor="#94A3B8"
+          placeholderTextColor={isDark ? "#71717A" : "#94A3B8"}
           multiline
           numberOfLines={3}
         />

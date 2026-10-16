@@ -100,11 +100,13 @@ function ElderLayoutContent() {
       style={[
         styles.sidebar,
         {
-          backgroundColor: isDark ? "#111827" : "#FFFFFF",
+          backgroundColor: isDark ? "#000000" : "#FFFFFF",
           borderRightColor: isAAAMode
             ? isDark
-              ? "#475569"
+              ? "#52525B"
               : "#CBD5E1"
+            : isDark
+            ? "#27272A"
             : colors.border,
           borderRightWidth: isAAAMode ? 1.5 : 1,
         },
@@ -115,7 +117,7 @@ function ElderLayoutContent() {
       <View
         style={[
           styles.sidebarHeader,
-          { borderBottomColor: isDark ? "#1E293B" : Theme.colors.borderSubtle },
+          { borderBottomColor: isDark ? "#27272A" : Theme.colors.borderSubtle },
         ]}
       >
         <TouchableOpacity
@@ -132,7 +134,7 @@ function ElderLayoutContent() {
         <Text
           style={[
             styles.navSectionTitle,
-            { color: isDark ? "#64748B" : Theme.colors.textLight },
+            { color: isDark ? "#A1A1AA" : Theme.colors.textLight },
           ]}
         >
           NAVIGATION
@@ -157,7 +159,7 @@ function ElderLayoutContent() {
                   styles.navItem,
                   isActive && {
                     backgroundColor: isDark
-                      ? "#1E293B"
+                      ? "#18181B"
                       : Theme.colors.primaryLight,
                   },
                   isTablet && styles.navItemTablet,
@@ -170,7 +172,7 @@ function ElderLayoutContent() {
                   style={[
                     styles.navIconWrap,
                     isActive && {
-                      backgroundColor: isDark ? "#0F172A" : "#FFFFFF",
+                      backgroundColor: isDark ? "#27272A" : "#FFFFFF",
                       ...Theme.shadows.sm,
                     },
                   ]}
@@ -211,15 +213,15 @@ function ElderLayoutContent() {
       <View
         style={[
           styles.sidebarFooter,
-          { borderTopColor: isDark ? "#1E293B" : Theme.colors.borderSubtle },
+          { borderTopColor: isDark ? "#27272A" : Theme.colors.borderSubtle },
         ]}
       >
         <TouchableOpacity
           style={[
             styles.userCard,
             {
-              backgroundColor: isDark ? "#1E293B" : colors.background,
-              borderColor: colors.border,
+              backgroundColor: isDark ? "#121212" : colors.background,
+              borderColor: isDark ? "#27272A" : colors.border,
             },
           ]}
           onPress={() => router.push("/(elder)/profile")}
@@ -265,8 +267,8 @@ function ElderLayoutContent() {
           style={[
             styles.sidebarLogoutBtn,
             {
-              backgroundColor: isDark ? "#1E293B" : "#FFFFFF",
-              borderColor: colors.border,
+              backgroundColor: isDark ? "#121212" : "#FFFFFF",
+              borderColor: isDark ? "#27272A" : colors.border,
             },
           ]}
           onPress={handleLogout}
@@ -290,82 +292,22 @@ function ElderLayoutContent() {
       style={[
         styles.desktopTopBar,
         {
-          backgroundColor: isDark
-            ? "rgba(17, 24, 39, 0.94)"
-            : "rgba(255, 255, 255, 0.94)",
+          backgroundColor: isDark ? "#000000" : "#FFFFFF",
           borderBottomColor: isAAAMode
             ? isDark
-              ? "#475569"
+              ? "#52525B"
               : "#CBD5E1"
+            : isDark
+            ? "#27272A"
             : colors.border,
           borderBottomWidth: isAAAMode ? 1.5 : 1,
+          justifyContent: "flex-end",
         },
       ]}
     >
-      <View style={styles.topBarTitleArea}>
-        <Text style={[styles.topBarHeading, { color: colors.text }]}>
-          {currentTitle}
-        </Text>
-        <View style={styles.liveSyncBadge}>
-          <View
-            style={[styles.liveSyncDot, { backgroundColor: colors.success }]}
-          />
-          <Text style={[styles.liveSyncText, { color: colors.textMuted }]}>
-            Protected Session
-          </Text>
-        </View>
-      </View>
-
-      {/* Top-Right Navigation Accessibility Controls & Quick Actions */}
+      {/* Top-Right Single Accessibility & Theme Menu Trigger */}
       <View style={styles.topBarRightCluster}>
         <NavAccessibilityControls />
-
-        <TouchableOpacity
-          style={[
-            styles.topBarUserBtn,
-            {
-              backgroundColor: isDark ? "#1E293B" : "#F8FAFC",
-              borderColor: colors.border,
-            },
-          ]}
-          onPress={() => router.push("/(elder)/profile")}
-          activeOpacity={0.8}
-          accessibilityLabel="Open Elder Profile"
-        >
-          <View
-            style={[
-              styles.avatarCircleSmall,
-              { backgroundColor: colors.primary },
-            ]}
-          >
-            <Text style={styles.avatarInitialsSmall}>
-              {user?.full_name ? user.full_name.charAt(0) : "E"}
-            </Text>
-          </View>
-          {!isTablet && (
-            <Text
-              style={[styles.topBarUserName, { color: colors.text }]}
-              numberOfLines={1}
-            >
-              {user?.full_name || "Eleanor Vance"}
-            </Text>
-          )}
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[
-            styles.topBarLogoutBtn,
-            {
-              backgroundColor: isDark ? "#1E293B" : "#FFFFFF",
-              borderColor: colors.border,
-            },
-          ]}
-          onPress={handleLogout}
-          activeOpacity={0.7}
-          accessibilityLabel="Sign out of deck"
-        >
-          <LogOut size={16} color={colors.textMuted} />
-        </TouchableOpacity>
       </View>
     </View>
   );
@@ -376,11 +318,13 @@ function ElderLayoutContent() {
       style={[
         styles.mobileTopBar,
         {
-          backgroundColor: isDark ? "#111827" : "#FFFFFF",
+          backgroundColor: isDark ? "#000000" : "#FFFFFF",
           borderBottomColor: isAAAMode
             ? isDark
-              ? "#475569"
+              ? "#52525B"
               : "#CBD5E1"
+            : isDark
+            ? "#27272A"
             : colors.border,
           borderBottomWidth: isAAAMode ? 1.5 : 1,
           paddingHorizontal: isSmallMobile ? 12 : 16,
@@ -419,8 +363,8 @@ function ElderLayoutContent() {
           style={[
             styles.exitBtnSmall,
             {
-              backgroundColor: isDark ? "#1E293B" : "#FFFFFF",
-              borderColor: colors.border,
+              backgroundColor: isDark ? "#121212" : "#FFFFFF",
+              borderColor: isDark ? "#27272A" : colors.border,
             },
           ]}
           onPress={handleLogout}
@@ -453,11 +397,13 @@ function ElderLayoutContent() {
               : [
                   styles.mobileTabBar,
                   {
-                    backgroundColor: isDark ? "#111827" : "#FFFFFF",
+                    backgroundColor: isDark ? "#000000" : "#FFFFFF",
                     borderTopColor: isAAAMode
                       ? isDark
-                        ? "#475569"
+                        ? "#52525B"
                         : "#CBD5E1"
+                      : isDark
+                      ? "#27272A"
                       : colors.border,
                     borderTopWidth: isAAAMode ? 1.5 : 1,
                   },

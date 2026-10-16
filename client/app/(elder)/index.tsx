@@ -30,7 +30,15 @@ export default function ElderHomeScreen() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { isSmallMobile, isMobile, isTablet, isDesktop } = useResponsive();
-  const { fontMultiplier, isAAAMode, minTouchTarget, aaaColors, highContrastBorders } = useAccessibility();
+  const {
+    fontMultiplier,
+    isAAAMode,
+    minTouchTarget,
+    aaaColors,
+    highContrastBorders,
+    colors,
+    isDark,
+  } = useAccessibility();
 
 
   // Query Elder Home Deck payload from backend API
@@ -170,7 +178,9 @@ export default function ElderHomeScreen() {
     (home.checklist_completed_count / Math.max(1, home.checklist_total_count)) * 100
   );
 
-  const cardBorderStyle = highContrastBorders ? { borderWidth: 1.5, borderColor: "#CBD5E1" } : {};
+  const cardBorderStyle = highContrastBorders
+    ? { borderWidth: 1.5, borderColor: isDark ? "#52525B" : "#CBD5E1" }
+    : {};
 
   return (
     <ResponsiveContainer>
@@ -179,70 +189,243 @@ export default function ElderHomeScreen() {
       {/* 1. Desktop & Deck Top Summary Metrics Ribbon */}
       <View style={[styles.metricsRibbon, isMobile && styles.metricsRibbonMobile]}>
         {/* KPI 1: Adherence */}
-        <View style={[styles.metricCard, isMobile && styles.metricCardMobile, isSmallMobile && styles.metricCardSmall, cardBorderStyle]}>
+        <View
+          style={[
+            styles.metricCard,
+            {
+              backgroundColor: colors.card,
+              borderColor: isDark ? "#27272A" : colors.border,
+            },
+            isMobile && styles.metricCardMobile,
+            isSmallMobile && styles.metricCardSmall,
+            cardBorderStyle,
+          ]}
+        >
           <View style={styles.metricCardHeader}>
-            <View style={[styles.metricIconWrap, { backgroundColor: "#F0F9FF" }, isSmallMobile && styles.metricIconWrapSmall]}>
-              <TrendingUp size={isSmallMobile ? 15 : 18} color="#0284C7" />
+            <View
+              style={[
+                styles.metricIconWrap,
+                { backgroundColor: isDark ? "#27272A" : "#F0F9FF" },
+                isSmallMobile && styles.metricIconWrapSmall,
+              ]}
+            >
+              <TrendingUp size={isSmallMobile ? 15 : 18} color={isDark ? "#38BDF8" : "#0284C7"} />
             </View>
-            <View style={[styles.metricBadge, { backgroundColor: "#F0F9FF" }]}>
-              <Text style={[styles.metricBadgeText, { color: "#0284C7", fontSize: Math.round(11 * fontMultiplier) }]}>95% Target</Text>
+            <View style={[styles.metricBadge, { backgroundColor: isDark ? "#27272A" : "#F0F9FF" }]}>
+              <Text style={[styles.metricBadgeText, { color: isDark ? "#38BDF8" : "#0284C7", fontSize: Math.round(11 * fontMultiplier) }]}>
+                95% Target
+              </Text>
             </View>
           </View>
           <View style={styles.metricBody}>
-            <Text style={[styles.metricLabel, isSmallMobile && styles.metricLabelSmall, { fontSize: Math.round((isSmallMobile ? 9 : 11) * fontMultiplier) }]} numberOfLines={1}>ADHERENCE</Text>
-            <Text style={[styles.metricValue, isSmallMobile && styles.metricValueSmall, { fontSize: Math.round((isSmallMobile ? 18 : 24) * fontMultiplier) }]}>{Math.round(home.adherence_rate_percentage)}%</Text>
+            <Text
+              style={[
+                styles.metricLabel,
+                { color: colors.textMuted },
+                isSmallMobile && styles.metricLabelSmall,
+                { fontSize: Math.round((isSmallMobile ? 9 : 11) * fontMultiplier) },
+              ]}
+              numberOfLines={1}
+            >
+              ADHERENCE
+            </Text>
+            <Text
+              style={[
+                styles.metricValue,
+                { color: colors.text },
+                isSmallMobile && styles.metricValueSmall,
+                { fontSize: Math.round((isSmallMobile ? 18 : 24) * fontMultiplier) },
+              ]}
+            >
+              {Math.round(home.adherence_rate_percentage)}%
+            </Text>
           </View>
         </View>
 
         {/* KPI 2: Routine */}
-        <View style={[styles.metricCard, isMobile && styles.metricCardMobile, isSmallMobile && styles.metricCardSmall, cardBorderStyle]}>
+        <View
+          style={[
+            styles.metricCard,
+            {
+              backgroundColor: colors.card,
+              borderColor: isDark ? "#27272A" : colors.border,
+            },
+            isMobile && styles.metricCardMobile,
+            isSmallMobile && styles.metricCardSmall,
+            cardBorderStyle,
+          ]}
+        >
           <View style={styles.metricCardHeader}>
-            <View style={[styles.metricIconWrap, { backgroundColor: "#EEF2FF" }, isSmallMobile && styles.metricIconWrapSmall]}>
-              <CheckSquare size={isSmallMobile ? 15 : 18} color="#4F46E5" />
+            <View
+              style={[
+                styles.metricIconWrap,
+                { backgroundColor: isDark ? "#27272A" : "#EEF2FF" },
+                isSmallMobile && styles.metricIconWrapSmall,
+              ]}
+            >
+              <CheckSquare size={isSmallMobile ? 15 : 18} color={isDark ? "#818CF8" : "#4F46E5"} />
             </View>
-            <View style={[styles.metricBadge, { backgroundColor: "#EEF2FF" }]}>
-              <Text style={[styles.metricBadgeText, { color: "#4F46E5", fontSize: Math.round(11 * fontMultiplier) }]}>{checklistPercent}% Done</Text>
+            <View style={[styles.metricBadge, { backgroundColor: isDark ? "#27272A" : "#EEF2FF" }]}>
+              <Text style={[styles.metricBadgeText, { color: isDark ? "#818CF8" : "#4F46E5", fontSize: Math.round(11 * fontMultiplier) }]}>
+                {checklistPercent}% Done
+              </Text>
             </View>
           </View>
           <View style={styles.metricBody}>
-            <Text style={[styles.metricLabel, isSmallMobile && styles.metricLabelSmall, { fontSize: Math.round((isSmallMobile ? 9 : 11) * fontMultiplier) }]} numberOfLines={1}>ROUTINE</Text>
-            <Text style={[styles.metricValue, isSmallMobile && styles.metricValueSmall, { fontSize: Math.round((isSmallMobile ? 18 : 24) * fontMultiplier) }]}>
+            <Text
+              style={[
+                styles.metricLabel,
+                { color: colors.textMuted },
+                isSmallMobile && styles.metricLabelSmall,
+                { fontSize: Math.round((isSmallMobile ? 9 : 11) * fontMultiplier) },
+              ]}
+              numberOfLines={1}
+            >
+              ROUTINE
+            </Text>
+            <Text
+              style={[
+                styles.metricValue,
+                { color: colors.text },
+                isSmallMobile && styles.metricValueSmall,
+                { fontSize: Math.round((isSmallMobile ? 18 : 24) * fontMultiplier) },
+              ]}
+            >
               {home.checklist_completed_count} / {home.checklist_total_count}
             </Text>
           </View>
         </View>
 
         {/* KPI 3: Doses */}
-        <View style={[styles.metricCard, isMobile && styles.metricCardMobile, isSmallMobile && styles.metricCardSmall, cardBorderStyle]}>
+        <View
+          style={[
+            styles.metricCard,
+            {
+              backgroundColor: colors.card,
+              borderColor: isDark ? "#27272A" : colors.border,
+            },
+            isMobile && styles.metricCardMobile,
+            isSmallMobile && styles.metricCardSmall,
+            cardBorderStyle,
+          ]}
+        >
           <View style={styles.metricCardHeader}>
-            <View style={[styles.metricIconWrap, { backgroundColor: "#F0FDFA" }, isSmallMobile && styles.metricIconWrapSmall]}>
-              <Pill size={isSmallMobile ? 15 : 18} color="#0D9488" />
+            <View
+              style={[
+                styles.metricIconWrap,
+                { backgroundColor: isDark ? "#27272A" : "#F0FDFA" },
+                isSmallMobile && styles.metricIconWrapSmall,
+              ]}
+            >
+              <Pill size={isSmallMobile ? 15 : 18} color={isDark ? "#2DD4BF" : "#0D9488"} />
             </View>
-            <View style={[styles.metricBadge, { backgroundColor: "#F0FDFA" }]}>
-              <Text style={[styles.metricBadgeText, { color: "#0D9488", fontSize: Math.round(11 * fontMultiplier) }]}>{home.next_medications[0]?.times_of_day || "Scheduled"}</Text>
+            <View style={[styles.metricBadge, { backgroundColor: isDark ? "#27272A" : "#F0FDFA" }]}>
+              <Text style={[styles.metricBadgeText, { color: isDark ? "#2DD4BF" : "#0D9488", fontSize: Math.round(11 * fontMultiplier) }]}>
+                {home.next_medications[0]?.times_of_day || "Scheduled"}
+              </Text>
             </View>
           </View>
           <View style={styles.metricBody}>
-            <Text style={[styles.metricLabel, isSmallMobile && styles.metricLabelSmall, { fontSize: Math.round((isSmallMobile ? 9 : 11) * fontMultiplier) }]} numberOfLines={1}>DOSES</Text>
-            <Text style={[styles.metricValue, isSmallMobile && styles.metricValueSmall, { fontSize: Math.round((isSmallMobile ? 18 : 24) * fontMultiplier) }]}>{home.next_medications.length}</Text>
+            <Text
+              style={[
+                styles.metricLabel,
+                { color: colors.textMuted },
+                isSmallMobile && styles.metricLabelSmall,
+                { fontSize: Math.round((isSmallMobile ? 9 : 11) * fontMultiplier) },
+              ]}
+              numberOfLines={1}
+            >
+              DOSES
+            </Text>
+            <Text
+              style={[
+                styles.metricValue,
+                { color: colors.text },
+                isSmallMobile && styles.metricValueSmall,
+                { fontSize: Math.round((isSmallMobile ? 18 : 24) * fontMultiplier) },
+              ]}
+            >
+              {home.next_medications.length}
+            </Text>
           </View>
         </View>
 
         {/* KPI 4: Wellness */}
-        <View style={[styles.metricCard, isMobile && styles.metricCardMobile, isSmallMobile && styles.metricCardSmall, cardBorderStyle]}>
+        <View
+          style={[
+            styles.metricCard,
+            {
+              backgroundColor: colors.card,
+              borderColor: isDark ? "#27272A" : colors.border,
+            },
+            isMobile && styles.metricCardMobile,
+            isSmallMobile && styles.metricCardSmall,
+            cardBorderStyle,
+          ]}
+        >
           <View style={styles.metricCardHeader}>
-            <View style={[styles.metricIconWrap, { backgroundColor: "#ECFDF5" }, isSmallMobile && styles.metricIconWrapSmall]}>
-              <Smile size={isSmallMobile ? 15 : 18} color="#10B981" />
+            <View
+              style={[
+                styles.metricIconWrap,
+                { backgroundColor: isDark ? "#27272A" : "#ECFDF5" },
+                isSmallMobile && styles.metricIconWrapSmall,
+              ]}
+            >
+              <Smile size={isSmallMobile ? 15 : 18} color={isDark ? "#34D399" : "#10B981"} />
             </View>
-            <View style={[styles.metricBadge, { backgroundColor: checkinDone ? "#ECFDF5" : "#FEF3C7" }]}>
-              <Text style={[styles.metricBadgeText, { color: checkinDone ? "#059669" : "#D97706", fontSize: Math.round(11 * fontMultiplier) }]}>
+            <View
+              style={[
+                styles.metricBadge,
+                {
+                  backgroundColor: isDark
+                    ? "#27272A"
+                    : checkinDone
+                    ? "#ECFDF5"
+                    : "#FEF3C7",
+                },
+              ]}
+            >
+              <Text
+                style={[
+                  styles.metricBadgeText,
+                  {
+                    color: checkinDone
+                      ? isDark
+                        ? "#34D399"
+                        : "#059669"
+                      : isDark
+                      ? "#FBBF24"
+                      : "#D97706",
+                    fontSize: Math.round(11 * fontMultiplier),
+                  },
+                ]}
+              >
                 {checkinDone ? "Synced" : "Pending"}
               </Text>
             </View>
           </View>
           <View style={styles.metricBody}>
-            <Text style={[styles.metricLabel, isSmallMobile && styles.metricLabelSmall, { fontSize: Math.round((isSmallMobile ? 9 : 11) * fontMultiplier) }]} numberOfLines={1}>WELLNESS</Text>
-            <Text style={[styles.metricValue, isSmallMobile && styles.metricValueSmall, { fontSize: Math.round((isSmallMobile ? 18 : 24) * fontMultiplier) }]}>{checkinDone ? "Logged" : "Ready"}</Text>
+            <Text
+              style={[
+                styles.metricLabel,
+                { color: colors.textMuted },
+                isSmallMobile && styles.metricLabelSmall,
+                { fontSize: Math.round((isSmallMobile ? 9 : 11) * fontMultiplier) },
+              ]}
+              numberOfLines={1}
+            >
+              WELLNESS
+            </Text>
+            <Text
+              style={[
+                styles.metricValue,
+                { color: colors.text },
+                isSmallMobile && styles.metricValueSmall,
+                { fontSize: Math.round((isSmallMobile ? 18 : 24) * fontMultiplier) },
+              ]}
+            >
+              {checkinDone ? "Logged" : "Ready"}
+            </Text>
           </View>
         </View>
       </View>
@@ -259,37 +442,114 @@ export default function ElderHomeScreen() {
             badgeVariant="primary"
           >
             {/* Visual Progress Bar */}
-            <View style={styles.progressBarTrack}>
-              <View style={[styles.progressBarFill, { width: `${checklistPercent}%` }]} />
+            <View
+              style={[
+                styles.progressBarTrack,
+                { backgroundColor: isDark ? "#27272A" : "#E2E8F0" },
+              ]}
+            >
+              <View
+                style={[
+                  styles.progressBarFill,
+                  { backgroundColor: colors.primary, width: `${checklistPercent}%` },
+                ]}
+              />
             </View>
 
             <View style={styles.checklistGroup}>
               {home.checklist_items.map((item) => {
                 const isDone = item.today_status === "COMPLETED";
                 return (
-                  <View key={item.id} style={[styles.checklistItemCard, cardBorderStyle]}>
+                  <View
+                    key={item.id}
+                    style={[
+                      styles.checklistItemCard,
+                      {
+                        backgroundColor: colors.card,
+                        borderColor: isDark ? "#27272A" : Theme.colors.border,
+                      },
+                      cardBorderStyle,
+                    ]}
+                  >
                     <View style={styles.checklistItemContent}>
                       <View style={styles.itemHeaderLine}>
-                        <View style={styles.timeTag}>
-                          <Text style={styles.timeTagText}>{item.time_of_day}</Text>
+                        <View
+                          style={[
+                            styles.timeTag,
+                            {
+                              backgroundColor: isDark
+                                ? "#27272A"
+                                : Theme.colors.primaryLight,
+                            },
+                          ]}
+                        >
+                          <Text
+                            style={[
+                              styles.timeTagText,
+                              {
+                                color: isDark
+                                  ? "#38BDF8"
+                                  : Theme.colors.primary,
+                              },
+                            ]}
+                          >
+                            {item.time_of_day}
+                          </Text>
                         </View>
                         {item.completed_at && (
-                          <Text style={styles.completedTimestamp}>Done at {item.completed_at}</Text>
+                          <Text style={styles.completedTimestamp}>
+                            Done at {item.completed_at}
+                          </Text>
                         )}
                       </View>
-                      <Text style={[styles.itemTitle, isDone && styles.itemDoneText, { fontSize: Math.round(17 * fontMultiplier) }]}>
+                      <Text
+                        style={[
+                          styles.itemTitle,
+                          { color: colors.text },
+                          isDone && styles.itemDoneText,
+                          { fontSize: Math.round(17 * fontMultiplier) },
+                        ]}
+                      >
                         {item.title}
                       </Text>
                       {item.description && (
-                        <Text style={[styles.itemDesc, { fontSize: Math.round(13 * fontMultiplier) }]}>{item.description}</Text>
+                        <Text
+                          style={[
+                            styles.itemDesc,
+                            { color: colors.textMuted, fontSize: Math.round(13 * fontMultiplier) },
+                          ]}
+                        >
+                          {item.description}
+                        </Text>
                       )}
                     </View>
 
                     <View style={styles.itemActionArea}>
                       {isDone ? (
-                        <View style={[styles.donePill, { minHeight: Math.max(48, minTouchTarget) }]}>
-                          <CheckCircle2 size={22} color={Theme.colors.success} />
-                          <Text style={[styles.doneText, { fontSize: Math.round(14 * fontMultiplier) }]}>Completed</Text>
+                        <View
+                          style={[
+                            styles.donePill,
+                            {
+                              minHeight: Math.max(48, minTouchTarget),
+                              backgroundColor: isDark ? "#064E3B" : Theme.colors.successLight,
+                            },
+                          ]}
+                        >
+                          <CheckCircle2
+                            size={22}
+                            color={isDark ? "#34D399" : Theme.colors.success}
+                          />
+                          <Text
+                            style={[
+                              styles.doneText,
+                              {
+                                color: isDark ? "#34D399" : Theme.colors.success,
+                                fontSize: Math.round(14 * fontMultiplier),
+                              },
+                            ]}
+                          >
+                            Completed
+                          </Text>
                         </View>
                       ) : (
                         <BigButton
@@ -309,33 +569,94 @@ export default function ElderHomeScreen() {
           {/* Quick Emotive Check-in Card (Embedded directly on Deck) */}
           <StatusCard
             title="Daily Wellness Sharing"
-            subtitle={checkinDone ? "Today's report shared with Family Circle" : "How are you feeling right now?"}
+            subtitle={
+              checkinDone
+                ? "Today's report shared with Family Circle"
+                : "How are you feeling right now?"
+            }
             icon={<Smile size={26} color={Theme.colors.brightTealBlue} />}
             badge={checkinDone ? "Recorded" : "5 Seconds"}
             badgeVariant={checkinDone ? "success" : "accent"}
           >
             {checkinDone ? (
-              <View style={styles.checkinConfirmedBox}>
-                <CheckCircle2 size={32} color={Theme.colors.success} />
+              <View
+                style={[
+                  styles.checkinConfirmedBox,
+                  {
+                    backgroundColor: isDark ? "#064E3B" : Theme.colors.successLight,
+                  },
+                ]}
+              >
+                <CheckCircle2
+                  size={32}
+                  color={isDark ? "#34D399" : Theme.colors.success}
+                />
                 <View style={styles.checkinConfirmedTextWrap}>
-                  <Text style={[styles.checkinConfirmedTitle, { fontSize: Math.round(16 * fontMultiplier) }]}>Status Logged: Feeling Well</Text>
-                  <Text style={[styles.checkinConfirmedDesc, { fontSize: Math.round(13 * fontMultiplier) }]}>
+                  <Text
+                    style={[
+                      styles.checkinConfirmedTitle,
+                      {
+                        color: isDark ? "#34D399" : Theme.colors.success,
+                        fontSize: Math.round(16 * fontMultiplier),
+                      },
+                    ]}
+                  >
+                    Status Logged: Feeling Well
+                  </Text>
+                  <Text
+                    style={[
+                      styles.checkinConfirmedDesc,
+                      {
+                        color: isDark ? "#D4D4D8" : Theme.colors.text,
+                        fontSize: Math.round(13 * fontMultiplier),
+                      },
+                    ]}
+                  >
                     Your care circle was notified that you're feeling good today.
                   </Text>
                 </View>
               </View>
             ) : (
-              <View style={[styles.emotiveRow, isSmallMobile && styles.emotiveRowGrid]}>
+              <View
+                style={[
+                  styles.emotiveRow,
+                  isSmallMobile && styles.emotiveRowGrid,
+                ]}
+              >
                 {[
-                  { label: "Good", status: "GOOD" as const, color: Theme.colors.success, icon: "😊" },
-                  { label: "Okay", status: "OKAY" as const, color: Theme.colors.brightTealBlue, icon: "🙂" },
-                  { label: "Tired", status: "NOT_WELL" as const, color: Theme.colors.blueGreen, icon: "🥱" },
-                  { label: "Need Help", status: "NEEDS_HELP" as const, color: Theme.colors.urgent, icon: "🙋" },
+                  {
+                    label: "Good",
+                    status: "GOOD" as const,
+                    color: Theme.colors.success,
+                    icon: "😊",
+                  },
+                  {
+                    label: "Okay",
+                    status: "OKAY" as const,
+                    color: Theme.colors.brightTealBlue,
+                    icon: "🙂",
+                  },
+                  {
+                    label: "Tired",
+                    status: "NOT_WELL" as const,
+                    color: Theme.colors.blueGreen,
+                    icon: "🥱",
+                  },
+                  {
+                    label: "Need Help",
+                    status: "NEEDS_HELP" as const,
+                    color: Theme.colors.urgent,
+                    icon: "🙋",
+                  },
                 ].map((emo) => (
                   <TouchableOpacity
                     key={emo.status}
                     style={[
                       styles.emotiveBtn,
+                      {
+                        backgroundColor: colors.card,
+                        borderColor: isDark ? "#27272A" : Theme.colors.border,
+                      },
                       isSmallMobile && styles.emotiveBtnGrid,
                       { minHeight: Math.max(isSmallMobile ? 70 : 82, minTouchTarget) },
                       cardBorderStyle,
@@ -343,15 +664,31 @@ export default function ElderHomeScreen() {
                     onPress={() => checkinMutation.mutate(emo.status)}
                     activeOpacity={0.8}
                   >
-                    <Text style={[styles.emotiveEmoji, { fontSize: Math.round(26 * fontMultiplier) }]}>{emo.icon}</Text>
-                    <Text style={[styles.emotiveLabel, { fontSize: Math.round(14 * fontMultiplier) }]}>{emo.label}</Text>
+                    <Text
+                      style={[
+                        styles.emotiveEmoji,
+                        { fontSize: Math.round(26 * fontMultiplier) },
+                      ]}
+                    >
+                      {emo.icon}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.emotiveLabel,
+                        {
+                          color: colors.text,
+                          fontSize: Math.round(14 * fontMultiplier),
+                        },
+                      ]}
+                    >
+                      {emo.label}
+                    </Text>
                   </TouchableOpacity>
                 ))}
               </View>
             )}
           </StatusCard>
         </View>
-
 
         {/* Right Deck: Medication Schedule & Appointments */}
         <View style={isDesktop ? styles.deckCol : styles.fullWidth}>
@@ -364,23 +701,93 @@ export default function ElderHomeScreen() {
             badgeVariant="primary"
           >
             {home.next_medications.length === 0 ? (
-              <Text style={styles.promptText}>No medications scheduled for today.</Text>
+              <Text style={[styles.promptText, { color: colors.textMuted }]}>
+                No medications scheduled for today.
+              </Text>
             ) : (
               home.next_medications.map((med) => (
-                <View key={med.id} style={[styles.medCard, cardBorderStyle]}>
+                <View
+                  key={med.id}
+                  style={[
+                    styles.medCard,
+                    {
+                      backgroundColor: colors.card,
+                      borderColor: isDark ? "#27272A" : Theme.colors.border,
+                    },
+                    cardBorderStyle,
+                  ]}
+                >
                   <View style={styles.medCardTop}>
-                    <View style={styles.medBadgePill}>
-                      <Clock size={16} color={Theme.colors.primary} />
-                      <Text style={[styles.medTimeTag, { fontSize: Math.round(13 * fontMultiplier) }]}>{med.times_of_day}</Text>
+                    <View
+                      style={[
+                        styles.medBadgePill,
+                        {
+                          backgroundColor: isDark
+                            ? "#27272A"
+                            : Theme.colors.primaryLight,
+                        },
+                      ]}
+                    >
+                      <Clock
+                        size={16}
+                        color={isDark ? "#38BDF8" : Theme.colors.primary}
+                      />
+                      <Text
+                        style={[
+                          styles.medTimeTag,
+                          {
+                            color: isDark
+                              ? "#38BDF8"
+                              : Theme.colors.primary,
+                            fontSize: Math.round(13 * fontMultiplier),
+                          },
+                        ]}
+                      >
+                        {med.times_of_day}
+                      </Text>
                     </View>
-                    <Text style={[styles.medDoseTag, { fontSize: Math.round(13 * fontMultiplier) }]}>{med.frequency}</Text>
+                    <Text
+                      style={[
+                        styles.medDoseTag,
+                        {
+                          color: isDark ? "#2DD4BF" : Theme.colors.accent,
+                          fontSize: Math.round(13 * fontMultiplier),
+                        },
+                      ]}
+                    >
+                      {med.frequency}
+                    </Text>
                   </View>
 
-                  <Text style={[styles.medName, { fontSize: Math.round(18 * fontMultiplier) }]}>{med.name}</Text>
-                  <Text style={[styles.medDoseText, { fontSize: Math.round(14 * fontMultiplier) }]}>{med.dosage}</Text>
+                  <Text
+                    style={[
+                      styles.medName,
+                      { color: colors.text, fontSize: Math.round(18 * fontMultiplier) },
+                    ]}
+                  >
+                    {med.name}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.medDoseText,
+                      { color: colors.textMuted, fontSize: Math.round(14 * fontMultiplier) },
+                    ]}
+                  >
+                    {med.dosage}
+                  </Text>
 
                   {med.instructions && (
-                    <Text style={[styles.medInstructions, { fontSize: Math.round(13 * fontMultiplier) }]}>
+                    <Text
+                      style={[
+                        styles.medInstructions,
+                        {
+                          backgroundColor: isDark ? "#18181B" : "#FFFFFF",
+                          borderColor: isDark ? "#27272A" : Theme.colors.borderSubtle,
+                          color: colors.textMuted,
+                          fontSize: Math.round(13 * fontMultiplier),
+                        },
+                      ]}
+                    >
                       Note: {med.instructions}
                     </Text>
                   )}
@@ -405,12 +812,43 @@ export default function ElderHomeScreen() {
               badge="Confirmed"
               badgeVariant="primary"
             >
-              <View style={[styles.apptBox, cardBorderStyle]}>
+              <View
+                style={[
+                  styles.apptBox,
+                  {
+                    backgroundColor: colors.card,
+                    borderColor: isDark ? "#27272A" : Theme.colors.border,
+                  },
+                  cardBorderStyle,
+                ]}
+              >
                 <View style={styles.apptDetails}>
-                  <Text style={[styles.apptDoctorText, { fontSize: Math.round(16 * fontMultiplier) }]}>{home.upcoming_appointment.doctor_name}</Text>
-                  <Text style={[styles.apptClinicText, { fontSize: Math.round(13 * fontMultiplier) }]}>{home.upcoming_appointment.clinic_name}</Text>
-                  <Text style={[styles.apptDateText, { fontSize: Math.round(13 * fontMultiplier) }]}>
-                    Scheduled for {new Date(home.upcoming_appointment.scheduled_at).toLocaleDateString("en-US", {
+                  <Text
+                    style={[
+                      styles.apptDoctorText,
+                      { color: colors.text, fontSize: Math.round(16 * fontMultiplier) },
+                    ]}
+                  >
+                    {home.upcoming_appointment.doctor_name}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.apptClinicText,
+                      { color: colors.textMuted, fontSize: Math.round(13 * fontMultiplier) },
+                    ]}
+                  >
+                    {home.upcoming_appointment.clinic_name}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.apptDateText,
+                      { color: isDark ? "#2DD4BF" : Theme.colors.accent, fontSize: Math.round(13 * fontMultiplier) },
+                    ]}
+                  >
+                    Scheduled for{" "}
+                    {new Date(
+                      home.upcoming_appointment.scheduled_at
+                    ).toLocaleDateString("en-US", {
                       weekday: "short",
                       month: "long",
                       day: "numeric",
@@ -422,17 +860,44 @@ export default function ElderHomeScreen() {
           )}
 
           {/* Discreet Care Circle Assistance Banner */}
-          <View style={[styles.careCircleBanner, cardBorderStyle]}>
+          <View
+            style={[
+              styles.careCircleBanner,
+              {
+                backgroundColor: colors.card,
+                borderColor: isDark ? "#27272A" : Theme.colors.border,
+              },
+              cardBorderStyle,
+            ]}
+          >
             <View style={styles.careCircleHeader}>
-              <Shield size={24} color={Theme.colors.primary} />
-              <Text style={[styles.careCircleTitle, { fontSize: Math.round(18 * fontMultiplier) }]}>Family & Care Support</Text>
+              <Shield
+                size={24}
+                color={isDark ? "#38BDF8" : Theme.colors.primary}
+              />
+              <Text
+                style={[
+                  styles.careCircleTitle,
+                  { color: colors.text, fontSize: Math.round(18 * fontMultiplier) },
+                ]}
+              >
+                Family & Care Support
+              </Text>
             </View>
-            <Text style={[styles.careCircleSubtitle, { fontSize: Math.round(14 * fontMultiplier) }]}>
-              Your authorized family guardians receive daily updates and can be contacted with a single tap.
+            <Text
+              style={[
+                styles.careCircleSubtitle,
+                { color: colors.textMuted, fontSize: Math.round(14 * fontMultiplier) },
+              ]}
+            >
+              Your authorized family guardians receive daily updates and can be
+              contacted with a single tap.
             </Text>
             <BigButton
               title="Contact Care Circle"
-              onPress={() => Alert.alert("Care Circle", "Connecting to your family guardian.")}
+              onPress={() =>
+                Alert.alert("Care Circle", "Connecting to your family guardian.")
+              }
               variant="outline"
               style={styles.careCircleBtn}
             />

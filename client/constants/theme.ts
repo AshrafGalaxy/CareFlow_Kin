@@ -57,59 +57,59 @@ export const LightColors = {
 };
 
 export const DarkColors = {
-  // Obsidian Slate Dark Healthcare Palette (WCAG 2.2 AAA Contrast >= 7:1)
-  brandPrimary: "#38BDF8",    // Sky 400 - Radiant against obsidian
+  // Pure Pitch Black / Neutral OLED Healthcare Palette (0% Blue Saturation Tint)
+  brandPrimary: "#38BDF8",    // Vibrant Sky 400
   brandHover: "#7DD3FC",      // Sky 300
-  brandLight: "#0C243B",      // Deep Sky Ambient Layer
-  brandSubtle: "#163859",     // Subdued Sky Border
+  brandLight: "#18181B",      // Neutral Dark Surface (Zinc 900)
+  brandSubtle: "#27272A",     // Neutral Zinc Border
   
   tealAccent: "#2DD4BF",      // Serene Teal 400
-  tealLight: "#0D2D2A",       // Teal Dark Ambient Surface
+  tealLight: "#18181B",       // Neutral Dark Surface
   
   // Legacy compatibility mapping
-  deepTwilight: "#F8FAFC",
+  deepTwilight: "#FFFFFF",
   frenchBlue: "#38BDF8",
   brightTealBlue: "#0284C7",
   blueGreen: "#2DD4BF",
   turquoiseSurf: "#38BDF8",
-  skyAqua: "#0C243B",
-  frostedBlue: "#151D2E",
-  frostedBlue2: "#1E293B",
-  lightCyan: "#0B0F19",
+  skyAqua: "#18181B",
+  frostedBlue: "#121212",
+  frostedBlue2: "#27272A",
+  lightCyan: "#000000",
 
   // Semantic Brand Roles
   primary: "#38BDF8",
   primaryDark: "#0284C7",
-  primaryLight: "#0C243B",
+  primaryLight: "#18181B",
   accent: "#2DD4BF",
-  accentLight: "#0D2D2A",
+  accentLight: "#18181B",
   brandAccent: "#38BDF8",
   brandGradientStart: "#38BDF8",
   brandGradientEnd: "#2DD4BF",
 
-  // Feedback States (High Contrast on Obsidian)
+  // Feedback States (Neutral High-Contrast)
   success: "#34D399",
-  successLight: "#064E3B",
+  successLight: "#052E16",
   urgent: "#F87171",
   urgentLight: "#450A0A",
   warning: "#FBBF24",
   warningLight: "#451A03",
 
-  // Surfaces & Spatial Layers (Obsidian Dark System)
-  background: "#0B0F19",     // Deep Obsidian Canvas
-  surfaceLight: "#151D2E",   // Elevated Card / Surface
-  card: "#151D2E",           // Obsidian Card Container
-  cardGlass: "rgba(21, 29, 46, 0.96)",
-  border: "#1E293B",         // Slate 800 Border
-  borderSubtle: "#162032",   // Subtle Slate Border
+  // Surfaces & Spatial Layers (Pitch Black OLED System)
+  background: "#000000",     // Pure Pitch Black Canvas
+  surfaceLight: "#121212",   // Deep Neutral Dark Surface (No blue tint)
+  card: "#121212",           // Neutral Dark Card
+  cardGlass: "rgba(18, 18, 18, 0.98)",
+  border: "#27272A",         // Neutral Zinc Border (No blue tint)
+  borderSubtle: "#18181B",   // Zinc 900 Border
   borderActive: "#38BDF8",
 
-  // Typography Legibility Hierarchy
-  text: "#F8FAFC",          // Slate 50 (>= 15:1 contrast against #0B0F19)
-  textSecondary: "#CBD5E1", // Slate 300 (>= 10:1 contrast)
-  textMuted: "#94A3B8",     // Slate 400 (>= 7.2:1 contrast)
-  textLight: "#64748B",     // Slate 500
-  textInverse: "#0F172A",
+  // Typography Legibility Hierarchy (Pure White & Neutral Zinc)
+  text: "#FFFFFF",          // Pure White (21:1 contrast on #000000)
+  textSecondary: "#E4E4E7", // Zinc 200 (15:1 contrast)
+  textMuted: "#A1A1AA",     // Zinc 400 (8.5:1 contrast)
+  textLight: "#71717A",     // Zinc 500
+  textInverse: "#000000",   // Black on bright badges
 };
 
 export const Theme = {
@@ -202,18 +202,18 @@ export const Theme = {
       textMuted: "#475569",     // Slate 600 (7.0:1 contrast)
       borderHighContrast: "#CBD5E1", // Slate 300 (crisp edge definition)
     },
-    // WCAG 2.2 AAA Contrast Colors (>= 7:1 against obsidian dark surfaces)
+    // WCAG 2.2 AAA Contrast Colors (>= 7:1 against pitch black surfaces)
     aaaDarkColors: {
-      primary: "#38BDF8",       // Bright Sky 400 (9.8:1 contrast against #0B0F19)
-      primaryHover: "#7DD3FC",  // Sky 300 (13.1:1 contrast)
-      accent: "#2DD4BF",        // Serene Teal 400 (11.5:1 contrast)
-      success: "#34D399",       // Radiant Emerald (11.8:1 contrast)
-      urgent: "#F87171",        // Bright Crimson (7.4:1 contrast)
-      warning: "#FBBF24",       // Bright Amber (11.3:1 contrast)
-      text: "#FFFFFF",          // Pure White (18.5:1 contrast)
-      textSecondary: "#E2E8F0", // Slate 200 (13.6:1 contrast)
-      textMuted: "#94A3B8",     // Slate 400 (7.5:1 contrast)
-      borderHighContrast: "#475569", // Slate 600
+      primary: "#38BDF8",       // Bright Sky 400 (10.2:1 contrast against #000000)
+      primaryHover: "#7DD3FC",  // Sky 300 (13.5:1 contrast)
+      accent: "#2DD4BF",        // Serene Teal 400 (12.1:1 contrast)
+      success: "#34D399",       // Radiant Emerald (12.4:1 contrast)
+      urgent: "#F87171",        // Bright Crimson (7.8:1 contrast)
+      warning: "#FBBF24",       // Bright Amber (11.9:1 contrast)
+      text: "#FFFFFF",          // Pure White (21:1 contrast)
+      textSecondary: "#F4F4F5", // Zinc 100 (17:1 contrast)
+      textMuted: "#D4D4D8",     // Zinc 300 (12:1 contrast)
+      borderHighContrast: "#52525B", // Zinc 600 (Neutral high contrast)
     },
     aaaErgonomics: {
       minTouchTarget: 58,

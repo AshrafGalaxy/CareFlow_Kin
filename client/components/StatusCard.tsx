@@ -32,11 +32,11 @@ export const StatusCard: React.FC<StatusCardProps> = ({
         case "success":
           return { bg: "#064E3B", text: "#34D399", border: "#059669" };
         case "accent":
-          return { bg: "#0C243B", text: "#38BDF8", border: "#0284C7" };
+          return { bg: "#18181B", text: "#38BDF8", border: "#27272A" };
         case "primary":
-          return { bg: "#0C243B", text: "#38BDF8", border: "#0284C7" };
+          return { bg: "#18181B", text: "#38BDF8", border: "#27272A" };
         default:
-          return { bg: "#1F2937", text: "#94A3B8", border: "#374151" };
+          return { bg: "#18181B", text: "#A1A1AA", border: "#27272A" };
       }
     }
     if (isAAAMode) {
@@ -89,7 +89,7 @@ export const StatusCard: React.FC<StatusCardProps> = ({
             <View
               style={[
                 styles.iconWrapper,
-                { backgroundColor: isDark ? "#0C243B" : colors.primaryLight },
+                { backgroundColor: isDark ? "#18181B" : colors.primaryLight },
                 isSmallMobile && styles.iconWrapperSmall,
               ]}
             >

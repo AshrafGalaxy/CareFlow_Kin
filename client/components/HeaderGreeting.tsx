@@ -28,7 +28,7 @@ export const HeaderGreeting: React.FC<HeaderGreetingProps> = ({ greeting, date }
         style={[
           styles.badgeContainer,
           {
-            backgroundColor: isDark ? "#0C243B" : colors.primaryLight,
+            backgroundColor: isDark ? "#18181B" : colors.primaryLight,
             borderColor: colors.border,
           },
           isSmallMobile && styles.badgeContainerSmall,

@@ -10,8 +10,18 @@ import { useAccessibility } from "../../context/AccessibilityContext";
 
 export default function TimelineScreen() {
   const { isSmallMobile } = useResponsive();
-  const { fontMultiplier, isAAAMode, minTouchTarget, aaaColors, highContrastBorders } = useAccessibility();
-  const cardBorderStyle = highContrastBorders ? { borderWidth: 1.5, borderColor: "#CBD5E1" } : {};
+  const {
+    fontMultiplier,
+    isAAAMode,
+    minTouchTarget,
+    aaaColors,
+    highContrastBorders,
+    colors,
+    isDark,
+  } = useAccessibility();
+  const cardBorderStyle = highContrastBorders
+    ? { borderWidth: 1.5, borderColor: isDark ? "#52525B" : "#CBD5E1" }
+    : {};
   const { data: events = [] } = useQuery<TimelineEvent[]>({
     queryKey: ["careTimeline"],
     queryFn: async () => {
@@ -79,8 +89,8 @@ export default function TimelineScreen() {
   return (
     <ResponsiveContainer>
       <View style={styles.header}>
-        <Text style={[styles.title, { fontSize: Math.round(26 * fontMultiplier) }]}>Care Timeline</Text>
-        <Text style={[styles.subtitle, { fontSize: Math.round(15 * fontMultiplier) }]}>
+        <Text style={[styles.title, { color: colors.text, fontSize: Math.round(26 * fontMultiplier) }]}>Care Timeline</Text>
+        <Text style={[styles.subtitle, { color: colors.textMuted, fontSize: Math.round(15 * fontMultiplier) }]}>
           Your unified history of completed routines, medications, and clinical logs.
         </Text>
       </View>
@@ -100,22 +110,34 @@ export default function TimelineScreen() {
           return (
             <View key={ev.id} style={styles.timelineItem}>
               <View style={[styles.indicatorCol, isSmallMobile && { width: 34, marginRight: 10 }]}>
-                <View style={[styles.iconSquircle, { backgroundColor: bg }, isSmallMobile && { width: 32, height: 32, borderRadius: 8 }]}>
+                <View style={[styles.iconSquircle, { backgroundColor: isDark ? "#18181B" : bg }, isSmallMobile && { width: 32, height: 32, borderRadius: 8 }]}>
                   {icon}
                 </View>
-                {index < events.length - 1 && <View style={styles.connectorLine} />}
+                {index < events.length - 1 && (
+                  <View style={[styles.connectorLine, { backgroundColor: isDark ? "#27272A" : "#E2E8F0" }]} />
+                )}
               </View>
 
-              <View style={[styles.contentCard, isSmallMobile && { padding: 12 }, cardBorderStyle]}>
+              <View
+                style={[
+                  styles.contentCard,
+                  {
+                    backgroundColor: colors.card,
+                    borderColor: isDark ? "#27272A" : colors.border,
+                  },
+                  isSmallMobile && { padding: 12 },
+                  cardBorderStyle,
+                ]}
+              >
                 <View style={styles.timestampRow}>
-                  <View style={[styles.badgePill, { backgroundColor: bg }]}>
+                  <View style={[styles.badgePill, { backgroundColor: isDark ? "#27272A" : bg }]}>
                     <Text style={[styles.badgeText, { color: textColor, fontSize: Math.round(11 * fontMultiplier) }]}>{ev.event_type}</Text>
                   </View>
-                  <Text style={[styles.timeText, { fontSize: Math.round(13 * fontMultiplier) }]}>{`${dayStr} • ${dateStr}`}</Text>
+                  <Text style={[styles.timeText, { color: colors.textMuted, fontSize: Math.round(13 * fontMultiplier) }]}>{`${dayStr} • ${dateStr}`}</Text>
                 </View>
-                <Text style={[styles.eventTitle, { fontSize: Math.round((isSmallMobile ? 15 : 17) * fontMultiplier) }]}>{ev.title}</Text>
+                <Text style={[styles.eventTitle, { color: colors.text, fontSize: Math.round((isSmallMobile ? 15 : 17) * fontMultiplier) }]}>{ev.title}</Text>
                 {ev.description && (
-                  <Text style={[styles.eventDesc, { fontSize: Math.round((isSmallMobile ? 12 : 14) * fontMultiplier) }]}>{ev.description}</Text>
+                  <Text style={[styles.eventDesc, { color: colors.textMuted, fontSize: Math.round((isSmallMobile ? 12 : 14) * fontMultiplier) }]}>{ev.description}</Text>
                 )}
               </View>
             </View>

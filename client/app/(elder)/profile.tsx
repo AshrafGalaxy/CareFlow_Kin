@@ -71,7 +71,7 @@ export default function ProfileScreen() {
       <View style={styles.contentStack}>
         {/* 1. Identity & Role Card */}
         <View style={[styles.profileCard, { backgroundColor: colors.card, borderColor: colors.border }, isSmallMobile && { padding: 14, gap: 12 }, cardBorderStyle]}>
-          <View style={[styles.avatarWrap, { backgroundColor: isDark ? "#0C243B" : "#F0F9FF" }, isSmallMobile && { width: 48, height: 48, borderRadius: 12 }]}>
+          <View style={[styles.avatarWrap, { backgroundColor: isDark ? "#18181B" : "#F0F9FF" }, isSmallMobile && { width: 48, height: 48, borderRadius: 12 }]}>
             <Text style={[styles.avatarText, { color: colors.primary }, isSmallMobile && { fontSize: 20 }]}>
               {user?.full_name ? user.full_name.charAt(0) : "E"}
             </Text>
@@ -82,7 +82,7 @@ export default function ProfileScreen() {
             <Text style={[styles.userEmail, { color: colors.textMuted, fontSize: Math.round(14 * fontMultiplier) }]}>{user?.email || "eleanor@careflow.com"}</Text>
 
             <View style={styles.roleBadgeRow}>
-              <View style={[styles.roleBadge, { backgroundColor: isDark ? "#0C243B" : "#F0F9FF", borderColor: colors.border }]}>
+              <View style={[styles.roleBadge, { backgroundColor: isDark ? "#18181B" : "#F0F9FF", borderColor: colors.border }]}>
                 <Heart size={13} color={colors.primary} />
                 <Text style={[styles.roleBadgeText, { color: colors.primary, fontSize: Math.round(12 * fontMultiplier) }]}>Elder Companion</Text>
               </View>
@@ -98,14 +98,14 @@ export default function ProfileScreen() {
         {/* 2. Emergency & Family Guardian Support */}
         <View style={[styles.sectionCard, { backgroundColor: colors.card, borderColor: colors.border }, isSmallMobile && { padding: 14 }, cardBorderStyle]}>
           <View style={styles.sectionHeader}>
-            <View style={[styles.sectionIconSquircle, { backgroundColor: isDark ? "#0C243B" : "#F0F9FF" }]}>
+            <View style={[styles.sectionIconSquircle, { backgroundColor: isDark ? "#18181B" : "#F0F9FF" }]}>
               <Shield size={18} color={colors.primary} />
             </View>
             <Text style={[styles.sectionTitle, { color: colors.text, fontSize: Math.round(16 * fontMultiplier) }]}>Designated Family Guardian</Text>
           </View>
 
-          <View style={[styles.contactRow, { backgroundColor: isDark ? "#1E293B" : "#F8FAFC", borderColor: colors.border }, isSmallMobile && { padding: 10, gap: 10 }]}>
-            <View style={[styles.contactAvatar, { backgroundColor: isDark ? "#0C243B" : "#F0F9FF" }, isSmallMobile && { width: 36, height: 36, borderRadius: 10 }]}>
+          <View style={[styles.contactRow, { backgroundColor: isDark ? "#18181B" : "#F8FAFC", borderColor: colors.border }, isSmallMobile && { padding: 10, gap: 10 }]}>
+            <View style={[styles.contactAvatar, { backgroundColor: isDark ? "#27272A" : "#F0F9FF" }, isSmallMobile && { width: 36, height: 36, borderRadius: 10 }]}>
               <Text style={[styles.contactInitials, { color: colors.primary }]}>RV</Text>
             </View>
             <View style={styles.contactInfo}>
@@ -130,7 +130,7 @@ export default function ProfileScreen() {
             <Text style={[styles.sectionTitle, { color: colors.text, fontSize: Math.round(16 * fontMultiplier) }]}>Daily Notifications & Alerts</Text>
           </View>
 
-          <View style={[styles.toggleRow, { borderBottomColor: isDark ? "#1E293B" : "#F1F5F9" }]}>
+          <View style={[styles.toggleRow, { borderBottomColor: isDark ? "#27272A" : "#F1F5F9" }]}>
             <View style={styles.toggleLabelWrap}>
               <Text style={[styles.toggleTitle, { color: colors.text }]}>Morning Routine Prompts</Text>
               <Text style={[styles.toggleSubtitle, { color: colors.textMuted }]}>Gentle notification for breakfast and hydration</Text>
@@ -138,12 +138,12 @@ export default function ProfileScreen() {
             <Switch
               value={morningReminders}
               onValueChange={setMorningReminders}
-              trackColor={{ false: isDark ? "#374151" : "#E2E8F0", true: isDark ? "#0C243B" : colors.primaryLight }}
+              trackColor={{ false: isDark ? "#27272A" : "#E2E8F0", true: isDark ? "#18181B" : colors.primaryLight }}
               thumbColor={morningReminders ? colors.primary : "#94A3B8"}
             />
           </View>
 
-          <View style={[styles.toggleRow, { borderBottomColor: isDark ? "#1E293B" : "#F1F5F9" }]}>
+          <View style={[styles.toggleRow, { borderBottomColor: isDark ? "#27272A" : "#F1F5F9" }]}>
             <View style={styles.toggleLabelWrap}>
               <Text style={[styles.toggleTitle, { color: colors.text }]}>Medication Reminders</Text>
               <Text style={[styles.toggleSubtitle, { color: colors.textMuted }]}>Sound alert when prescription dose is due</Text>
@@ -151,7 +151,7 @@ export default function ProfileScreen() {
             <Switch
               value={medAlerts}
               onValueChange={setMedAlerts}
-              trackColor={{ false: isDark ? "#374151" : "#E2E8F0", true: isDark ? "#0C243B" : colors.primaryLight }}
+              trackColor={{ false: isDark ? "#27272A" : "#E2E8F0", true: isDark ? "#18181B" : colors.primaryLight }}
               thumbColor={medAlerts ? colors.primary : "#94A3B8"}
             />
           </View>
@@ -164,7 +164,7 @@ export default function ProfileScreen() {
             <Switch
               value={circleSync}
               onValueChange={setCircleSync}
-              trackColor={{ false: isDark ? "#374151" : "#E2E8F0", true: isDark ? "#0C243B" : colors.primaryLight }}
+              trackColor={{ false: isDark ? "#27272A" : "#E2E8F0", true: isDark ? "#18181B" : colors.primaryLight }}
               thumbColor={circleSync ? colors.primary : "#94A3B8"}
             />
           </View>
@@ -184,14 +184,14 @@ export default function ProfileScreen() {
                 style={[
                   styles.langOption,
                   {
-                    backgroundColor: isDark ? "#1E293B" : "#FAFCFE",
+                    backgroundColor: isDark ? "#18181B" : "#FAFCFE",
                     borderColor: colors.border,
                   },
                   selectedLanguage === lang && [
                     styles.langOptionActive,
                     {
                       borderColor: colors.primary,
-                      backgroundColor: isDark ? "#0C243B" : "#F0F9FF",
+                      backgroundColor: isDark ? "#27272A" : "#F0F9FF",
                     },
                   ],
                 ]}
@@ -211,7 +211,7 @@ export default function ProfileScreen() {
                 </Text>
                 {selectedLanguage === lang && (
                   <View style={[styles.langCheck, { backgroundColor: colors.primary }]}>
-                    <Check size={13} color={isDark ? "#0F172A" : "#FFFFFF"} strokeWidth={3} />
+                    <Check size={13} color={isDark ? "#000000" : "#FFFFFF"} strokeWidth={3} />
                   </View>
                 )}
               </TouchableOpacity>
