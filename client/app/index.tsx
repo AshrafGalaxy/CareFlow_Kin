@@ -7,7 +7,7 @@ import {
   ScrollView,
   Platform,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, Redirect } from "expo-router";
 import { Theme } from "../constants/theme";
 import { useResponsive } from "../hooks/useResponsive";
 import { CareFlowLogo } from "../components/CareFlowLogo";
@@ -53,11 +53,10 @@ export default function LandingPage() {
   const scrollRef = useRef<ScrollView>(null);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
-  React.useEffect(() => {
-    if (!isLoading && token && user) {
-      router.replace("/(elder)");
-    }
-  }, [isLoading, token, user, router]);
+  // Declarative navigation safely waits for Root Layout mounting
+  if (!isLoading && token && user) {
+    return <Redirect href="/(elder)" />;
+  }
 
   const heroTitleFontSize = isSmallMobile ? 26 : isMobile ? 32 : isTablet ? 42 : 52;
   const heroTitleLineHeight = isSmallMobile ? 34 : isMobile ? 40 : isTablet ? 50 : 62;

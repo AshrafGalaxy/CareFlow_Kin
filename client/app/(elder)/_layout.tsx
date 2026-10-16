@@ -19,7 +19,7 @@ import {
   ScrollView,
   Platform,
 } from "react-native";
-import { useRouter, usePathname } from "expo-router";
+import { useRouter, usePathname, Redirect } from "expo-router";
 import { CareFlowLogo } from "../../components/CareFlowLogo";
 import { useAuth } from "../../context/AuthContext";
 import { useResponsive } from "../../hooks/useResponsive";
@@ -36,15 +36,8 @@ function ElderLayoutContent() {
   const { user, token, isLoading, logout } = useAuth();
   const { colors, isDark, isAAAMode } = useAccessibility();
 
-  React.useEffect(() => {
-    if (!isLoading && (!token || !user)) {
-      router.replace("/(auth)/login");
-    }
-  }, [isLoading, token, user, router]);
-
   const handleLogout = () => {
     logout();
-    router.replace("/(auth)/login");
   };
 
   if (isLoading) {
@@ -72,8 +65,9 @@ function ElderLayoutContent() {
     );
   }
 
+  // Declarative navigation safely waits for Root Layout mounting
   if (!token || !user) {
-    return null;
+    return <Redirect href="/(auth)/login" />;
   }
 
   const navItems = [

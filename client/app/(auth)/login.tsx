@@ -8,7 +8,7 @@ import {
   ScrollView,
   Platform,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, Redirect } from "expo-router";
 import { Theme } from "../../constants/theme";
 import { useResponsive } from "../../hooks/useResponsive";
 import { BigButton } from "../../components/BigButton";
@@ -27,11 +27,10 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  React.useEffect(() => {
-    if (!isLoading && token && user) {
-      router.replace("/(elder)");
-    }
-  }, [isLoading, token, user, router]);
+  // Declarative navigation safely waits for Root Layout mounting
+  if (!isLoading && token && user) {
+    return <Redirect href="/(elder)" />;
+  }
 
   const handleLogin = async (overrideEmail?: string, overridePass?: string) => {
     setErrorMsg("");

@@ -9,7 +9,7 @@ import {
   Platform,
   Alert,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, Redirect } from "expo-router";
 import { Theme } from "../../constants/theme";
 import { useResponsive } from "../../hooks/useResponsive";
 import { BigButton } from "../../components/BigButton";
@@ -30,11 +30,10 @@ export default function RegisterScreen() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  React.useEffect(() => {
-    if (!isLoading && token && user) {
-      router.replace("/(elder)");
-    }
-  }, [isLoading, token, user, router]);
+  // Declarative navigation safely waits for Root Layout mounting
+  if (!isLoading && token && user) {
+    return <Redirect href="/(elder)" />;
+  }
 
   const roles = [
     {
