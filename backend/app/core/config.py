@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 from typing import List, Union
 from pydantic import AnyHttpUrl, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -15,10 +16,10 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days for elder session persistence
     REFRESH_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 30  # 30 days
     
-    # Persistence Configuration
+    # Persistence Configuration - Canonical absolute database path to prevent CWD split-brain
     DATABASE_URL: str = os.getenv(
         "DATABASE_URL",
-        "sqlite:///./elderly_careflow.db"
+        f"sqlite:///{(Path(__file__).resolve().parent.parent.parent / 'elderly_careflow.db').as_posix()}"
     )
     
     # Cross-Origin Resource Sharing

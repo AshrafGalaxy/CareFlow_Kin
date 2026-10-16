@@ -63,3 +63,27 @@ def test_get_current_user_profile(client, elder_auth_headers):
     data = response.json()
     assert data["email"] == "eleanor@careflow.org"
     assert data["role"] == "ELDER"
+
+
+def test_google_auth_success(client):
+    response = client.post(
+        "/api/v1/auth/google",
+        json={
+            "email": "eleanor.google@careflow.com",
+            "full_name": "Eleanor Vance (Google)",
+            "role": "ELDER",
+            "google_id": "google-sub-12345"
+        }
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert "access_token" in data
+    assert data["role"] == "ELDER"
+    assert data["full_name"] == "Eleanor Vance (Google)"
+
+    # Verify token rehydration against /auth/me
+    token = data["access_token"]
+    me_res = client.get("/api/v1/auth/me", headers={"Authorization": f"Bearer {token}"})
+    assert me_res.status_code == 200
+    assert me_res.json()["email"] == "eleanor.google@careflow.com"
+

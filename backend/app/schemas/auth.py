@@ -16,6 +16,13 @@ class UserLogin(BaseModel):
     password: str
 
 
+class GoogleAuthRequest(BaseModel):
+    email: EmailStr
+    full_name: str
+    role: Role = Role.ELDER
+    google_id: Optional[str] = None
+
+
 class TokenResponse(BaseModel):
     access_token: str
     refresh_token: str

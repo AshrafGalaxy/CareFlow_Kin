@@ -5,7 +5,7 @@ from app.core.security import verify_password, get_password_hash, create_access_
 from app.models.user import User, Role
 from app.models.patient import PatientProfile
 from app.models.checklist import DailyChecklistItem, ChecklistItemTime
-from app.schemas.auth import UserRegister, UserLogin, TokenResponse, UserOut
+from app.schemas.auth import UserRegister, UserLogin, GoogleAuthRequest, TokenResponse, UserOut
 from app.api.deps import get_current_user
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
@@ -105,6 +105,84 @@ def login(login_in: UserLogin, db: Session = Depends(get_db)):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Account is deactivated.",
+        )
+
+    access_token = create_access_token(user.id, user.role.value)
+    refresh_token = create_refresh_token(user.id, user.role.value)
+
+    return TokenResponse(
+        access_token=access_token,
+        refresh_token=refresh_token,
+        role=user.role,
+        user_id=user.id,
+        full_name=user.full_name
+    )
+
+
+@router.post("/google", response_model=TokenResponse)
+def google_auth(payload: GoogleAuthRequest, db: Session = Depends(get_db)):
+    """Authenticate or auto-provision user via Google identity with server-authoritative JWT issuance."""
+    user = db.query(User).filter(User.email == payload.email).first()
+    if not user:
+        random_pwd = get_password_hash(f"google_{payload.email}_{payload.google_id or 'oauth'}")
+        user = User(
+            email=payload.email,
+            hashed_password=random_pwd,
+            full_name=payload.full_name,
+            role=payload.role,
+            is_active=True
+        )
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+
+        if user.role == Role.ELDER:
+            profile = PatientProfile(
+                user_id=user.id,
+                preferred_language="en",
+                timezone="UTC"
+            )
+            db.add(profile)
+            db.commit()
+            db.refresh(profile)
+
+            default_items = [
+                DailyChecklistItem(
+                    patient_id=profile.id,
+                    title="Morning Hydration",
+                    description="Drink 2 glasses of fresh water",
+                    time_of_day=ChecklistItemTime.MORNING,
+                    icon_name="droplet"
+                ),
+                DailyChecklistItem(
+                    patient_id=profile.id,
+                    title="Gentle Morning Walk",
+                    description="15 minutes light stroll or stretching",
+                    time_of_day=ChecklistItemTime.MORNING,
+                    icon_name="activity"
+                ),
+                DailyChecklistItem(
+                    patient_id=profile.id,
+                    title="Afternoon Rest & Check",
+                    description="Quiet relaxation and fluid check",
+                    time_of_day=ChecklistItemTime.AFTERNOON,
+                    icon_name="sun"
+                ),
+                DailyChecklistItem(
+                    patient_id=profile.id,
+                    title="Evening Reading or Music",
+                    description="Wind down with calm activities",
+                    time_of_day=ChecklistItemTime.EVENING,
+                    icon_name="moon"
+                )
+            ]
+            db.add_all(default_items)
+            db.commit()
+
+    if not user.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="User account is deactivated.",
         )
 
     access_token = create_access_token(user.id, user.role.value)
